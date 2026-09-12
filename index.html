@@ -1184,6 +1184,7 @@ const parseExpression = (inp, quoteDepth=0) => {
 
   <pre>
 punmain tu babi  |  Hello, Bobby
+pundut tu babi   |  Goodbye, Bobby.
   </pre>
 
   <p>The word <code>`iau`</code> is used to quote the text/speech that follows (normally Papsa) and
@@ -1269,11 +1270,15 @@ mainContentParsers.push((ctx, inp, out) => {
   common to augment the relevant noun.</p>
 
   <pre>
-tina kimcukcuc ei cin   |  Tina might be awake / might wake up.
-guk guih ei vin         |  The fire is glowing.
-guk guih ei zous        |  The fire was glowing.
-guk guih ei zeif        |  The fire will glow.
-pun bik ei am vin zous  |  I have already eaten.
+tina kimcukcuc ei cin     |  Tina might be awake / might wake up.
+guk guih ei vin           |  The fire is glowing.
+guk guih ei zous          |  The fire was glowing.
+guk guih ei zeif          |  The fire will glow.
+pun bik ei am vin zous    |  I have already eaten.
+pun bik ei mazgu          |  I ate today / will eat today.
+pun bik ei mazgu ei zeif  |  I will eat later today.
+pun bik ei am mazgu zouc  |  I will eat tomorrow.
+pun bik ei vin ei maz     |  I'm eating again.
   </pre>
 
   <p>When multiple items fill the same clause slot (subject/verb/object), the statement becomes
@@ -1324,14 +1329,32 @@ bik ui bup   |  food of the plants  (e.g. fertilizer)
 bik ei bup   |  vegetarian food     (e.g. veggie pizza)
 bikbup       |  produce             (e.g. apples)
   </pre>
-  
-  <h3>Times, Tenses, and Durations</h3>
 
-  TODO
-  
-  <h3>This or That</h3>
+  <h3>This or That Thing</h3>
 
-  TODO
+  <p>English is full of words like “this”, “that”, “here”, “there”, “thing”, and “stuff”, because
+  it's inconvienent to spell out the subject of discussion each time one wants to reference it.
+  Papsa's ability to elide arbitrary parts of speech, its natural vagueness, and its powerful
+  pronoun system reduce the need, but don't totally eliminate it.</p>
+
+  <pre>
+pun min vin     |  I want this.
+pun min vinjuc  |  I want that.
+vin naun        |  Here's good.
+vinjuc naun     |  There's good.
+faf naun        |  Things are good.
+mum faf faf     |  Water's made of stuff.
+  </pre>
+
+  <p>If there are multiple options, the most natural Papsa expression is to use numbers
+  (usually 0 and 1) instead of "this" or "that". When the `ous` placeholder is associated with
+  something, we interpret that thing as an option. To reference exclusive options outside the
+  context of a question, use `xih`.</p>
+
+  <pre>
+eis nuh min kai ous soun saum  |  Do you want option #0 or #1?
+    nuh fut kai xih soun saum  |  You have options: #0 or #1.
+  </pre>
 
   <h3>Cardinals and Ordinals</h3>
 
@@ -1355,10 +1378,6 @@ bik ui sat guk   |   The fourth food burned.
 bik guk ui sat   |   The food was burned by the fourth flame.
 nup ui soun      |   first people
   </pre>
-  
-  <h3>Greetings, Thanks, and Apology</h3>
-
-  TODO
   
 </section>
 
@@ -1432,10 +1451,6 @@ ciftoldi ei minbikuk     | There was a very hungry caterpillar.
 
 TODO:
 
-The big dog will eat the small cat tomorrow. -> um gerku tat bik ii am sam tcadi im mlatu hat
-The small cat ate the big dog yesterday. -> um mlatu hat bik ii am clam tcadi im gerku tat
-The big cat is eating the small dog now. -> um mlatu tat am bik finsus im gerku hat
-The small dog is drinking water now. -> um gerku hat am bik finsus mum
 The big cat likes water, but the small dog prefers meat. -> mum naun im mlatu tat ! cuc li bikmauk naunais im gerku hat
 Water benefits fish. -> mum naun maukmum
 The dog likes meat, and the cat prefers fish. -> bikmauk naun gerku ! maukmum naunais mlatu
@@ -1465,17 +1480,7 @@ Where do you live? -> iis nuh tif uus
 What is your name? -> iis uus paunup nuh
 How old are you? -> iis uus susmuk nuh
 I can speak Papsa well. -> pun am pun naun papsa
-We will eat tomorrow. -> pun bik ii am sam tcadi
 
-There’s fire. -> fire
-Fire shines. -> fire glow
-The fire is currently glowing. -> fire (glow local)
-The fire shone. -> fire (glow past)
-A fire might glow. -> fire (glow veiled)
-A fire will glow. -> fire (glow fated)
-The fire has been glowing. -> fire (glow (local past))
-The fire is shining again. -> fire (glow local bent)
-The fire will glow tomorrow. -> fire (glow (one Day))
 The fire shines brightly. -> fire (glow glow)
 The bright fire glows. -> [fire glow] glow
 The sun is shining. -> Sol glow
@@ -1782,6 +1787,8 @@ tigab | net
   <h3>Elements and Atoms</h3>
   
   <h3>Emotion</h3>
+
+  Don't forget gratitude and sorrow as thanks and sorry.
   
   <h3>Family</h3>
   
@@ -2204,6 +2211,7 @@ tokenParsers.splice(1,0,(s,base,ixs) => {
 | `kimnaun` | `kim`, `naun` | to play with, to explore | toy, game, adventure, make-believe, play | playful | playfully | |
 | `bikmum` | `bik`, `mum` | to eat seafood | seafood, fish, shellfish | - | - | Technically also includes freshwater fare and seaweed. |
 | `bikbup` | `bik`, `bup` | to eat produce | produce, vegetable, fruit | - | - | |
+| `vinjuc` | `vin`, `juc` | to depart, to leave, to exit, to walk away | there, then, that | distant, far, away | distantly | |
 
 TODO:
 adultery/infidelity/cheating/secret romance -> love-new-veiled (papmaincin)
