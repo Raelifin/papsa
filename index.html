@@ -1719,24 +1719,29 @@ I met a little cottage girl; she was eight years old, she said.
   non-human people as they do to humans. (The definition includes lots of human-centric words
   because that's often a reasonable way to translate the word into English, which <em>is</em>
   human-centric.) The core words don't have any of the "human universal" small words like
-  "dog" and "hand" because, again, not all beings will find those things to be basic concepts.</p>
+  "dog" and "nose" because, again, not all beings will find those things to be basic concepts.</p>
 
   <p>It's normal for Papsa to get adapted into specific contexts through importing important
   concepts via naming them. For example, English speakers might recognize the Papsa name
   `iuman` as the word for "human", even though non-English Papsa speakers would not. Still,
   there are some proper nouns that are so important and common that they get universal names.</p>
   
-  <pre data-table="papsaNames">
-| Papsa Name  | English   | Notes            |
-|-------------|-----------|------------------|
-| `vufua`     | Earth     |                  |
-| `vufuduta`  | Luna      |                  |
-| `guixuvina` | Sol       | Often just "ina" |
-| `vufusama`  | Milky Way |                  |
-| `mazgu`     | day       | 24 hour period   |
-| `aihat`     | sit       | Papsa is intended to be so neutral that it doesn't even privilege the human form. As such, there's no core word for sitting, as that pose isn't universal among body plans. The closest core word is `fifsaihat` (literally "half pose"), which is used for deliberately being diagonal. `aihat` is a pun on that and `hat`, since sitting down can also make someone take up less space. |
-| `ikneimfic` | laugh     | Where `neimfic` is about the experience of humor, `ikneimfic` is about the sound of laughter and the specific expression of amusement. Can also be used to capture humorless laughter. |
-| `ikneimcun` | cry, weep | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
+  <pre data-table="papsaNames">  
+  TODO Fill in etymologies!
+| Papsa Name  | English        | Etymology        | Notes |
+|-------------|----------------|------------------|-------|
+| `vufua`     | Earth          |                  |       |
+| `vufuduta`  | Luna           |                  |       |
+| `guixuvina` | Sol            |                  | Often just "ina" |
+| `vufusama`  | Milky Way      |                  |       |
+| `mazgu`     | day            |                  | 24 hour period |
+| `aihat`     | sit            |                  | Papsa is intended to be so neutral that it doesn't even privilege the human form. As such, there's no core word for sitting, as that pose isn't universal among body plans. The closest core word is `fifsaihat` (literally "half pose"), which is used for deliberately being diagonal. `aihat` is a pun on that and `hat`, since sitting down can also make someone take up less space. |
+| `ikneimfic` | laugh          |                  | Where `neimfic` is about the experience of humor, `ikneimfic` is about the sound of laughter and the specific expression of amusement. Can also be used to capture humorless laughter. |
+| `ikneimcun` | cry, weep      |                  | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
+| `aisbib`    | fingertip unit | `nais` + `bibih` |       |
+| `aisas`     | stretch unit   | `nais` + `has`   |       |
+| `aisasuh`   | tower unit     | `nais` + `hasuh` |       |
+| `aisin`     | Papsan Mile    | `nais` + i + n   |       |
     TODO MORE
   </pre>
 
@@ -1745,12 +1750,48 @@ for (const [name,row] of papsaNames["Papsa Name"]) {
   names[baseLetters(name)] = { word: name, meaning: row['English'], notes: row['Notes'] };
 }
   </code></pre></details>
+  
+  <h3>Units of Measurement</h3>
 
+  <p>For <a href="https://utopiandreams.substack.com/p/spacetime-distances/comment/345143742">practical purposes</a>,
+  the basic units of measurment in Papsa are, like the SI units, based on <a href="">the cesuim standard</a>.
+  Specifically, one full oscilation of cesium-standard light is exactly 3.26122557 centimeters, or approximately 1.28 inches.
+  In Papsa, this unit goes by the name `aisbib`, which translates to something like "standard galactic fingertip".
+  All standard Papsa units of measure start with the "ais-" prefix and end with a consonant so that they can be followed by
+  `ei` and then the quantity, just like any noun. The other units of length are multiples of 36 `aisbib`.</p>
+
+  <pre>
+aisbib ei sat                              |  3 Fingertips (≈ 9.78cm or 3.85 inches)
+aisbib ei slounaum faftaz aisas ei saum    |  36 Fingertips = 1 Stretch (≈ 117.4 cm ≈ 46 inches)
+aisas ei slounaum faftaz aisasuh ei saum   |  36 Stretches = 1 Tower (≈ 42.3 m ≈ 140 feet)
+aisasuh ei slounaum faftaz aisin ei saum   |  36 Stretches = 1 Mile (≈ 1.52 km ≈ 0.95 (imperial) miles)
+aisin ei slounaum faftaz aiskufut ei saum  |  36 Miles = 1 Ride (≈ 55 km ≈ 34 miles)
+aiskufut ei slounaum faftaz aisuif ei saum |  36 Rides = 1 Border (≈ 1972 km ≈ 1225 miles)
+  </pre>
+
+  <p>And of course, just like we can go up in size, we can go down.
+  The unit `aisiguk` is the equivalent of about 700nm, which is at the outer edge of
+  human color vision, making the etymology of its name — Red — particularly fun. We get
+  a similar name with the smallest named unit, `_TODO_` — X-ray.</p>
+
+  <pre>
+aisbib ei slaihaum faftaz aisasat ei saum      |  1/36 Fingertip = 1 Thread (≈ 0.91 mm)
+aisasat ei slaihaum faftaz aisasatfic ei saum  |  1/36 Thread = 1 Fiber (≈ 25 μm)
+aisasatfic ei slaihaum faftaz aisiguk ei saum  |  1/36 Fiber = 1 Red (≈ 699 nm)
+aisiguk ei slaihaum faftaz aistikmuk ei saum   |  1/36 Red = 1 Biomachine (≈ 19.4 nm)
+aistikmuk ei slaihaum faftaz ais___ ei saum  |  1/36 Biomachine = 1 Molecule (≈ 0.54 nm)
+ais___ ei slaihaum faftaz ais___ ei saum  |  1/36 Molecule = 1 X-ray (≈ 0.015 nm)
+  </pre>
+
+  <p>TK square/cube units time/space tradeoffs.</p>
+
+  <h3>Color</h3>
+
+  <p>Papsa takes a three-fold approach to color. First, there is TODO</p>
+  
   <h3>Body Parts</h3>
   
   <h3>Buildings, Towns, and Cities</h3>
-
-  <h3>Color</h3>
 
   <h3>Coordinates and Directions</h3>
   
@@ -1797,8 +1838,6 @@ tigab | net
   <h3>Gender and Sexuality</h3>
   
   <h3>Taxonomy of Earth Organisms</h3>
-  
-  <h3>Units of Measurement</h3>
 
 </section>
 
@@ -1974,7 +2013,80 @@ tokenParsers.splice(1,0,(s,base,ixs) => {
 });
   </code></pre></details>
 
-  <p>TODO Fractions (aih as changeover syllable)</p>
+  <h3 id="fractions">Fractions</h3>
+
+  <p>Numbers that aren't whole are written by placing the <strong>radix syllable</strong>
+  <code>`aih`</code> between the whole part and the fractional part, much like a decimal point in
+  English. It works the same way for basic and compact numbers. If the whole part is zero, it can
+  be left out entirely.</p>
+
+  <p>Before the radix syllable, digits are little-endian, as described above. For basic numbers we
+  first see the ones, then the sixes, then the thirty-sixes, and so on. In the fractional part, digits
+  run the other way: first the sixths, then the thirty-sixths, and so on. In this way the rule that
+  the listener always knows which place the current syllable occupies, is preserved.</p>
+
+  <pre>
+saihaum                |  one sixth — 0.1 in base six ≈ 0.1667
+slaihaum               |  one thirty-sixth — 0.01 in base six ≈ 0.0278
+slaihaukt              |  one sixth — 0.6 in base thirty-six
+saumaihat              |  one and a half — 1.3 in base six
+slaumaihakt            |  one and a half — 1.I in base thirty-six
+slataihifatakt         |  3 + 5/36 + 3/36² + 18/36³ ≈ 3.14159 (π, approximately)
+pun bik bik ei saihat  |  I ate half the food.
+  </pre>
+
+  <p>Base six handles the fractions of everyday life well.</p>
+
+  <pre data-table="commonFractions">
+| Fraction | Base six | Basic                 | Compact           |
+|----------|----------|-----------------------|-------------------|
+| 1/2      | 0.3      | `saihat`              | `slaihakt`        |
+| 1/3      | 0.2      | `saihuk`              | `slaihukt`        |
+| 2/3      | 0.4      | `saiheip`             | `slaiheikt`       |
+| 1/4      | 0.13     | `saihaumat`           | `slaihark`        |
+| 3/4      | 0.43     | `saiheipat`           | `slaihart`        |
+| 1/6      | 0.1      | `saihaum`             | `slaihaukt`       |
+| 1/8      | 0.043    | `saihouneipat`        | `slaiheipakt`     |
+| 1/9      | 0.04     | `saihouneip`          | `slaiheip`        |
+| 1/12     | 0.03     | `saihounat`           | `slaihat`         |
+| 1/36     | 0.01     | `saihounaum`          | `slaihaum`        |
+| 1/5      | 0.1111…  | `saihaumaumaumaum`…   | `slaihauxaux`…    |
+| 1/10     | 0.0333…  | `saihounatatat`…      | `slaihatax`…      |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Fractions</summary><pre><code>
+// Fractional digits in either radix -> big-endian base-six digits, minus trailing zeros.
+const fracBaseSix = (ds, compact) => {
+  const out = compact ? ds.flatMap(d => [Math.floor(d / 6), d % 6]) : [...ds];
+  while (out.length > 1 && out.at(-1) === 0) out.pop();
+  return out;
+};
+
+// Spliced in ahead of the whole-number parser (which rejects anything containing `aih` anyway).
+tokenParsers.splice(1, 0, (s, base) => {
+  const prefix = base.match(/^(?:UU)?SL?/)?.[0] ?? "";
+  const compact = ! prefix || prefix.endsWith("L");
+  const radix = compact ? 36 : 6;
+  const groups = base.slice(prefix.length).match(/[UAI]*[^UAI]+|[UAI]+/g) ?? [];
+  const radixMark = baseLetters('aih');
+  const at = groups.indexOf(radixMark);
+  if (at === -1 || groups.lastIndexOf(radixMark) !== at) return; // Exactly one radix mark.
+  const whole = lettersToDigits(groups.slice(0, at).join(''), compact); // Empty means an elided zero.
+  const frac  = lettersToDigits(groups.slice(at + 1).join(''), compact);
+  if ( ! frac.length) return;
+  const wholeN = digitsToNum(whole, radix);
+  const n = wholeN + frac.reduceRight((f, d) => (f + d) / radix, 0);
+  if ( ! Number.isFinite(n)) return; // Unknown digit, or a compact digit in a basic number.
+  const value = +n.toPrecision(10);
+  return { rawTok: s, type: 'number', word: s, value,
+    baseSix: numberDigits(wholeN, 6).join('') + '.' + fracBaseSix(frac, compact).join(''),
+    verbMeaning:      `to be ${value} times, to do ${value} times`,
+    nounMeaning:      `${value}`,
+    adjectiveMeaning: `${value}`,
+    adverbMeaning:    `${value} times`,
+  };
+});
+  </code></pre></details>
   
   <p>TODO Scientific Notation</p>
   
@@ -2212,7 +2324,15 @@ tokenParsers.splice(1,0,(s,base,ixs) => {
 | `bikmum` | `bik`, `mum` | to eat seafood | seafood, fish, shellfish | - | - | Technically also includes freshwater fare and seaweed. |
 | `bikbup` | `bik`, `bup` | to eat produce | produce, vegetable, fruit | - | - | |
 | `vinjuc` | `vin`, `juc` | to depart, to leave, to exit, to walk away | there, then, that | distant, far, away | distantly | |
-
+| `bibih` | `bih`, `bih` |  to subdivide, to sub-specialize | subdivision, finger, toe | subdivided | subdividedly | |
+| `faftaz` | `faf`, `taz` |  to equal, to balance, to be the same as | equality, identity | equal, balanced, identical, matched | equally, identically | |
+| `kufut` | `kuh`, `fut` |  to ride, to go by vehicle, to be carried to | rider, passenger | riding | - | |
+| `hasat` | `has`, `hat` | to string, to thread, to spin, to draw out thin, to stretch into a strand | thread, string, strand, filament, fiber, yarn, twine, cord, hair | threadlike, stringy, fibrous, wispy, fine, thin | finely, thinly | Where `has` leans toward sturdy lines like sticks, rods, and tubes, `hasat` is the thin, flexible kind: the sort of line that can be wound, knotted, or woven. Follows the same diminutive pattern as `bupasat` (vine) and `bubihat` (twig). Hair, silk, sinew, and optical fiber all count, whatever they're made of. A natural base for further compounds, such as rope, cable, or fabric. |
+| `hasadut` | `hasat`, `dut` | to wire, to bind with wire, to string with wire, to draw metal into wire | wire, metal thread, metal filament, metal string | wiry, wired, wire-bound | - | Metal drawn into a `hasat`, so it keeps the flexibility of thread and doesn't take on the hardness `dut` usually implies. Says nothing about electricity: fencing wire, jewelry wire, and piano strings are all `hasadut`. An electrical cable would more naturally be a compound built on `gaug`. The internal "td" collapses to "d," following the right-side preference. |
+| `hasatfic` | `hasat`, `fic` | to fray, to unravel, to shred into strands, to tease apart | fiber, fibril, staple, strand, loose thread | fibrous, frayed, shredded, fibrillar | - | The pieces a `hasat` is made of, or comes apart into. Thread is spun from `hasatfic`, and a frayed rope end is a tangle of it. Covers cotton and wool fibers, the grain of wood, muscle fibers, and the strands of a torn leaf. Where `hasat` is a strand considered as a whole line, `hasatfic` is a strand considered as a component of something larger. Dietary fiber is most naturally `bik ei hasatfic`. |
+| `tikmuk` | `tik`, `muk` | to function mechanically within an organism | biomachine, biological mechanism, cellular machinery | biomechanical | biomechanically | The machinery of life. The compound deliberately sets aside the "artificial" connotation of `tik`; Papsa draws no fundamental line between machines that are made and machines that are grown, and this word only says whose machine it is. A `tikmuk` need not be alive itself, which is why the most literal phrase is `tik ui muk`, while `tik ei muk` instead describes a machine that is itself alive. Body parts considered as parts are more naturally `bih`; `tikmuk` emphasizes the mechanistic aspect. |
+| `tikmukat` | `tikmuk`, `hat` | to catalyze, to assemble molecules for, to process at the molecular scale | molecular machine, ribosome, enzyme, motor protein, ATP synthase, flagellar motor | biochemical, molecular, nanoscale | - | The smallest `tikmuk` -- individual molecules or complexes that do mechanical or chemical work. |
+    
 TODO:
 adultery/infidelity/cheating/secret romance -> love-new-veiled (papmaincin)
 infatuation -> love-new (papmain)
@@ -2288,7 +2408,7 @@ must -> free-opposite
 investigator/detective -> person-paps-listen
   </pre>
   
-  <details class="spec-code"><summary class="code-title">Add Compound Words to Dictionary</summary><pre><code>
+  <details class="spec-code"><summary class="code-title">Compound Word Lookup</summary><pre><code>
 for (const [wrd,row] of compoundMeanings["Word"]) { coreWords[baseLetters(wrd)] = coreWordEntry(wrd, row); }
   </code></pre></details>
 </section>
