@@ -2204,7 +2204,241 @@ TODO EXAMPLES
 <section id="orthography">
   <h2>Orthography</h2>
 
-  <p>TODO</p>
+  <p>The romanization used throughout this page is a convenience for English readers. Papsa also
+  has a script of its own, designed from scratch rather than borrowed from any existing writing
+  system. Any script has to balance two pairs of goals that pull against each other. Symbols that
+  are easy to <em>write</em> are simple and uniform, and flow into each other, while symbols that
+  are easy to <em>read</em> are contrasting and detailed. Likewise, a script that is
+  <em>accessible</em> to everyone should have only a handful of letters, while a script that is
+  <em>inclusive</em> of everyone should be able to write any name from any language
+  faithfully.</p>
+
+  <p>Papsa resolves both tensions the same way. There is a small <strong>basic script</strong>,
+  which is fast to write and captures only the broad sound-groups that nearly every language
+  distinguishes, and a system of <strong>annotations</strong> that can be layered onto any letter
+  to pin its sound down as precisely as needed (serving as a kind of phonetic alphabet).
+  Basic text without annotations is sufficient for most uses, since the letters are unambiguous.
+  Annotations are mostly important for names, to make script look fancier, or to help children
+  learn to read. The expectation is that people jot things down in the basic script, and tech
+  like keyboards and text editors fills in annotations from context wherever they'd help a
+  reader.</p>
+
+  <p>For ergonomic reasons, letters are mostly vertical, words and lines run left to right,
+  with the lines on page being stacked top to bottom, with pages turned front to back, just like
+  English.</p>
+
+  <p>Every letter is naturally the same width, and almost all of them share a single horizontal
+  baseline that runs through the middle. The shape of each letter is a hint to its sound, with big,
+  smooth nasals, sharp plosives, soft fricatives, and vowels that share a common shape.</p>
+
+  <pre data-table="scriptLetters">
+| Letter | Glyph                            | Shape                                                                                       |
+|:------:|----------------------------------|---------------------------------------------------------------------------------------------|
+|  `N`   | <span data-glyph="n" data-size="3"></span> | A smooth figure that swings both above and below the baseline                              |
+|  `M`   | <span data-glyph="m" data-size="3"></span> | A smooth hump that curls down under the baseline; visibly a sibling of `N`                  |
+|  `K`   | <span data-glyph="k" data-size="3"></span> | A short, sharp hook below the baseline                                                      |
+|  `T`   | <span data-glyph="t" data-size="3"></span> | A sharp zigzag that reaches both the top and the bottom of the line                         |
+|  `P`   | <span data-glyph="p" data-size="3"></span> | A sharp, doubled point above the baseline                                                   |
+|  `F`   | <span data-glyph="f" data-size="3"></span> | A soft double hump above the baseline                                                       |
+|  `H`   | <span data-glyph="h" data-size="3"></span> | A straight line along the baseline, like the neutral mouth that makes it                    |
+|  `C`   | <span data-glyph="c" data-size="3"></span> | A tall closed loop through the baseline; a sibilant, so it resembles `S` (and `F`)          |
+|  `S`   | <span data-glyph="s" data-size="3"></span> | Like `C`, but left open on the right                                                        |
+|  `L`   | <span data-glyph="l" data-size="3"></span> | A crossed loop that hangs below the baseline; the consonant closest in form to the vowels           |
+|  `U`   | <span data-glyph="u" data-size="3"></span> | A round arch with a small loop at its crown                                                 |
+|  `A`   | <span data-glyph="a" data-size="3"></span> | A plain round arch                                                                          |
+|  `I`   | <span data-glyph="i" data-size="3"></span> | A sharp spike                                                                               |
+|  `.`   | <span data-glyph="." data-size="3"></span> | A single vertical bar, abrupt like the sounds it stands for; the only letter off the baseline |
+  </pre>
+
+  <p>Every letter except the click enters at the left end of the baseline and leaves at the right
+  end, so the letters of a word join end to end and the whole word is written as a single
+  unbroken stroke. For example, here's <code>`guk`</code>, written without lifting the pen:
+  <span data-glyph="guk" data-size="3"></span></p>
+
+  <p>And here is <code>`papsa`</code>: <span data-glyph="papsa" data-size="3"></span></p>
+
+  <p>Words are separated by a space. The click never touches the baseline, so writing it always
+  means lifting the pen, which suits a letter that almost only appears as its own word marking a
+  boundary. In the rare cases where a click shows up inside a word, such as the glottal stop in
+  <code>`a'apaun`</code>, the pen lifts for the bar and comes back down to finish the word.
+  Here's the canonical Papsa pangram, <code>`neim kud. pif xarc sou`</code>:</p>
+
+  <p><span data-glyph="neim kud. pif xarc sou" data-size="3"></span></p>
+
+  <h3>Annotations</h3>
+
+  <p>Annotations are often drawn with a thinner or fainter line than the letter itself (or in a
+  different color), so the basic letter underneath always stays legible. TODO: more annotations</p>
+
+  <pre data-table="consonantAnnotations">
+| Mark                          | Meaning                               | Examples |
+|-------------------------------|---------------------------------------|----------|
+| Small circle                  | Voiceless                             | <span data-glyph="k" data-annotated data-size="3.5"></span> <span data-glyph="p" data-annotated data-size="3.5"></span> <span data-glyph="s" data-annotated data-size="3.5"></span> |
+| Downward chevron              | Voiced                                | <span data-glyph="g" data-annotated data-size="3.5"></span> <span data-glyph="b" data-annotated data-size="3.5"></span> <span data-glyph="z" data-annotated data-size="3.5"></span> |
+| Overbar                       | Articulated nearer the lips           | <span data-glyph="n" data-annotated data-size="3.5"></span> <span data-glyph="f" data-annotated data-size="3.5"></span> |
+| Underbar                      | Articulated nearer the throat         | <span data-glyph="ŋ" data-annotated data-size="3.5"></span> <span data-glyph="θ" data-annotated data-size="3.5"></span> |
+| Vertical line through a hoop  | Lateral                               | <span data-glyph="l" data-annotated data-size="3.5"></span> |
+| Cross inside a hoop           | Rhotic                                | <span data-glyph="r" data-annotated data-size="3.5"></span> |
+| Bars above and below          | Dental click                          | <span data-glyph="." data-annotated data-size="3.5"></span> |
+  </pre>
+
+  <p>Voiceless sounds are smooth, so they get a round mark, while voiced sounds vibrate, so they
+  get a pointed one. (Put a hand on your throat while saying "sss" and then "zzz" to feel the
+  difference.) The voicing marks sit near the vertical middle of a letter, in whichever space the letter
+  leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
+  <code>`P`</code> (which rises above it). The place-of-articulation bars follow a pattern that
+  also runs through the letterforms themselves: toward the top means toward the lips, toward the
+  bottom means toward the throat. Annotations combine freely, so a "v" is an <code>`F`</code>
+  with both an overbar and a voiced chevron: <span data-glyph="v" data-annotated data-size="3"></span></p>
+
+  <p>Vowels are annotated with small chevrons and arrows beneath the letter, along with the same
+  overbar and underbar used for consonants. Diphthongs are simply written as two vowel letters.
+  Here are the annotations for the most common vowel sounds of English.</p>
+
+  <pre data-table="englishVowelAnnotations">
+| Sound (IPA) | As in...         | Letter | Annotation                            |
+|-------------|------------------|:------:|---------------------------------------|
+| ɪ           | "i" in "sit"     | `I`    | Left-pointing chevron beneath         |
+| i           | "ea" in "seat"   | `I`    | Right-pointing chevron beneath        |
+| ə           | "u" in "upon"    | `A`    | Right-pointing chevron beneath        |
+| ɛ           | "e" in "dress"   | `A`    | Overbar                               |
+| æ           | "a" in "cat"     | `A`    | Overbar, left-pointing chevron beneath |
+| ʌ           | "u" in "bun"     | `A`    | Underbar                              |
+| ɑ           | "a" in "palm"    | `A`    | Left-pointing arrow and underbar beneath |
+| u           | "ou" in "soup"   | `U`    | Right-pointing chevron beneath        |
+| ʊ           | "oo" in "foot"   | `U`    | Left-pointing chevron beneath         |
+| aɪ          | "ie" in "pie"    | `A`, `I` | None (two letters)                  |
+| eɪ          | "ay" in "may"    | `I`, `I` | Left-pointing arrow beneath the first |
+| oʊ          | "oa" in "goat"   | `U`, `U` | Left-pointing arrow beneath the first |
+| aʊ          | "ow" in "how"    | `A`, `U` | None (two letters)                  |
+  </pre>
+
+  <!-- TODO: Explain the logic behind the vowel chevrons and arrows (not just the English cases),
+       and add glyph coordinates for the vowel marks so they can be drawn like the consonant marks. -->
+
+  <p>Glides like the ones at the start of "yes" and "west" and affricates like the ones in "jump"
+  and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
+  in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
+
+  <h3>Font Generator</h3>
+
+  <p>TODO have an interactive tool that shows SVG versions in addition to papsatasa. Let the page generate the font file?</p>
+  
+  <!-- TODO: Numerals. The basic-numbers table lists a "Papsa Numeral" column; document whether
+       numerals have their own glyphs or are written with letters. -->
+
+  <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
+// TODO: This code was written by Claude and probably needs to be manually inspected at some point.
+
+// Stroke centerlines for the basic letters, ported from the original papsatasa generator.
+// Units: each letter is 360 wide. The baseline is y = 0, negative y is above it, and no stroke
+// reaches more than 396 from the baseline. Every letter except the click enters at (0,0) and
+// leaves at (360,0), which is what lets a whole word be written as one continuous stroke.
+const GLYPH = { width: 360, reach: 396, stroke: 36, markStroke: 24, wordGap: 180 };
+const glyphCurves = {
+  N: [['C', 180,72, 360,-360, 180,-360], ['C', 0,-360, 360,360, 180,360], ['C', 0,360, 180,-72, 360,0]],
+  M: [['C', 360,-72, 360,-360, 180,-360], ['C', 0,-360, 0,468, 180,216], ['C', 360,0, 180,216, 360,0]],
+  K: [['C', 144,0, 144,216, 72,324], ['C', 180,324, 360,0, 180,0], ['L', 360,0]],
+  T: [['C', 180,-144, 180,-396, 36,-396], ['C', 360,-396, 144,324, 72,324], ['C', 108,324, 180,0, 360,0]],
+  P: [['C', 288,-108, 288,-216, 108,-216], ['C', 288,-216, 180,-396, 36,-396], ['C', 360,-396, 180,0, 360,0]],
+  F: [['C', 72,0, 144,-324, 36,-324], ['C', 0,-324, 72,-180, 180,-180], ['C', 288,-180, 360,-324, 324,-324], ['C', 216,-324, 288,0, 360,0]],
+  H: [['L', 360,0]],
+  C: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 360,396, 360,-396, 180,-396], ['C', 36,-396, 36,0, 180,0], ['L', 360,0]],
+  S: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 288,396, 288,144, 288,144], ['C', 324,-396, 108,0, 360,0]],
+  L: [['C', 360,396, 360,396, 180,396], ['C', 0,396, 0,396, 360,0]],
+  U: [['C', 288,0, 288,-396, 180,-396], ['C', 108,-396, 108,-288, 180,-288], ['C', 252,-288, 252,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
+  A: [['C', 288,0, 288,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
+  I: [['C', 180,0, 180,-396, 180,-396], ['C', 180,-396, 180,0, 360,0]],
+};
+// The click is the one letter drawn as its own subpath, so the pen lifts around it.
+const clickStroke = { x: 180, y: -396, segs: [['L', 180,396]] };
+
+// Annotation marks. Each is a list of subpaths ({x, y} start plus segments), in the same
+// coordinates as the letter. Voicing marks hang from a per-letter anchor in the letter's empty space.
+const voiceAnchor = { K: [126,-108], T: [28,64], P: [126,54], F: [126,54], H: [126,108], C: [126,108], S: [126,54] };
+const shiftSeg = ([cmd, ...p], dx, dy) => [cmd, ...p.map((v, j) => v + (j % 2 ? dy : dx))];
+const atAnchor = (ltr, segs) => {
+  const a = voiceAnchor[ltr];
+  return a ? [{ x: a[0], y: a[1], segs: segs.map(s => shiftSeg(s, a[0], a[1])) }] : [];
+};
+const glyphMarks = {
+  unvoiced: (l) => atAnchor(l, [['C', 0,-72, 108,-72, 108,0], ['C', 108,72, 0,72, 0,0]]),
+  voiced:   (l) => atAnchor(l, [['L', 54,54], ['L', 108,0]]),
+  overbar:  () => [{ x: 36, y: -396, segs: [['L', 324,-396]] }],
+  underbar: () => [{ x: 36, y: 396,  segs: [['L', 324,396]] }],
+  lateral:  (l) => l === 'L' ? [{ x: 180, y: 396, segs: [['L', 180,-108]] }] : [],
+  rhotic:   (l) => l === 'L' ? [{ x: 64, y: 372, segs: [['L', 254,280]] }, { x: 106, y: 280, segs: [['L', 296,372]] }] : [],
+  dental:   (l) => l === '!' ? [{ x: 0, y: -396, segs: [['L', 360,-396]] }, { x: 0, y: 396, segs: [['L', 360,396]] }] : [],
+};
+
+// Which marks each romanized letter implies, when a snippet asks to be drawn annotated.
+// Letters not listed (m, h, x, the vowels, ...) are drawn bare.
+const romanizationMarks = {
+  k: ['unvoiced'], g: ['voiced'], t: ['unvoiced'], d: ['voiced'], p: ['unvoiced'], b: ['voiced'],
+  f: ['unvoiced', 'overbar'], v: ['voiced', 'overbar'], 'θ': ['underbar'],
+  c: ['unvoiced'], j: ['voiced'], s: ['unvoiced'], z: ['voiced'],
+  n: ['overbar'], 'ŋ': ['underbar'], l: ['lateral'], r: ['rhotic'], '.': ['dental'],
+};
+
+const segText = ([cmd, ...p]) => {
+  const pairs = [];
+  for (let j = 0; j < p.length; j += 2) pairs.push(p[j] + ',' + p[j+1]);
+  return ' ' + cmd + pairs.join(' ');
+};
+const subpathText = (sp, dx) => ` M${sp.x + dx},${sp.y}` + sp.segs.map(s => segText(shiftSeg(s, dx, 0))).join('');
+
+// Romanized Papsa text -> { letters, marks, width }, as SVG path data.
+const glyphPaths = (text, annotated = false) => {
+  let letters = '', marks = '', x = 0;
+  for (const word of text.match(/[.,]|[^\s.,]+/g) ?? []) {
+    let penDown = false;
+    for (const ch of word) {
+      const ltr = baseLetter(ch);
+      if (ltr === '!') {
+        letters += subpathText(clickStroke, x);
+        penDown = false;
+      } else {
+        if ( ! penDown) { letters += ` M${x},0`; penDown = true; }
+        letters += glyphCurves[ltr].map(s => segText(shiftSeg(s, x, 0))).join('');
+      }
+      if (annotated)
+        for (const m of romanizationMarks[ch.toLowerCase()] ?? [])
+          for (const sp of glyphMarks[m](ltr)) marks += subpathText(sp, x);
+      x += GLYPH.width;
+    }
+    x += GLYPH.wordGap;
+  }
+  return { letters, marks, width: Math.max(0, x - GLYPH.wordGap) };
+};
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const glyphSVG = (text, { annotated = false, size = 2.4 } = {}) => {
+  const { letters, marks, width } = glyphPaths(text, annotated);
+  const pad = GLYPH.stroke / 2, height = 2 * (GLYPH.reach + pad);
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', `${-pad} ${-GLYPH.reach - pad} ${width + 2 * pad} ${height}`);
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', `${text} in Papsa script`);
+  svg.style.cssText = `height:${size}em; width:${size * (width + 2 * pad) / height}em; vertical-align:middle; overflow:visible`;
+  const title = document.createElementNS(SVG_NS, 'title');
+  title.textContent = text;
+  svg.appendChild(title);
+  const addPath = (d, strokeWidth, opacity) => {
+    if ( ! d) return;
+    const path = document.createElementNS(SVG_NS, 'path');
+    for (const [k, v] of Object.entries({ d, fill: 'none', stroke: 'currentColor', 'stroke-width': strokeWidth,
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity })) path.setAttribute(k, v);
+    svg.appendChild(path);
+  };
+  addPath(letters, GLYPH.stroke, 1);
+  addPath(marks, GLYPH.markStroke, 0.5);  // Annotations are fainter than the letters they sit on.
+  return svg;
+};
+
+// Draw every &lt;span data-glyph="..."&gt; on the page. Add data-annotated for marks, data-size for scale (in em).
+document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
+  glyphSVG(el.dataset.glyph, { annotated: el.hasAttribute('data-annotated'), size: +el.dataset.size || 2.4 })));
+  </code></pre></details>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
