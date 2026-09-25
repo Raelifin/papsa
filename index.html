@@ -1728,20 +1728,27 @@ I met a little cottage girl; she was eight years old, she said.
   
   <pre data-table="papsaNames">  
   TODO Fill in etymologies!
-| Papsa Name  | English        | Etymology        | Notes |
-|-------------|----------------|------------------|-------|
-| `vufua`     | Earth          |                  |       |
-| `vufuduta`  | Luna           |                  |       |
-| `guixuvina` | Sol            |                  | Often just "ina" |
-| `vufusama`  | Milky Way      |                  |       |
-| `mazgu`     | day            |                  | 24 hour period |
-| `aihat`     | sit            |                  | Papsa is intended to be so neutral that it doesn't even privilege the human form. As such, there's no core word for sitting, as that pose isn't universal among body plans. The closest core word is `fifsaihat` (literally "half pose"), which is used for deliberately being diagonal. `aihat` is a pun on that and `hat`, since sitting down can also make someone take up less space. |
-| `ikneimfic` | laugh          |                  | Where `neimfic` is about the experience of humor, `ikneimfic` is about the sound of laughter and the specific expression of amusement. Can also be used to capture humorless laughter. |
-| `ikneimcun` | cry, weep      |                  | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
-| `aisbib`    | fingertip unit | `nais` + `bibih` |       |
-| `aisas`     | stretch unit   | `nais` + `has`   |       |
-| `aisasuh`   | tower unit     | `nais` + `hasuh` |       |
-| `aisin`     | Papsan Mile    | `nais` + i + n   |       |
+| Papsa Name  | English         | Etymology        | Notes |
+|-------------|-----------------|------------------|-------|
+| `vufua`     | Earth           |                  |       |
+| `vufuduta`  | Luna            |                  |       |
+| `guixuvina` | Sol             |                  | Often just "ina" |
+| `vufusama`  | Milky Way       |                  |       |
+| `mazgu`     | day             |                  | 24 hour period |
+| `aihat`     | sit             |                  | Papsa is intended to be so neutral that it doesn't even privilege the human form. As such, there's no core word for sitting, as that pose isn't universal among body plans. The closest core word is `fifsaihat` (literally "half pose"), which is used for deliberately being diagonal. `aihat` is a pun on that and `hat`, since sitting down can also make someone take up less space. |
+| `ikneimfic` | laugh           |                  | Where `neimfic` is about the experience of humor, `ikneimfic` is about the sound of laughter and the specific expression of amusement. Can also be used to capture humorless laughter. |
+| `ikneimcun` | cry, weep       |                  | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
+| `aisbib`    | fingertip unit  | `nais` + `bibih` |       |
+| `aisas`     | stretch unit    | `nais` + `has`   |       |
+| `aisasuh`   | tower unit      | `nais` + `hasuh` |       |
+| `aisin`     | Papsan Mile     | `nais` + i + n   |       |
+| `iksoun`    | red             | `fik` + `soun`   |       |
+| `iksaum`    | yellow          | `fik` + `saum`   |       |
+| `iksuk`     | green           | `fik` + `suk`    |       |
+| `iksat`     | cyan            | `fik` + `sat`    |       |
+| `ikseip`    | blue            | `fik` + `seip`   |       |
+| `iksif`     | purple/magenta  | `fik` + `sif`    |       |
+| `ikaih`     | x-ray/gamma-ray | `fik` + `saih`   |       |
     TODO MORE
   </pre>
 
@@ -1757,8 +1764,8 @@ for (const [name,row] of papsaNames["Papsa Name"]) {
   the basic units of measurment in Papsa are, like the SI units, based on <a href="">the cesuim standard</a>.
   Specifically, one full oscilation of cesium-standard light is exactly 3.26122557 centimeters, or approximately 1.28 inches.
   In Papsa, this unit goes by the name `aisbib`, which translates to something like "standard galactic fingertip".
-  All standard Papsa units of measure start with the "ais-" prefix and end with a consonant so that they can be followed by
-  `ei` and then the quantity, just like any noun. The other units of length are multiples of 36 `aisbib`.</p>
+  All standard Papsa units of distance start with the "ais-" prefix and end with a consonant so that they can be followed
+  by `ei` and then the quantity, just like any noun. The other units of length are multiples of 36 `aisbib`.</p>
 
   <pre>
 aisbib ei sat                              |  3 Fingertips (≈ 9.78cm or 3.85 inches)
@@ -1772,22 +1779,78 @@ aiskufut ei slounaum faftaz aisuif ei saum |  36 Rides = 1 Border (≈ 1972 km �
   <p>And of course, just like we can go up in size, we can go down.
   The unit `aisiguk` is the equivalent of about 700nm, which is at the outer edge of
   human color vision, making the etymology of its name — Red — particularly fun. We get
-  a similar name with the smallest named unit, `_TODO_` — X-ray.</p>
+  a similar name with the smallest named distance unit, `aisikaih` — X-ray.</p>
 
   <pre>
 aisbib ei slaihaum faftaz aisasat ei saum      |  1/36 Fingertip = 1 Thread (≈ 0.91 mm)
 aisasat ei slaihaum faftaz aisasatfic ei saum  |  1/36 Thread = 1 Fiber (≈ 25 μm)
 aisasatfic ei slaihaum faftaz aisiguk ei saum  |  1/36 Fiber = 1 Red (≈ 699 nm)
 aisiguk ei slaihaum faftaz aistikmuk ei saum   |  1/36 Red = 1 Biomachine (≈ 19.4 nm)
-aistikmuk ei slaihaum faftaz ais___ ei saum  |  1/36 Biomachine = 1 Molecule (≈ 0.54 nm)
-ais___ ei slaihaum faftaz ais___ ei saum  |  1/36 Molecule = 1 X-ray (≈ 0.015 nm)
+aistikmuk ei slaihaum faftaz aisficat ei saum  |  1/36 Biomachine = 1 Molecule (≈ 0.54 nm)
+aisficat ei slaihaum faftaz aisikaih ei saum   |  1/36 Molecule = 1 X-ray (≈ 0.015 nm)
   </pre>
 
-  <p>TK square/cube units time/space tradeoffs.</p>
+  <p>To talk about a region or volume, mark the exponent via a numerical syllable after `ais`
+  and before the rest of the unit.</p>
+
+  <pre>
+aisukbib  |  square-Fingertip (≈ 10.6 cm²)
+aisatbib  |  cubic-Fingertip (≈ 34.7 cm³)
+aisukuif  |  square-Border (≈ 40% of the area of the USA)
+aisatuif  |  cubic-Border (≈ 1/3 the volume of Luna)
+  </pre>
+
+  <p>Units of time are related to space via the speed of light, which in Papsa is called `kuzuip`
+  — full-speed. Where space uses "ais-", time uses "uiz-". If the other prefix is used for either
+  kind of unit, a light-speed conversion is applied. The units of duration pick up where the units
+  of distance become inhuman.</p>
+
+  <pre>
+uizuif ei sat                                 |  3 Light-Borders (≈ 19.7 miliseconds)
+uizuif ei slounaum faftaz uizinarc ei saum    |  36 Light-Borders = 1 Blink (≈ 0.24 seconds)
+uizinarc ei slounaum faftaz uizbikuh ei saum  |  36 Blinks = 1 Breath (≈ 8.5 seconds)
+uizbikuh ei slounaum faftaz uizimcuk ei saum  |  36 Breaths = 1 Rest (≈ 5 minutes)
+uizimcuk ei slounaum faftaz uizeimtif ei saum |  36 Rests = 1 Visit (≈ 3 hours)
+aiseimtif ei saum                             |  1 Light-Visit (≈ 22 times the distance from the earth to the sun)
+  </pre>
+
+  <p>And of course, one can talk about days and years and such using special names.
+  Consult the dictionary for your unit of choice.</p>
+  
+  <p>TODO MASS, CHARGE, ETC. (Also combination units like speed.)</p>
+
+  <p>For more on units of measure, see <a href="https://utopiandreams.substack.com/p/timekeeping">various</a> <a href="https://utopiandreams.substack.com/p/spacetime-distances">essays</a> on <a href="https://utopiandreams.substack.com/">Utopian Dreams</a>.</p>
 
   <h3>Color</h3>
 
-  <p>Papsa takes a three-fold approach to color. First, there is TODO</p>
+  <p>Papsa takes a three-fold approach to color. First, we can talk in terms of wavelengths. Light with a
+  wavelength of <code>`aisiguk ei saum`</code> — "1 Red-length" — for example, are on the far red side of
+  the spectrum, while light that has a wavelength of half that is just barely ultraviolet. By augmenting
+  <code>`fik`</code>, the word for color, with a wavelength, we can be very precise. When only a fractional
+  number is given, the units are assumed to be Red-lengths.</p>
+
+  <pre>
+fik ei um aisiguk slaiheikt | 24/36 Red color (≈ 466 nm; #0097FF; "dodger blue")
+fik ei slaiheikt            | (Same as above)
+fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric lime")
+  </pre>
+  
+  <p>But that's clunky. Most Papsa speakers use a simpler color system that has six colors, made by
+  compounding <code>`fik`</code> with other root words. These six colors can also be referenced by digits
+  that ascend from red through the color wheel. Because this numerical mapping is totally human-centric,
+  these words are names, rather than compounds, and drop the opening `f`. The fifth color, magenta, exists
+  only in the mind, and doesn't correspond to a single wavelength of light.</p>
+
+  <pre data-table="colors">  
+| Digit | Element | English | Elemental Compound Word | Name      |
+|-------|---------|---------|-------------------------|-----------|
+| 0     | Fire    | Red     |                 `figuk` | `iksoun`  |
+| 1     | Light   | Yellow  |                `figuih` | `iksaum`  |
+| 2     | Plants  | Green   |                `fikbup` | `iksuk`   |
+| 3     | Sky     | Cyan    |                 `fikuh` | `iksat`   |
+| 4     | Water   | Blue    |                `fikmum` | `ikseip`  |
+| 5     | Mind    | Magenta |                `fiknuŋ` | `iksif`   |
+  </pre>
   
   <h3>Body Parts</h3>
   
@@ -1823,8 +1886,6 @@ tigab | net
 
   <h3>Credence, Speculation, and Theory</h3>
   
-  <h3>Days, Times, and Dates</h3>
-  
   <h3>Elements and Atoms</h3>
   
   <h3>Emotion</h3>
@@ -1832,8 +1893,6 @@ tigab | net
   Don't forget gratitude and sorrow as thanks and sorry.
   
   <h3>Family</h3>
-  
-  <h3>Food and Drink</h3>
   
   <h3>Gender and Sexuality</h3>
   
@@ -2205,17 +2264,11 @@ tokenParsers.splice(1, 0, (s, base) => {
 | `punmain` | `pun`, `main` | to greet, to hail, to say hello | greeter, introducer, newcomer-to-conversation | greeting, initiating | initially | |
 | `pundut` | `pun`, `dut` | to say goodbye, to conclude, to end a conversation, to sign off, to hang up, to disconnect | ender-of-conversation | closing, final, concluding | terminally | |
 | `figuk` | `fik`, `guk` | to be as red as | red | red | - | |
-| `fiksoun` | `fik`, `soun` | to be as red as | red | red | - | |
 | `figuih` | `fik`, `guih` | to be as yellow as | yellow | yellow | - | |
-| `fiksaum` | `fik`, `saum` | to be as yellow as | yellow | yellow | - | |
 | `fikbup` | `fik`, `bup` | to be as green as | green | green | - | |
-| `fiksuk` | `fik`, `suk` | to be as green as | green | green | - | |
 | `fikuh` | `fik`, `xuh` | to be as cyan as | cyan | cyan | - | |
-| `fiksat` | `fik`, `sat` | to be as cyan as | cyan | cyan | - | |
 | `fikmum` | `fik`, `mum` | to be as blue as | blue | blue | - | |
-| `fikseip` | `fik`, `seip` | to be as blue as | blue | blue | - | |
 | `fiknuŋ` | `fik`, `nuŋ` | to be as purple as | purple, magenta | purple, magenta | - | |
-| `fiksif` | `fik`, `sif` | to be as purple as | purple, magenta | purple, magenta | - | |
 | `fikjuc` | `fik`, `juc` | to be as dark as | blackness, darkness | black, dark | darkly | |
 | `fikzuip` | `fik`, `zuip` | to be as light as | white, lightness, brightness | white, bright, light | brightly | |
 | `vufzuip` | `vuf`, `zuip` | to be the universe of | universe, world | universal | universally | |
@@ -2332,7 +2385,12 @@ tokenParsers.splice(1, 0, (s, base) => {
 | `hasatfic` | `hasat`, `fic` | to fray, to unravel, to shred into strands, to tease apart | fiber, fibril, staple, strand, loose thread | fibrous, frayed, shredded, fibrillar | - | The pieces a `hasat` is made of, or comes apart into. Thread is spun from `hasatfic`, and a frayed rope end is a tangle of it. Covers cotton and wool fibers, the grain of wood, muscle fibers, and the strands of a torn leaf. Where `hasat` is a strand considered as a whole line, `hasatfic` is a strand considered as a component of something larger. Dietary fiber is most naturally `bik ei hasatfic`. |
 | `tikmuk` | `tik`, `muk` | to function mechanically within an organism | biomachine, biological mechanism, cellular machinery | biomechanical | biomechanically | The machinery of life. The compound deliberately sets aside the "artificial" connotation of `tik`; Papsa draws no fundamental line between machines that are made and machines that are grown, and this word only says whose machine it is. A `tikmuk` need not be alive itself, which is why the most literal phrase is `tik ui muk`, while `tik ei muk` instead describes a machine that is itself alive. Body parts considered as parts are more naturally `bih`; `tikmuk` emphasizes the mechanistic aspect. |
 | `tikmukat` | `tikmuk`, `hat` | to catalyze, to assemble molecules for, to process at the molecular scale | molecular machine, ribosome, enzyme, motor protein, ATP synthase, flagellar motor | biochemical, molecular, nanoscale | - | The smallest `tikmuk` -- individual molecules or complexes that do mechanical or chemical work. |
-    
+| `ficat` | `fic`, `hat` | to disintegrate | atom, element, molecule, particle | molecular, atomic | - | A generic way to talk about particles. |
+| `guixarc` | `guih`, `xarc` | to flash, to flare, to glint, to flicker once | flash, flare, glint, burst of light, camera flash | flashing, momentary, glinting | momentarily, in a flash | A light that shines and is gone. Implies a single brief event; a light that keeps flashing is `guimaz`. The flash of lightning is a `guixarc`, though the lightning itself is `gaug`. |
+| `guimaz` | `guih`, `maz` | to blink, to strobe, to pulse, to flash on and off, to signal with light | blinker, strobe, beacon, lighthouse, signal lamp, turn signal | blinking, strobing, pulsing, intermittent | intermittently, rhythmically | A light with the character of a cycle, the mirror image of `mazguih`, which is a cycle with the character of light. The noun is the thing that blinks rather than the blinking itself, in keeping with the "ui" vowel of `guih`. Covers regular rhythms (a turn signal, a pulsar) and irregular ones (a failing bulb), as long as the light keeps returning. |
+| `cinarc` | `cin`, `xarc` | to blink, to black out momentarily, to flicker out, to lapse briefly | blink, momentary blackout, lapse, flicker, gap | lapsing, flickering, intermittent | in a blink, instantly | A fleeting concealment: darkness that comes and immediately goes. Most often used for blinking the eyes, described from the inside as a moment of darkness rather than as the motion of a body part. Also covers a flicker in a signal, a brief power outage, or a gap in attention. The inverse of `guixarc`: a flash is a brief light, a blink is a brief dark. |
+| `bikuh` | `bik`, `xuh` | to breathe, to inhale, to respire, to draw breath | breath, inhaled air, respiration | breathable, respiratory, breathing | - | Literally "to consume air." Not tied to lungs: any organism taking in gas qualifies, from a fish drawing oxygen through its gills to a plant absorbing carbon dioxide. Fire is often said to `bikuh`, extending the sense of `bik` as fuel. Centrally about inhalation; breathing out is more naturally a compound built on `pif`. Compare `xukim` (moving air) and `neimuh` (smelling, which a breath often carries). |
+
 TODO:
 adultery/infidelity/cheating/secret romance -> love-new-veiled (papmaincin)
 infatuation -> love-new (papmain)
