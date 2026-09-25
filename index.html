@@ -1816,12 +1816,23 @@ aiseimtif ei saum                             |  1 Light-Visit (≈ 22 times the
 
   <p>And of course, one can talk about days and years and such using special names.
   Consult the dictionary for your unit of choice.</p>
+
+  <p>To talk about units like speed, one can either use names for the specific units, or
+  combine units by multiplying/dividing them just as though they were numbers. By appending
+  "-aih-" to the prefix, one naturally gets the reciprocal unit.</p>
+
+  <pre>
+aisin ei uizaiheimtif ei sat                        |  3 Miles per Vist (≈ 1.5 kph ≈ 0.95 mph)
+aisas ei uizaihinarc ei suk                         |  2 Stretches per Breath (≈ 1 kph)
+aisas ei uizaihinarc ei saum faftaz uaskuh ei saum  |  1 Stretch-per-breath = 1 Go-Speed
+uaskuh ei sounaum naiskuh li iuman kuh              |  6 Go-Speeds is how fast humans go
+  </pre>
   
-  <p>TODO MASS, CHARGE, ETC. (Also combination units like speed.)</p>
+  <p>TODO MASS, CHARGE, ETC.</p>
 
   <p>For more on units of measure, see <a href="https://utopiandreams.substack.com/p/timekeeping">various</a> <a href="https://utopiandreams.substack.com/p/spacetime-distances">essays</a> on <a href="https://utopiandreams.substack.com/">Utopian Dreams</a>.</p>
 
-  <h3>Color</h3>
+  <h3>Colors</h3>
 
   <p>Papsa takes a three-fold approach to color. First, we can talk in terms of wavelengths. Light with a
   wavelength of <code>`aisiguk ei saum`</code> — "1 Red-length" — for example, are on the far red side of
@@ -1851,10 +1862,6 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
 | 4     | Water   | Blue    |                `fikmum` | `ikseip`  |
 | 5     | Mind    | Magenta |                `fiknuŋ` | `iksif`   |
   </pre>
-  
-  <h3>Body Parts</h3>
-  
-  <h3>Buildings, Towns, and Cities</h3>
 
   <h3>Coordinates and Directions</h3>
   
@@ -2147,7 +2154,23 @@ tokenParsers.splice(1, 0, (s, base) => {
 });
   </code></pre></details>
   
-  <p>TODO Scientific Notation</p>
+  <h3 id="fractions">Scientific Notation</h3>
+
+  <p>Just as we can insert a syllable to indicate the trasinion to the fractional part, of a
+  number, we can insert the syllable "-uz-" to mark that we're multiplying the number that
+  came before by <strong>six</strong> to the power of whatever number comes after the syllable.
+  If the preceding number is elided, it's assumed to be 1. In other words, this lets us
+  efficiently express things in scientific notation.</p>
+
+  <pre>
+TODO EXAMPLES
+  </pre>
+
+  <p>To use scientific notation with a negative exponent, use "-uc-" instead of "-uz-".</p>
+
+  <pre>
+TODO EXAMPLES
+  </pre>
   
   <p>TODO Special quantities (e, tau, phi, i, etc)</p>
 
@@ -2464,6 +2487,9 @@ armor -> useful-guard-block
 shield -> guard-useful
 must -> free-opposite
 investigator/detective -> person-paps-listen
+
+More words!!
+Body Parts, Buildings, Towns, and Cities
   </pre>
   
   <details class="spec-code"><summary class="code-title">Compound Word Lookup</summary><pre><code>
