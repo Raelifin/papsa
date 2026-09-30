@@ -1954,44 +1954,54 @@ sounatukeipififat | `0324553` = 0×6⁰ + 3×6¹ + 2×6² + 4×6³ + 5×6⁴ + 5
   thirty-six. In order not to clutter the namespace, compact numbers all start with "sl". Like basic numbers,
   they can be combined in a little-endian fashion, dropping the "sl" when it occurs in the middle of a word.</p>
 
+  <pre class="tall" data-table="compactNumbers">
+| Papsa Word | Base ten | Rule        |
+|------------|----------|-------------|
+| `sloun`    | 0        | basic digit |
+| `slaum`    | 1        | basic digit |
+| `sluk`     | 2        | basic digit |
+| `slat`     | 3        | basic digit |
+| `sleip`    | 4        | basic digit |
+| `slif`     | 5        | basic digit |
+| `slaukt`   | 6        | 1 × 6       |
+| `slaux`    | 7        | prime       |
+| `slurt`    | 8        | 2³          |
+| `slark`    | 9        | 3²          |
+| `sluf`     | 10       | 2 × 5       |
+| `slauj`    | 11       | prime       |
+| `slukt`    | 12       | 2 × 6       |
+| `slauz`    | 13       | prime       |
+| `slux`     | 14       | 2 × 7       |
+| `slaf`     | 15       | 3 × 5       |
+| `slurp`    | 16       | 2⁴          |
+| `slaur`    | 17       | prime       |
+| `slakt`    | 18       | 3 × 6       |
+| `slaug`    | 19       | prime       |
+| `sleif`    | 20       | 4 × 5       |
+| `slax`     | 21       | 3 × 7       |
+| `sluj`     | 22       | 2 × 11      |
+| `slaud`    | 23       | prime       |
+| `sleikt`   | 24       | 4 × 6       |
+| `slirk`    | 25       | 5²          |
+| `sluz`     | 26       | 2 × 13      |
+| `slart`    | 27       | 3³          |
+| `sleix`    | 28       | 4 × 7       |
+| `slaub`    | 29       | prime       |
+| `slikt`    | 30       | 5 × 6       |
+| `slauv`    | 31       | prime       |
+| `slurf`    | 32       | 2⁵          |
+| `slaj`     | 33       | 3 × 11      |
+| `slur`     | 34       | 2 × 17      |
+| `slix`     | 35       | 5 × 7       |
+  </pre>
+
+  <p>Larger compact numbers string these digits together:</p>
+
   <pre>
-  TODO Should I programmatically generate this block or test against it?
-sloun         | Zero
-slaum         | One
-...
-slif          | Five
-slaukt        | Six
-slaux         | Seven
-slurt         | Eight
-slark         | Nine
-sluf          | Ten
-slauj         | Eleven
-slukt         | Twelve
-slauz         | Thirteen
-slux          | Fourteen
-slaf          | Fifteen
-slurp         | Sixteen
-slaur         | Seventeen
-slakt         | Eighteen
-slaug         | Nineteen
-sleif         | Twenty
-slax          | Twenty-one
-sluj          | Twenty-two
-slaud         | Twenty-three
-...
-slaub         | Twenty-nine
-slikt         | Thirty
-slauv         | Thirty-one
-slurf         | Thirty-two
-slaj          | Thirty-three
-slur          | Thirty-four
-slix          | Thirty-five
 slounaum      | Thirty-six
 slaumaum      | Thirty-seven
 slukaum       | Thirty-eight
-...
 slifuf        | Three-hundred-sixty-five
-...
 slaktuzixat   | One-hundred-eighty-six-thousand, two-hundred-eighty-two
   </pre>
 
@@ -2050,6 +2060,26 @@ const numberDigits = (n, radix) => {
 };
 const numberWord = (n, compact) =>
   (compact ? 'sl' : 's') + numberDigits(n, compact ? 36 : 6).map(d => digitSuff[d]).join('');
+
+// The digit rules above must give each number from 0 to 35 a syllable of its own.
+for (let n = 0; n < 36; n++)
+  if (bySuffix[baseLetters(digitSuff[n] ?? '')] !== n)
+    fail(`Compact digit ${n} (${digitSuff[n]}) is missing or shares its syllable with another digit.`);
+
+// The compact-number table must list 0 to 35 in order, each spelled as the rules above spell it.
+for (const [word, row] of compactNumbers['Papsa Word']) {
+  const n = +row['Base ten'], rule = row['Rule'];
+  if (row.index !== n) fail(`The compact-number table should list ${row.index} where it lists ${n}.`);
+  if (numberWord(n, true) !== word) fail(`${word} should be ${numberWord(n, true)}, the compact word for ${n}.`);
+  const [, a, b] = rule.match(/^(\d+) × (\d+)$/) ?? [];
+  const [, base, exp] = rule.match(/^(\d+)([²³⁴⁵])$/) ?? [];
+  const holds = rule === 'basic digit' ? n < 6
+    : rule === 'prime' ? n in primeConsonants
+    : a ? a * b === n
+    : base ? base ** ('²³⁴⁵'.indexOf(exp) + 2) === n
+    : false;
+  if ( ! holds) fail(`The rule "${rule}" doesn't give ${n}.`);
+}
 
 const numberEntry = (n, compact) => ({
   word: numberWord(n, compact),
@@ -2169,6 +2199,21 @@ tokenParsers.splice(1, 0, (s, base) => {
   const q = groupsToQuantity(groups, compact);
   return q && quantityEntry(s, q.value, q.baseSix);
 });
+
+// The common-fractions table must agree with the parser. A trailing "…" means the digits repeat,
+// so they only need to be right up to the last place shown.
+for (const [fraction, row] of commonFractions['Fraction']) {
+  const [num, den] = fraction.split('/').map(Number);
+  for (const col of ['Basic', 'Compact']) {
+    const word = row[col].replace(/…$/, '');
+    const { compact, groups } = numberParts(baseLetters(word));
+    const q = groupsToQuantity(groups, compact);
+    const places = groups.length - groups.indexOf(radixMark) - 1;
+    const tolerance = row[col].endsWith('…') ? (compact ? 36 : 6) ** -places : 1e-9;
+    if ( ! q || Math.abs(q.value - num / den) >= tolerance) fail(`${word} isn't ${fraction}.`);
+    if (q.baseSix !== row['Base six'].replace(/…$/, '')) fail(`${word} is ${q.baseSix} in base six, not ${row['Base six']}.`);
+  }
+}
   </code></pre></details>
   
   <h3 id="scientific-notation">Scientific Notation</h3>
