@@ -1955,44 +1955,44 @@ sounatukeipififat | `0324553` = 0×6⁰ + 3×6¹ + 2×6² + 4×6³ + 5×6⁴ + 5
   they can be combined in a little-endian fashion, dropping the "sl" when it occurs in the middle of a word.</p>
 
   <pre class="tall" data-table="compactNumbers">
-| Papsa Word | Value | Rule        |
-|------------|-------|-------------|
-| `sloun`    | 0     | basic digit |
-| `slaum`    | 1     | basic digit |
-| `sluk`     | 2     | basic digit |
-| `slat`     | 3     | basic digit |
-| `sleip`    | 4     | basic digit |
-| `slif`     | 5     | basic digit |
-| `slaukt`   | 6     | 1 × 6       |
-| `slaux`    | 7     | prime       |
-| `slurt`    | 8     | 2³          |
-| `slark`    | 9     | 3²          |
-| `sluf`     | 10    | 2 × 5       |
-| `slauj`    | 11    | prime       |
-| `slukt`    | 12    | 2 × 6       |
-| `slauz`    | 13    | prime       |
-| `slux`     | 14    | 2 × 7       |
-| `slaf`     | 15    | 3 × 5       |
-| `slurp`    | 16    | 2⁴          |
-| `slaur`    | 17    | prime       |
-| `slakt`    | 18    | 3 × 6       |
-| `slaug`    | 19    | prime       |
-| `sleif`    | 20    | 4 × 5       |
-| `slax`     | 21    | 3 × 7       |
-| `sluj`     | 22    | 2 × 11      |
-| `slaud`    | 23    | prime       |
-| `sleikt`   | 24    | 4 × 6       |
-| `slirk`    | 25    | 5²          |
-| `sluz`     | 26    | 2 × 13      |
-| `slart`    | 27    | 3³          |
-| `sleix`    | 28    | 4 × 7       |
-| `slaub`    | 29    | prime       |
-| `slikt`    | 30    | 5 × 6       |
-| `slauv`    | 31    | prime       |
-| `slurf`    | 32    | 2⁵          |
-| `slaj`     | 33    | 3 × 11      |
-| `slur`     | 34    | 2 × 17      |
-| `slix`     | 35    | 5 × 7       |
+| Papsa Word | Base ten | Rule        |
+|------------|----------|-------------|
+| `sloun`    | 0        | basic digit |
+| `slaum`    | 1        | basic digit |
+| `sluk`     | 2        | basic digit |
+| `slat`     | 3        | basic digit |
+| `sleip`    | 4        | basic digit |
+| `slif`     | 5        | basic digit |
+| `slaukt`   | 6        | 1 × 6       |
+| `slaux`    | 7        | prime       |
+| `slurt`    | 8        | 2³          |
+| `slark`    | 9        | 3²          |
+| `sluf`     | 10       | 2 × 5       |
+| `slauj`    | 11       | prime       |
+| `slukt`    | 12       | 2 × 6       |
+| `slauz`    | 13       | prime       |
+| `slux`     | 14       | 2 × 7       |
+| `slaf`     | 15       | 3 × 5       |
+| `slurp`    | 16       | 2⁴          |
+| `slaur`    | 17       | prime       |
+| `slakt`    | 18       | 3 × 6       |
+| `slaug`    | 19       | prime       |
+| `sleif`    | 20       | 4 × 5       |
+| `slax`     | 21       | 3 × 7       |
+| `sluj`     | 22       | 2 × 11      |
+| `slaud`    | 23       | prime       |
+| `sleikt`   | 24       | 4 × 6       |
+| `slirk`    | 25       | 5²          |
+| `sluz`     | 26       | 2 × 13      |
+| `slart`    | 27       | 3³          |
+| `sleix`    | 28       | 4 × 7       |
+| `slaub`    | 29       | prime       |
+| `slikt`    | 30       | 5 × 6       |
+| `slauv`    | 31       | prime       |
+| `slurf`    | 32       | 2⁵          |
+| `slaj`     | 33       | 3 × 11      |
+| `slur`     | 34       | 2 × 17      |
+| `slix`     | 35       | 5 × 7       |
   </pre>
 
   <p>Larger compact numbers string these digits together:</p>
@@ -2068,7 +2068,7 @@ for (let n = 0; n < 36; n++)
 
 // The compact-number table must list 0 to 35 in order, each spelled as the rules above spell it.
 for (const [word, row] of compactNumbers['Papsa Word']) {
-  const n = +row['Value'], rule = row['Rule'];
+  const n = +row['Base ten'], rule = row['Rule'];
   if (row.index !== n) fail(`The compact-number table should list ${row.index} where it lists ${n}.`);
   if (numberWord(n, true) !== word) fail(`${word} should be ${numberWord(n, true)}, the compact word for ${n}.`);
   const [, a, b] = rule.match(/^(\d+) × (\d+)$/) ?? [];
