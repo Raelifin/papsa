@@ -374,7 +374,7 @@
   (In the Papsa script we do this using diacritics: <code class="script">`g`</code>.) In this way,
   it can serve as a phonetic alphabet, if needed, such as when writing a name.</p>
   
-  <p>To make things easy on English readers, the standard way to romanize Papsa using a small set
+  <p>To make things easy on English readers, the standard way to romanize Papsa uses a small set
   of lowercase letters where each letter represents a single Papsa letter. For example, we use the
   letter "c" for the "sh" sound to clarify it's not the "s" letter plus the "h" letter. And because
   Papsa letters can be pronounced in a variety of ways, letters are chosen to roughly match Anglophone
@@ -470,7 +470,7 @@ const wordIdxs = (wrd) => [...wrd].map(letterIdx);
   that marks the boundary between sentences. Because it is similar to a period, it is often written
   without any space between it and the preceding word. It is usually pronounced with a dental click
   — the tooth-sucking noise that is often written as "tsk!" in English. (When written to close a
-  quote it's written as `,` and pronounced as a more emphatic click. In the very rare cases where it
+  quote it's written as <code>`,`</code> and pronounced as a more emphatic click. In the very rare cases where it
   shows up mid-word it's pronounced as a glottal stop and written with an apostrophe.)</p>
 </section>
 
@@ -1347,9 +1347,9 @@ mum faf faf     |  Water's made of stuff.
   </pre>
 
   <p>If there are multiple options, the most natural Papsa expression is to use numbers
-  (usually 0 and 1) instead of "this" or "that". When the `ous` placeholder is associated with
+  (usually 0 and 1) instead of "this" or "that". When the <code>`ous`</code> placeholder is associated with
   something, we interpret that thing as an option. To reference exclusive options outside the
-  context of a question, use `xih`.</p>
+  context of a question, use <code>`xih`</code>.</p>
 
   <pre>
 eis nuh min kai ous soun saum  |  Do you want option #0 or #1?
@@ -1359,7 +1359,7 @@ eis nuh min kai ous soun saum  |  Do you want option #0 or #1?
   <h3>Cardinals and Ordinals</h3>
 
   <p>When we augment a noun with a number, we think of the number as counting the noun. When we
-  augment a verb, we think of the number counting the number of times the action happens. To say
+  augment a verb, we think of the number as counting the number of times the action happens. To say
   that there's an absence, we simply use the number zero.</p>
 
   <pre>
@@ -1423,7 +1423,7 @@ const lintContent = (c, found) => {
 };
   </code></pre></details>
 
-  <div id="report">(This is where the validation outcomes would be rendered if you had Javascript on.)</div>
+  <div id="report">(This is where the validation outcomes would be rendered if you had JavaScript on.)</div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -1448,7 +1448,7 @@ tut fiksuip im huh kiuh  |  The stone was as yellow as the glowing sky.
 xufaf naun ei vin        |  The weather is currently good.
 ciftoldi ei minbikuk     |  There was a very hungry caterpillar.
   </pre>
-TODO "ciftoldi" is a loanword from lojban, and I probably don't want it or mlatu or gerku on this page.
+TODO "ciftoldi" is a loanword from Lojban, and I probably don't want it or mlatu or gerku on this page.
 TODO:
 
 The big cat likes water, but the small dog prefers meat. -> mum naun im mlatu tat ! cuc li bikmauk naunais im gerku hat
@@ -1535,13 +1535,13 @@ Can you come tomorrow? -> you (traveler (one Day))?
 Have the neighbors gone away for the winter? -> person-place traveler local-opposite> time Winter?
 Does the robin sing in the rain? -> Robin sonic-feel via-sky-water?
 Are you going with us to the concert? -> you and me traveler time-sonic-feel?
-Have you ever travelled in the jungle?-> you (traveler any) place-plant-life?
+Have you ever travelled in the jungle? -> you (traveler any) place-plant-life?
 We sailed down the river for several miles. -> me traveler-water water-traveler-fated via-measured Mile swarm
 Everybody knows about hunting. -> person-all know {want-beast>
-On a sunny morning after the solstice we newed for the mountains. -> me new-traveler place-block via-time bent-glow-new sky-glow via-past-time Solstice
+On a sunny morning after the solstice we started for the mountains. -> me new-traveler place-block via-time bent-glow-new sky-glow via-past-time Solstice
 Tom laughed at the monkey's tricks. -> Tom feel-boon-sonic give-veiled of Monkey
 An old man with a walking stick stood beside the fence. -> person-past of WalkingStick Stand to-place block-base
-The squirrel's nest was hidden by drooping boughs. -> [plant-branch sky-opposite] veiled built of Squirel
+The squirrel's nest was hidden by drooping boughs. -> [plant-branch sky-opposite] veiled built of Squirrel
 The little seeds waited patiently under the snow for the warm spring sun. -> [new-plant shrink] (await cold) {Sun fire} of Spring
 Many little girls with wreaths of flowers on their heads danced around the bonfire. -> [Girl swarm] of [Tiara plant-glow] active-feel to-bent fire-fill
 The cover of the basket fell to the floor. -> plane-guard of hold-plant sky-opposite plane-base
@@ -1638,7 +1638,7 @@ In winter I get up at night, and dress by yellow candlelight.
 Tell the last part of that story again.
 Be quick or you will be too late.
 Will you go with us or wait here?
-She was always, shabby, often ragged, and on cold days very uncomfortable.
+She was always shabby, often ragged, and on cold days very uncomfortable.
 Think first and then act.
 I stood, a little mite of a girl, upon a chair by the window, and watched the falling snowflakes.
 Show the guests these shells, my son, and tell them their strange history.
@@ -1708,14 +1708,14 @@ I met a little cottage girl; she was eight years old, she said.
   <h2>Philosophy</h2>
 
   <p>Papsa is designed to be culturally universal. One way of thinking about this is to
-  imagine that it is designed to be relatively natural for not just humans across time and,
+  imagine that it is designed to be relatively natural for not just humans across time and
   space, but also for non-human animals, artificial intelligences, and aliens. The phonology
   tries not to lean too heavily on distinctions that are only present in some languages
-  (eg tones, voicedness, aspiration), and while the romanized text is shaped for Anglophones,
+  (e.g. tones, voicedness, aspiration), and while the romanized text is shaped for Anglophones,
   the base orthography is intended to be accessible to everyone.</p>
 
   <p>As a result of this universality, Papsa avoids making presumptions about the people who
-  use it. Gender is naturally absent, for example, and words like `nup` apply just as much to
+  use it. Gender is naturally absent, for example, and words like <code>`nup`</code> apply just as much to
   non-human people as they do to humans. (The definition includes lots of human-centric words
   because that's often a reasonable way to translate the word into English, which <em>is</em>
   human-centric.) The core words don't have any of the "human universal" small words like
@@ -1723,7 +1723,7 @@ I met a little cottage girl; she was eight years old, she said.
 
   <p>It's normal for Papsa to get adapted into specific contexts through importing important
   concepts via naming them. For example, English speakers might recognize the Papsa name
-  `iuman` as the word for "human", even though non-English Papsa speakers would not. Still,
+  <code>`iuman`</code> as the word for "human", even though non-English Papsa speakers would not. Still,
   there are some proper nouns that are so important and common that they get universal names.</p>
   
   <pre data-table="papsaNames">  
@@ -1761,11 +1761,11 @@ for (const [name,row] of papsaNames["Papsa Name"]) {
   <h3>Units of Measurement</h3>
 
   <p>For <a href="https://utopiandreams.substack.com/p/spacetime-distances/comment/345143742">practical purposes</a>,
-  the basic units of measurment in Papsa are, like the SI units, based on <a href="https://en.wikipedia.org/wiki/Caesium_standard">the cesium standard</a>.
+  the basic units of measurement in Papsa are, like the SI units, based on <a href="https://en.wikipedia.org/wiki/Caesium_standard">the cesium standard</a>.
   Specifically, one full oscillation of cesium-standard light is exactly 3.26122557 centimeters, or approximately 1.28 inches.
-  In Papsa, this unit goes by the name `aisbib`, which translates to something like "standard galactic fingertip".
+  In Papsa, this unit goes by the name <code>`aisbib`</code>, which translates to something like "standard galactic fingertip".
   All standard Papsa units of distance start with the "ais-" prefix and end with a consonant so that they can be followed
-  by `ei` and then the quantity, just like any noun. The other units of length are multiples of 36 `aisbib`.</p>
+  by <code>`ei`</code> and then the quantity, just like any noun. The other units of length are multiples of 36 <code>`aisbib`</code>.</p>
 
   <pre>
 aisbib ei sat                              |  3 Fingertips (≈ 9.78cm or 3.85 inches)
@@ -1777,9 +1777,9 @@ aiskufut ei slounaum faftaz aisuif ei saum |  36 Rides = 1 Border (≈ 1972 km �
   </pre>
 
   <p>And of course, just like we can go up in size, we can go down.
-  The unit `aisiguk` is the equivalent of about 700nm, which is at the outer edge of
+  The unit <code>`aisiguk`</code> is the equivalent of about 700nm, which is at the outer edge of
   human color vision, making the etymology of its name — Red — particularly fun. We get
-  a similar name with the smallest named distance unit, `aisikaih` — X-ray.</p>
+  a similar name with the smallest named distance unit, <code>`aisikaih`</code> — X-ray.</p>
 
   <pre>
 aisbib ei slaihaum faftaz aisasat ei saum      |  1/36 Fingertip = 1 Thread (≈ 0.91 mm)
@@ -1790,7 +1790,7 @@ aistikmuk ei slaihaum faftaz aisficat ei saum  |  1/36 Biomachine = 1 Molecule (
 aisficat ei slaihaum faftaz aisikaih ei saum   |  1/36 Molecule = 1 X-ray (≈ 0.015 nm)
   </pre>
 
-  <p>To talk about a region or volume, mark the exponent via a numerical syllable after `ais`
+  <p>To talk about a region or volume, mark the exponent via a numerical syllable after "ais-"
   and before the rest of the unit.</p>
 
   <pre>
@@ -1800,7 +1800,7 @@ aisukuif  |  square-Border (≈ 40% of the area of the USA)
 aisatuif  |  cubic-Border (≈ 1/3 the volume of Luna)
   </pre>
 
-  <p>Units of time are related to space via the speed of light, which in Papsa is called `kuzuip`
+  <p>Units of time are related to space via the speed of light, which in Papsa is called "kuzuip"
   — full-speed. Where space uses "ais-", time uses "uiz-". If the other prefix is used for either
   kind of unit, a light-speed conversion is applied. The units of duration pick up where the units
   of distance become inhuman.</p>
@@ -1822,9 +1822,9 @@ aiseimtif ei saum                             |  1 Light-Visit (≈ 22 times the
   "-aih-" to the prefix, one naturally gets the reciprocal unit.</p>
 
   <pre>
-aisin ei uizaiheimtif ei sat                        |  3 Miles per Vist (≈ 1.5 kph ≈ 0.95 mph)
-aisas ei uizaihinarc ei suk                         |  2 Stretches per Breath (≈ 1 kph)
-aisas ei uizaihinarc ei saum faftaz uaskuh ei saum  |  1 Stretch-per-breath = 1 Go-Speed
+aisin ei uizaiheimtif ei sat                        |  3 Miles per Visit (≈ 1.5 kph ≈ 0.95 mph)
+aisas ei uizaihbikuh ei suk                         |  2 Stretches per Breath (≈ 1 kph)
+aisas ei uizaihbikuh ei saum faftaz uaskuh ei saum  |  1 Stretch-per-Breath = 1 Go-Speed
 uaskuh ei sounaum naiskuh li iuman kuh              |  6 Go-Speeds is how fast humans go
   </pre>
   
@@ -1835,7 +1835,7 @@ uaskuh ei sounaum naiskuh li iuman kuh              |  6 Go-Speeds is how fast h
   <h3>Colors</h3>
 
   <p>Papsa takes a three-fold approach to color. First, we can talk in terms of wavelengths. Light with a
-  wavelength of <code>`aisiguk ei saum`</code> — "1 Red-length" — for example, are on the far red side of
+  wavelength of <code>`aisiguk ei saum`</code> — "1 Red-length" — for example, is on the far red side of
   the spectrum, while light that has a wavelength of half that is just barely ultraviolet. By augmenting
   <code>`fik`</code>, the word for color, with a wavelength, we can be very precise. When only a fractional
   number is given, the units are assumed to be Red-lengths.</p>
@@ -1849,7 +1849,7 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
   <p>But that's clunky. Most Papsa speakers use a simpler color system that has six colors, made by
   compounding <code>`fik`</code> with other root words. These six colors can also be referenced by digits
   that ascend from red through the color wheel. Because this numerical mapping is totally human-centric,
-  these words are names, rather than compounds, and drop the opening `f`. The fifth color, magenta, exists
+  these words are names, rather than compounds, and drop the opening <code>`f`</code>. The fifth color, magenta, exists
   only in the mind, and doesn't correspond to a single wavelength of light.</p>
 
   <pre data-table="colors">  
@@ -1938,7 +1938,7 @@ tigab | net
   If we combine <code>`sat`</code> with <code>`sat`</code>, for example, we drop the middle <code>`s`</code> and
   just get <code>`satat`</code> — 33 in base-six, which is 3×1 + 3×6 = twenty-one. Again, this is
   <a href="https://en.wikipedia.org/wiki/Endianness">little endian</a>, so we read the digits as first the number of
-  ones, then the number of sixes, then number of thirty-sixes, and so on. In this way, the reader can (theoretically)
+  ones, then the number of sixes, then the number of thirty-sixes, and so on. In this way, the reader can (theoretically)
   always tell what digit they're on, even when the number is long.</p>
 
   <pre>
@@ -2074,6 +2074,7 @@ tokenParsers.splice(1,0,(s,base,ixs) => {
   const compact = ! prefix || prefix.endsWith("L");
   const digits = lettersToDigits(base.slice(prefix.length), compact);
   const n = digitsToNum(digits, compact ? 36 : 6);
+  if ( ! digits.length) return; // A bare prefix, like the letter `S`, isn't a number.
   if ( ! Number.isFinite(n)) return; // Don't parse NaN
   return { rawTok: s, type: 'number', ...numberEntry(n,compact) };
 });
@@ -2089,7 +2090,7 @@ tokenParsers.splice(1,0,(s,base,ixs) => {
   <p>Before the radix syllable, digits are little-endian, as described above. For basic numbers we
   first see the ones, then the sixes, then the thirty-sixes, and so on. In the fractional part, digits
   run the other way: first the sixths, then the thirty-sixths, and so on. In this way the rule that
-  the listener always knows which place the current syllable occupies, is preserved.</p>
+  the listener always knows which place the current syllable occupies is preserved.</p>
 
   <pre>
 saihaum                |  one sixth — 0.1 in base six ≈ 0.1667
@@ -2277,7 +2278,7 @@ for (const mark of [radixMark, ...Object.keys(exponentMarks)])
   reader.</p>
 
   <p>For <a href="https://utopiandreams.substack.com/p/writing">ergonomic reasons</a>, letters are mostly vertical, words and lines run left to right,
-  with the lines on page being stacked top to bottom, with pages turned front to back, just like
+  with the lines on a page being stacked top to bottom, with pages turned front to back, just like
   English.</p>
 
   <p>Every letter is naturally the same width, and almost all of them share a single horizontal
@@ -2517,7 +2518,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
   <ul>
     <li>Delete duplicated consonants. Papsa doesn't recognize any duplicated letters except "u", "i",
     and ".". Remember that "k" and "g" are the same consonant, et cetera. Prefer the sound from the
-    right-side, when there's a conflict, except in the case of "h" which always loses to "x".</li>
+    right side, when there's a conflict, except in the case of "h" which always loses to "x".</li>
     <li>Soften instances of "j" that follow a plosive into "c".</li>
     <li>Remove instances of "h" (or "x") that are next to other consonants.</li>
     <li>Ensure you haven't created a homonym collision with any other words (looking only at the base
@@ -2622,7 +2623,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
 | `neimfic` | `neim`, `fic` | to laugh at, to find something funny, to be amused by, to enjoy | humor, joke | funny, hilarious, amusing | hilariously, amusingly | |
 | `neimcun` | `neim`, `cun` | to be sad about, to feel bad about | sadness, anguish, misery, suffering | sad, miserable, pathetic, depressed | sadly, miserably | |
 | `neimcap` | `neim`, `cap` | to be angry about, to rage at, to fight with | anger, rage, fury | angry, infuriating | angrily, infuriatingly | |
-| `neimcin` | `neim`, `cin` | to fear, to dread, to worry about | fear, horror, dread, worry, terror | afraid, scary, scared, fearful, fearsome, horrified, horrifying, worried, worrying, anxious, terrified, terrifying | fearfully, fearsomely, horrifyingly, anxiously | This is a word where the vagueness of `neim` does not map to English very naturally. In most contexts, if it's ambiguous, you should interpret `neimcin` as refering to the one who is afraid (or the experience of fear) rather than externally fearsome things, which in Papsa are more naturally described as directly-bad, rather than implying badness by describing the emotion they invoke. |
+| `neimcin` | `neim`, `cin` | to fear, to dread, to worry about | fear, horror, dread, worry, terror | afraid, scary, scared, fearful, fearsome, horrified, horrifying, worried, worrying, anxious, terrified, terrifying | fearfully, fearsomely, horrifyingly, anxiously | This is a word where the vagueness of `neim` does not map to English very naturally. In most contexts, if it's ambiguous, you should interpret `neimcin` as referring to the one who is afraid (or the experience of fear) rather than externally fearsome things, which in Papsa are more naturally described as directly-bad, rather than implying badness by describing the emotion they invoke. |
 | `neimguk` | `neim`, `guk` | to be in pain, to hurt, to endure | pain, injury, anguish | painful, pained | painfully | |
 | `neimcuk` | `neim`, `cuk` | to be calm, to relax, to sit with, to be bored by | calm, tranquility, boredom | calm, neutral, bored, boring, tranquil | calmly | |
 | `neimpap` | `neim`, `pap` | to love | love | lovely, loving | lovingly | |
@@ -2678,7 +2679,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
 | `papsaum` | `pap`, `saum` | to love as a brother, to love as a sister, to love as a parent, to love as a child | parent, child, sibling, brother, sister, mother, father, kid, nuclear family member | - | - | |
 | `papsuk` | `pap`, `suk` | to love as family | grandparent, grandchild, grandkid, half-sibling, niece, nephew, nibling, uncle, aunt | - | - | |
 | `papsat` | `pap`, `sat` | to love as a cousin | cousin | - | - | |
-| `papsuat` | `pap`, `suat` | to love as family | family, clan | clanish | - | |
+| `papsuat` | `pap`, `suat` | to love as family | family, clan | clannish | - | |
 | `pabih` | `pap`, `bih` | to love as a brother, to love as a sister, to love as a sibling | sibling, brother, sister | brotherly, sisterly, fraternal, sororal | - | Used metaphorically more often than `papsaum`. |
 | `papdup` | `pap`, `dup` | to love as a parent | parent, guardian | parental | - | Also applies to step-parents, foster parents, et cetera. |
 | `papmain` | `pap`, `main` | to care for a child, to love a child | child, kid | childish | - | The verb form also applies to teacher/student relationships and even peer relations between kids. Does *not* (usually) apply to grown people who are descended or were raised by someone. More affectionate than `mainup`. |
@@ -2797,7 +2798,7 @@ for (const [wrd,row] of compoundMeanings["Word"]) { coreWords[baseLetters(wrd)] 
   any of the methods listed on <a href="https://maxharms.com/">his personal website</a>.
   You can also submit pull requests <a href="https://github.com/Raelifin/papsa">on GitHub</a>.</p>
 
-  <p>Everything on this website, including <a href="papsatasa.sfd">the font for rendering Papsa
+  <p>Everything on this website, including <a href="PapsaTasa.sfd">the font for rendering Papsa
   text</a>, is released into the public domain and is free for anyone to use.</p>
 </section>
 
