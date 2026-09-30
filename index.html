@@ -2128,49 +2128,102 @@ const fracBaseSix = (ds, compact) => {
   return out;
 };
 
-// Spliced in ahead of the whole-number parser (which rejects anything containing `aih` anyway).
-tokenParsers.splice(1, 0, (s, base) => {
+const radixMark = baseLetters('aih');
+
+// Base letters of a number word -> whether it's compact, and its syllable groups after the prefix.
+const numberParts = (base) => {
   const prefix = base.match(/^(?:UU)?SL?/)?.[0] ?? "";
-  const compact = ! prefix || prefix.endsWith("L");
+  return { compact: ! prefix || prefix.endsWith("L"),
+           groups: base.slice(prefix.length).match(/[UAI]*[^UAI]+|[UAI]+/g) ?? [] };
+};
+
+// Digit groups with at most one radix mark -> { value, baseSix }, or undefined if malformed.
+const groupsToQuantity = (groups, compact) => {
   const radix = compact ? 36 : 6;
-  const groups = base.slice(prefix.length).match(/[UAI]*[^UAI]+|[UAI]+/g) ?? [];
-  const radixMark = baseLetters('aih');
   const at = groups.indexOf(radixMark);
-  if (at === -1 || groups.lastIndexOf(radixMark) !== at) return; // Exactly one radix mark.
-  const whole = lettersToDigits(groups.slice(0, at).join(''), compact); // Empty means an elided zero.
-  const frac  = lettersToDigits(groups.slice(at + 1).join(''), compact);
-  if ( ! frac.length) return;
+  if (groups.lastIndexOf(radixMark) !== at) return; // At most one radix mark.
+  const whole = lettersToDigits((at === -1 ? groups : groups.slice(0, at)).join(''), compact); // Empty means an elided zero.
+  const frac  = at === -1 ? [] : lettersToDigits(groups.slice(at + 1).join(''), compact);
+  if ( ! (at === -1 ? whole : frac).length) return;
   const wholeN = digitsToNum(whole, radix);
-  const n = wholeN + frac.reduceRight((f, d) => (f + d) / radix, 0);
-  if ( ! Number.isFinite(n)) return; // Unknown digit, or a compact digit in a basic number.
-  const value = +n.toPrecision(10);
-  return { rawTok: s, type: 'number', word: s, value,
-    baseSix: numberDigits(wholeN, 6).join('') + '.' + fracBaseSix(frac, compact).join(''),
+  const value = wholeN + frac.reduceRight((f, d) => (f + d) / radix, 0);
+  if ( ! Number.isFinite(value)) return; // Unknown digit, or a compact digit in a basic number.
+  return { value, baseSix: numberDigits(wholeN, 6).join('') + (frac.length ? '.' + fracBaseSix(frac, compact).join('') : '') };
+};
+
+const quantityEntry = (s, value, baseSix) => {
+  value = +value.toPrecision(10);
+  return { rawTok: s, type: 'number', word: s, value, baseSix,
     verbMeaning:      `to be ${value} times, to do ${value} times`,
     nounMeaning:      `${value}`,
     adjectiveMeaning: `${value}`,
     adverbMeaning:    `${value} times`,
   };
+};
+
+// Spliced in ahead of the whole-number parser (which rejects anything containing `aih` anyway).
+tokenParsers.splice(1, 0, (s, base) => {
+  const { compact, groups } = numberParts(base);
+  if ( ! groups.includes(radixMark)) return; // Whole numbers are left to the whole-number parser.
+  const q = groupsToQuantity(groups, compact);
+  return q && quantityEntry(s, q.value, q.baseSix);
 });
   </code></pre></details>
   
   <h3 id="scientific-notation">Scientific Notation</h3>
 
-  <p>Just as we can insert a syllable to indicate the transition to the fractional part, of a
-  number, we can insert the syllable "-uz-" to mark that we're multiplying the number that
-  came before by <strong>six</strong> to the power of whatever number comes after the syllable.
-  If the preceding number is elided, it's assumed to be 1. In other words, this lets us
-  efficiently express things in scientific notation.</p>
+  <p>Just as we can insert a syllable to indicate the transition to the fractional part of a
+  number, we can insert the <strong>exponent syllable</strong> "-iaz-" to mark that
+  we're multiplying the number that came before by <strong>six</strong> to the power of whatever
+  number comes after the syllable. If the preceding number is elided, it's assumed to be 1. In
+  other words, this lets us efficiently express things in scientific notation.</p>
+
+  <p>The exponent is a whole number, written with the same kind of digits as the rest of the word:
+  basic digits in a basic number, compact digits in a compact number, and little-endian either way.
+  But the base being raised to that power is always six, even in a compact number.</p>
 
   <pre>
-TODO EXAMPLES
+saumiazuk          |  1 × 6² = thirty-six
+siazuk             |  6² = thirty-six (the leading 1 is elided)
+sukiazat           |  2 × 6³ = four-hundred-thirty-two
+siazaumaum         |  6⁷ = two-hundred-seventy-nine-thousand, nine-hundred-thirty-six (the exponent is 11 in base six)
+slataihirkuriazukt |  (3 + 25/36 + 34/36²) × 6¹² ≈ 8.1 billion (the population of Earth, approximately)
+slukaihuzukiazikt  |  (2 + 26/36 + 2/36²) × 6³⁰ ≈ 6.022 × 10²³ (Avogadro's number, approximately)
   </pre>
 
-  <p>To use scientific notation with a negative exponent, use "-uc-" instead of "-uz-".</p>
+  <p>To use scientific notation with a negative exponent, use "-iaj-" instead of "-iaz-".</p>
 
   <pre>
-TODO EXAMPLES
+saumiajuk           |  1 × 6⁻² = one thirty-sixth
+siajat              |  6⁻³ = one two-hundred-sixteenth
+sleipaihaugixiajirk |  (4 + 19/36 + 35/36²) × 6⁻²⁵ ≈ 1.602 × 10⁻¹⁹ (the charge of an electron in coulombs)
   </pre>
+
+  <p>Like the radix syllable "-aih-", the exponent syllables are built on a vowel
+  group that no digit uses — every digit's vowel group is one of "ou," "au," "u," "a," "ei," or
+  "i" — so they can never be mistaken for digits.</p>
+
+  <details class="spec-code"><summary class="code-title">Scientific Notation</summary><pre><code>
+const exponentMarks = { [baseLetters('iaz')]: 1, [baseLetters('iaj')]: -1 }; // Mark -> sign of the exponent
+
+// Spliced in ahead of the fraction parser (which rejects anything containing an exponent mark anyway).
+tokenParsers.splice(1, 0, (s, base) => {
+  const { compact, groups } = numberParts(base);
+  const at = groups.findIndex(g => g in exponentMarks);
+  if (at === -1 || groups.slice(at + 1).some(g => g in exponentMarks)) return; // Exactly one exponent mark.
+  const mantissa = at ? groupsToQuantity(groups.slice(0, at), compact) : { value: 1, baseSix: '1' }; // Elided means 1.
+  const exponent = lettersToDigits(groups.slice(at + 1).join(''), compact);
+  if ( ! mantissa || ! exponent.length) return;
+  const e = exponentMarks[groups[at]] * digitsToNum(exponent, compact ? 36 : 6);
+  if ( ! Number.isFinite(e)) return; // Unknown digit, or a compact digit in a basic number.
+  return quantityEntry(s, mantissa.value * 6 ** e,
+    `${mantissa.baseSix}×6^${e < 0 ? '-' : ''}${numberDigits(Math.abs(e), 6).join('')}`);
+});
+
+// Number punctuation must never double as a digit.
+for (const mark of [radixMark, ...Object.keys(exponentMarks)])
+  if (mark in bySuffix) fail(`Number punctuation ${mark} is also the digit ${bySuffix[mark]}.`);
+  </code></pre></details>
   
   <p>TODO Special quantities (e, tau, phi, i, etc)</p>
 
