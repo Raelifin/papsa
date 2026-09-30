@@ -3113,10 +3113,16 @@ if (issues) {
   const table = document.createElement('table');
   table.createTHead().innerHTML = `<tr><th>Where</th><th>Message</th></tr>`;
   const tbody = table.createTBody();
-  for (const x of [...specErrors, ...dupWarnings])
-    tbody.insertRow().innerHTML = `<td><code>${escapeHTML(x.where)}</code></td><td>${escapeHTML(x.reason)}</td>`;
-  for (const x of [...failures, ...lintWarnings])
-    tbody.insertRow().innerHTML = `<td><code lang="art-x-papsa">${x.text}</code></td><td>${escapeHTML(x.reason)}</td>`;
+  // data-kind lets tools/check.py tell errors from lint without parsing the messages.
+  const addRow = (kind, where, reason) => {
+    const tr = tbody.insertRow();
+    tr.dataset.kind = kind;
+    tr.innerHTML = `<td>${where}</td><td>${escapeHTML(reason)}</td>`;
+  };
+  for (const [kind, xs] of [['spec', specErrors], ['duplicate', dupWarnings]])
+    for (const x of xs) addRow(kind, `<code>${escapeHTML(x.where)}</code>`, x.reason);
+  for (const [kind, xs] of [['failure', failures], ['lint', lintWarnings]])
+    for (const x of xs) addRow(kind, `<code lang="art-x-papsa">${x.text}</code>`, x.reason);
   report.appendChild(wrapTable(table));
 } else {
   report.innerHTML = `<p>All ${passes} examples of Papsa text successfully validated!</p>`;
