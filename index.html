@@ -2396,7 +2396,7 @@ for (const mark of [radixMark, ...Object.keys(exponentMarks)])
 
   <pre data-table="englishVowelAnnotations">
 | Sound (IPA) | As in...         | Letter | Annotation                            |
-|-------------|------------------|:------:|---------------------------------------|
+|:-----------:|------------------|--------|---------------------------------------|
 | ɪ           | "i" in "sit"     | `I`    | Left-pointing chevron beneath         |
 | i           | "ea" in "seat"   | `I`    | Right-pointing chevron beneath        |
 | ə           | "u" in "upon"    | `A`    | Right-pointing chevron beneath        |
@@ -2920,6 +2920,8 @@ document.querySelectorAll('pre').forEach(pre => {
     // Build per-column index supporting both obj[key] access and for..of [key, val].
     const tableName = pre.getAttribute('data-table');
     const sepCells = cells(lines[1]);
+    // Colons in the separator row both align a column and mark it as a key column, whose values must be
+    // unique. With no colons anywhere, the first column is the key.
     const hasAnyMarked = sepCells.some(c => c.includes(':'));
     const isKeyCol = (colIdx) => hasAnyMarked ? sepCells[colIdx].includes(':') : colIdx === 0;
     const mkIdx = (col) => {
