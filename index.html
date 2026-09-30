@@ -1444,7 +1444,7 @@ guk figuk                |  The fire is red.
 pun guk bik              |  I burn the food.
 bik guk pun              |  The food burns me.
 nuh bik bup ei tat       |  You ate a big plant.
-tut fiksuip im huh kiuh  |  The stone was as yellow as the glowing sky.
+tut fiksuip im huh guih  |  The stone was as yellow as the glowing sky.
 xufaf naun ei vin        |  The weather is currently good.
 ciftoldi ei minbikuk     |  There was a very hungry caterpillar.
   </pre>
@@ -1748,7 +1748,7 @@ I met a little cottage girl; she was eight years old, she said.
 | `iksat`     | cyan            | `fik` + `sat`    |       |
 | `ikseip`    | blue            | `fik` + `seip`   |       |
 | `iksif`     | purple/magenta  | `fik` + `sif`    |       |
-| `ikaih`     | x-ray/gamma-ray | `fik` + `saih`   |       |
+| `ikaih`     | x-ray/gamma-ray | `fik` + "saih"   |       |
     TODO MORE
   </pre>
 
@@ -2113,7 +2113,7 @@ tokenParsers.splice(1,0,(s,base,ixs) => {
   <h3 id="fractions">Fractions</h3>
 
   <p>Numbers that aren't whole are written by placing the <strong>radix syllable</strong>
-  <code>`aih`</code> between the whole part and the fractional part, much like a decimal point in
+  "-aih-" between the whole part and the fractional part, much like a decimal point in
   English. It works the same way for basic and compact numbers. If the whole part is zero, it can
   be left out entirely.</p>
 
@@ -2576,14 +2576,14 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
   <p>As an example, let's combine <code>`sih`</code> and <code>`xih`</code> to make a word meaning
   something like "unordered list" (a bit of an oxymoron, but hey, it's a concept in English).
   First, we combine, and get "sihxih". The middle letters are both <code>`H`</code>, so we collapse
-  that cluster down to simply "x", and get <code>`sixih`</code>. Now suppose we want to compound
+  that cluster down to simply "x", and get <code data-skip-validation>`sixih`</code>. Now suppose we want to compound
   that again to invent a word for "an unordered list that is divided into sections" by adding
   <code>`fic`</code> to the end. "sixihfic" doesn't have any double-letters, but we need to get rid
-  of the internal h. The final result is <code>`sixific`</code>. But now what if someone else has
-  already combined <code>`sihif`</code> ("steps") with <code>`fic`</code> to create
-  <code>`sihific`</code> ("divided steps"?). Despite the slight difference in pronunciation, this
+  of the internal h. The final result is <code data-skip-validation>`sixific`</code>. But now what if someone else has
+  already combined <code data-skip-validation>`sihif`</code> ("steps") with <code>`fic`</code> to create
+  <code data-skip-validation>`sihific`</code> ("divided steps"?). Despite the slight difference in pronunciation, this
   would have the same (non-annotated) spelling, so we'd be forced to change our word to something
-  like <code>`sixiflic`</code>.</p>
+  like <code data-skip-validation>`sixiflic`</code>.</p>
 
   <p>In practice, namespace collisions are very rare, which is why the example is somewhat
   contrived. As long as neologisms are reserved for concepts with real generality and utility,
