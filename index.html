@@ -2896,7 +2896,7 @@ function wrapTable(table, classes = '') {
 }
 
 const specErrors  = [];  // errors thrown while executing spec code blocks
-const dupWarnings = [];  // duplicate keys found while indexing tables
+const tableErrors = [];  // malformed rows and duplicate keys found while indexing tables
 let runningBlock = null;
 window.addEventListener('error', (e) => {
   if (runningBlock !== null) {
@@ -2909,20 +2909,26 @@ window.addEventListener('error', (e) => {
 document.querySelectorAll('pre').forEach(pre => {
   if (pre.getAttribute('data-table')) {
     // ── Parse markdown table ────────────────────────────────────────────
-    const lines   = pre.textContent.split('\n').map(l => l.trim()).filter(l => l.startsWith('|'));  // TODO Probably should do trim before split and check both start and end and handle errors in a way that'll be obvious to maintainers who make an oopsie
+    const tableName = pre.getAttribute('data-table');
+    // Lines that don't touch a pipe are free-form notes (e.g. TODOs) and are skipped.
+    const lines   = pre.textContent.split('\n').map(l => l.trim()).filter(l => l.startsWith('|') || l.endsWith('|'));
     const splitCells = l => l.split('|').slice(1, -1).map(c => c.trim());
     const cells      = l => splitCells(l).map(c => c.replace(/`([^`]+)`/g, '$1'));
     const htmlCells  = splitCells;
-    const isSep   = l => cells(l).every(c => /^[:\- ]+$/.test(c));
-    const headers = cells(lines[0]);            
-    // TODO Check that each cell in line 1 isSep
+    const isSep   = l => cells(l).every(c => /^:?-+:?$/.test(c));
+    const tableError = reason => tableErrors.push({ where: tableName, reason });
+    if (lines.length < 2 || !isSep(lines[1])) tableError('needs a header row followed by a separator row like |---|---|');
+    const headers = cells(lines[0]);
+    lines.forEach((l, i) => {
+      if (!l.startsWith('|') || !l.endsWith('|')) tableError(`line ${i + 1} must start and end with "|": ${l}`);
+      else if (cells(l).length !== headers.length) tableError(`line ${i + 1} has ${cells(l).length} cells, but the header has ${headers.length}: ${l}`);
+    });
     const rows    = lines.slice(2).map((line, i) => {
       const row = Object.fromEntries(headers.map((h, j) => [h, cells(line)[j] ?? '']));
       row.index = i;   // 0-based row index; doubles as primal number for alphabet table
       return row;
     });
     // Build per-column index supporting both obj[key] access and for..of [key, val].
-    const tableName = pre.getAttribute('data-table');
     const sepCells = cells(lines[1]);
     // Colons in the separator row both align a column and mark it as a key column, whose values must be
     // unique. With no colons anywhere, the first column is the key.
@@ -2939,7 +2945,7 @@ document.querySelectorAll('pre').forEach(pre => {
         for (const key of keys) {
           if (!key) continue;
           if (keyCol && key in seen)
-            dupWarnings.push({ where: tableName, reason: `duplicate key "${key}" in column "${col}" (rows ${seen[key]} and ${row.index})` });
+            tableError( `duplicate key "${key}" in column "${col}" (rows ${seen[key]} and ${row.index})`);
           else
             seen[key] = row.index;
           pairs.push([key, row]);
@@ -3111,7 +3117,7 @@ document.querySelectorAll('[data-validate]').forEach(el => {
   }
 });
 const report = document.querySelector('#report');
-const issues = failures.length + lintWarnings.length + specErrors.length + dupWarnings.length;
+const issues = failures.length + lintWarnings.length + specErrors.length + tableErrors.length;
 if (issues) {
   report.innerHTML = `<p><strong>${issues} issue${issues===1?'':'s'} found:</strong></p>`;
   const table = document.createElement('table');
@@ -3123,7 +3129,7 @@ if (issues) {
     tr.dataset.kind = kind;
     tr.innerHTML = `<td>${where}</td><td>${escapeHTML(reason)}</td>`;
   };
-  for (const [kind, xs] of [['spec', specErrors], ['duplicate', dupWarnings]])
+  for (const [kind, xs] of [['spec', specErrors], ['table', tableErrors]])
     for (const x of xs) addRow(kind, `<code>${escapeHTML(x.where)}</code>`, x.reason);
   for (const [kind, xs] of [['failure', failures], ['lint', lintWarnings]])
     for (const x of xs) addRow(kind, `<code lang="art-x-papsa">${x.text}</code>`, x.reason);
