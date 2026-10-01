@@ -3,7 +3,7 @@
 
 Usage: python3 tools/check.py [path/to/index.html]
 
-Exits 1 if the report lists spec errors, duplicate table keys, or unparseable snippets, or if the
+Exits 1 if the report lists spec errors, malformed tables or duplicate keys, or unparseable snippets, or if the
 page throws. Lint (undefined or malformed words) is printed but doesn't fail the check. Set CHROME
 to a Chrome/Chromium binary if one isn't found on the PATH.
 """
@@ -11,7 +11,7 @@ import html.parser, os, pathlib, re, shutil, subprocess, sys
 
 CANDIDATES = ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome',
               'chrome-headless-shell', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome']
-FATAL = {'spec', 'duplicate', 'failure'}
+FATAL = {'spec', 'table', 'failure'}
 
 class Report(html.parser.HTMLParser):
     """Collects the text of #report's summary and its rows as (kind, where, message)."""
