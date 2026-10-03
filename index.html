@@ -2133,7 +2133,15 @@ const numberDigits = (n, radix) => {
   return ds;  // little-endian
 };
 const numberWord = (n, compact) =>
-  (compact ? 'sl' : 's') + numberDigits(n, compact ? 36 : 6).map(d => digitSuff[d]).join('');
+  (n < 0 ? 'cr' : compact ? 'sl' : 's') + numberDigits(Math.abs(n), compact ? 36 : 6).map(d => digitSuff[d]).join('');
+
+// Base letters of a number word -> whether it's compact, its sign, and its syllable groups after the prefix.
+// Negative numbers are always compact; leaving out the prefix means a positive compact number.
+const numberParts = (base) => {
+  const prefix = base.match(/^(?:UU)?(?:SL?|CL)/)?.[0] ?? "";
+  return { compact: ! prefix || prefix.endsWith("L"), sign: prefix.includes("C") ? -1 : 1,
+           groups: base.slice(prefix.length).match(/[UAI]*[^UAI]+|[UAI]+/g) ?? [] };
+};
 
 // The digit rules above must give each number from 0 to 35 a syllable of its own.
 for (let n = 0; n < 36; n++)
@@ -2158,7 +2166,7 @@ for (const [word, row] of compactNumbers['Papsa Word']) {
 const numberEntry = (n, compact) => ({
   word: numberWord(n, compact),
   value: n,
-  baseSix: numberDigits(n, 6).join(''),
+  baseSix: (n < 0 ? '-' : '') + numberDigits(Math.abs(n), 6).join(''),
   verbMeaning:      `to be ${n} times, to do ${n} times`,
   nounMeaning:      `${n}`,
   adjectiveMeaning: `${n}`,
@@ -2174,13 +2182,12 @@ tokenParsers.push((s) => {
 // Papsa numbers written with letters.
 // Splice instead of push to go after the grammar tokenizer but before the generic name tokenizer.
 tokenParsers.splice(1,0,(s,base,ixs) => {
-  const prefix = base.match(/^(?:UU)?SL?/)?.[0] ?? "";
-  const compact = ! prefix || prefix.endsWith("L");
-  const digits = lettersToDigits(base.slice(prefix.length), compact);
+  const { compact, sign, groups } = numberParts(base);
+  const digits = lettersToDigits(groups.join(''), compact);
   const n = digitsToNum(digits, compact ? 36 : 6);
   if ( ! digits.length) return; // A bare prefix, like the letter `S`, isn't a number.
   if ( ! Number.isFinite(n)) return; // Don't parse NaN
-  return { rawTok: s, type: 'number', ...numberEntry(n,compact) };
+  return { rawTok: s, type: 'number', ...numberEntry(sign * n || 0, compact) };
 });
   </code></pre></details>
 
@@ -2235,13 +2242,6 @@ const fracBaseSix = (ds, compact) => {
 
 const radixMark = baseLetters('aih');
 
-// Base letters of a number word -> whether it's compact, and its syllable groups after the prefix.
-const numberParts = (base) => {
-  const prefix = base.match(/^(?:UU)?SL?/)?.[0] ?? "";
-  return { compact: ! prefix || prefix.endsWith("L"),
-           groups: base.slice(prefix.length).match(/[UAI]*[^UAI]+|[UAI]+/g) ?? [] };
-};
-
 // Digit groups with at most one radix mark -> { value, baseSix }, or undefined if malformed.
 const groupsToQuantity = (groups, compact) => {
   const radix = compact ? 36 : 6;
@@ -2257,7 +2257,7 @@ const groupsToQuantity = (groups, compact) => {
 };
 
 const quantityEntry = (s, value, baseSix) => {
-  value = +value.toPrecision(10);
+  if (typeof value === 'number') value = +value.toPrecision(10); // Imaginary values are strings, like "3i".
   return { rawTok: s, type: 'number', word: s, value, baseSix,
     verbMeaning:      `to be ${value} times, to do ${value} times`,
     nounMeaning:      `${value}`,
@@ -2268,10 +2268,10 @@ const quantityEntry = (s, value, baseSix) => {
 
 // Spliced in ahead of the whole-number parser (which rejects anything containing `aih` anyway).
 tokenParsers.splice(1, 0, (s, base) => {
-  const { compact, groups } = numberParts(base);
+  const { compact, sign, groups } = numberParts(base);
   if ( ! groups.includes(radixMark)) return; // Whole numbers are left to the whole-number parser.
   const q = groupsToQuantity(groups, compact);
-  return q && quantityEntry(s, q.value, q.baseSix);
+  return q && quantityEntry(s, sign * q.value, (sign < 0 ? '-' : '') + q.baseSix);
 });
 
 // The common-fractions table must agree with the parser. A trailing "…" means the digits repeat,
@@ -2328,7 +2328,7 @@ const exponentMarks = { [baseLetters('iaz')]: 1, [baseLetters('iaj')]: -1 }; // 
 
 // Spliced in ahead of the fraction parser (which rejects anything containing an exponent mark anyway).
 tokenParsers.splice(1, 0, (s, base) => {
-  const { compact, groups } = numberParts(base);
+  const { compact, sign, groups } = numberParts(base);
   const at = groups.findIndex(g => g in exponentMarks);
   if (at === -1 || groups.slice(at + 1).some(g => g in exponentMarks)) return; // Exactly one exponent mark.
   const mantissa = at ? groupsToQuantity(groups.slice(0, at), compact) : { value: 1, baseSix: '1' }; // Elided means 1.
@@ -2336,8 +2336,8 @@ tokenParsers.splice(1, 0, (s, base) => {
   if ( ! mantissa || ! exponent.length) return;
   const e = exponentMarks[groups[at]] * digitsToNum(exponent, compact ? 36 : 6);
   if ( ! Number.isFinite(e)) return; // Unknown digit, or a compact digit in a basic number.
-  return quantityEntry(s, mantissa.value * 6 ** e,
-    `${mantissa.baseSix}×6^${e < 0 ? '-' : ''}${numberDigits(Math.abs(e), 6).join('')}`);
+  return quantityEntry(s, sign * mantissa.value * 6 ** e,
+    `${sign < 0 ? '-' : ''}${mantissa.baseSix}×6^${e < 0 ? '-' : ''}${numberDigits(Math.abs(e), 6).join('')}`);
 });
 
 // Number punctuation must never double as a digit.
@@ -2345,9 +2345,101 @@ for (const mark of [radixMark, ...Object.keys(exponentMarks)])
   if (mark in bySuffix) fail(`Number punctuation ${mark} is also the digit ${bySuffix[mark]}.`);
   </code></pre></details>
   
-  <p>TODO Special quantities (e, tau, phi, i, etc)</p>
+  <h3 id="negative-numbers">Negative Numbers</h3>
 
-  <p>TODO juc Negatives</p>
+  <p>A negative number is a compact number that starts with "cr" instead of "sl". Everything after
+  the prefix works the same way, including the radix and exponent syllables.</p>
+
+  <pre>
+craum              |  −1
+crat               |  −3
+crounaum           |  −36
+crifuf             |  −365
+crataihakt         |  −3.5 (−3.I in base thirty-six)
+craihaum           |  −1/36
+craumiajat         |  −1 × 6⁻³ = −1/216 (a negative number with a negative exponent)
+  </pre>
+
+  <p>There are no negative basic numbers. "c" alone can't be the prefix, because words like
+  <code>`cuk`</code> are already taken, and children learn the basic numbers well before they need
+  to go below zero. The "cr" also can't be dropped the way "sl" sometimes is, since what's left
+  would read as a positive number.</p>
+
+  <h3 id="constants">Constants</h3>
+
+  <p>Some numbers can't be written exactly with digits. The most important ones get words of their
+  own, starting with "sk". Each takes the digit nearest its value, so it's easy to guess roughly how
+  big it is. (The exception is −1, which takes zero.)</p>
+
+  <pre data-table="constants">
+| Papsa Word | Digit | Constant              | Value        |
+|------------|-------|-----------------------|--------------|
+| `skoun`    | 0     | −1                    | -1           |
+| `skaum`    | 1     | i, the square root of −1 | i         |
+| `skuk`     | 2     | φ, the golden ratio   | 1.6180339887 |
+| `skat`     | 3     | e, Euler's number     | 2.7182818285 |
+| `skaukt`   | 6     | τ, the circle constant | 6.2831853072 |
+  </pre>
+
+  <p>Digits after a constant multiply it. They're compact digits, and as with any number the
+  radix syllable can mark a fraction. This gives imaginary numbers, and a second way of writing
+  negative numbers.</p>
+
+  <pre>
+skaumat            |  3i
+skaumaihakt        |  0.5i
+skounat            |  −3 (the same as crat)
+  </pre>
+
+  <p>Papsa uses <a href="https://tauday.com/tau-manifesto">τ, not π</a>, as the circle constant, and
+  measures angles in turns. A fraction of a circle is τ times that fraction, so the common fractions
+  above double as the common angles.</p>
+
+  <pre data-table="angles">
+| Angle | Turn | Papsa             |
+|-------|------|-------------------|
+| 360°  | 1    | `skaukt`          |
+| 180°  | 1/2  | `skauktaihakt`    |
+| 90°   | 1/4  | `skauktaihark`    |
+| 60°   | 1/6  | `skauktaihaukt`   |
+| 45°   | 1/8  | `skauktaiheipakt` |
+| 30°   | 1/12 | `skauktaihat`     |
+| 15°   | 1/24 | `skauktaihaumakt` |
+| 10°   | 1/36 | `skauktaihaum`    |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Constants</summary><pre><code>
+// Base letters -> { value, baseSix } for a constant times an optional (compact) multiplier, or undefined.
+const constantQuantity = (base) => {
+  const prefix = base.match(/^(?:UU)?SK/)?.[0];
+  if ( ! prefix) return;
+  const [c, ...rest] = base.slice(prefix.length).match(/[UAI]*[^UAI]+|[UAI]+/g) ?? [];
+  const row = constants['Digit'][bySuffix[c]];
+  if ( ! row) return;
+  const m = rest.length ? groupsToQuantity(rest, true) : { value: 1, baseSix: '1' }; // Elided means 1.
+  if ( ! m) return;
+  if (row['Value'] === 'i') return { value: `${m.value === 1 ? '' : +m.value.toPrecision(10)}i`, baseSix: `${m.baseSix}×i` };
+  const v = +row['Value'];
+  return { value: m.value * v, baseSix: v === -1 ? `-${m.baseSix}` : `${m.baseSix}×${row['Constant'][0]}` };
+};
+
+tokenParsers.splice(1, 0, (s, base) => {
+  const q = constantQuantity(base);
+  return q && quantityEntry(s, q.value, q.baseSix);
+});
+
+// Each constant is spelled with its digit.
+for (const [word, row] of constants['Papsa Word'])
+  if (word !== 'sk' + digitSuff[+row['Digit']]) fail(`${word} should be sk${digitSuff[+row['Digit']]}, for digit ${row['Digit']}.`);
+
+// Each angle must be its turn of τ, in degrees.
+for (const [word, row] of angles['Papsa']) {
+  const [num, den = 1] = row['Turn'].split('/').map(Number);
+  const q = constantQuantity(baseLetters(word));
+  if ( ! q || Math.abs(q.value - 2 * Math.PI * num / den) > 1e-8) fail(`${word} isn't τ×${row['Turn']}.`);
+  if (360 * num / den !== parseFloat(row['Angle'])) fail(`${row['Turn']} of a turn isn't ${row['Angle']}.`);
+}
+  </code></pre></details>
 
   <h3>Algebra</h3>
 
