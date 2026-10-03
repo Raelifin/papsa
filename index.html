@@ -563,6 +563,12 @@ for (const [ltr,row] of alphabet["Letter"]) {
   as <code>`guk`</code>, but then later use the name <code>`aguk`</code> to refer to that
   particular fire. (And if the thing has a very long word, they might just use the pronoun version
   of its name.)</p>
+
+  <p>Papsa names are always one word. (If they weren't, they would cause grammatical confusion.)
+  When someone has a first and last name, Papsa represents that by mashing them together. The same
+  goes for multi-word scientific names. <em>Canis familiaris</em> (dog) becomes
+  <code>`kanafamiliara`</code>. (See <a href="#taxonomy">the taxonomy of Earth organisms</a> for
+  more.)</p>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -1446,40 +1452,39 @@ bik guk pun              |  The food burns me.
 nuh bik bup ei tat       |  You ate a big plant.
 tut fiksuip im huh guih  |  The stone was as yellow as the glowing sky.
 xufaf naun ei vin        |  The weather is currently good.
-ciftoldi ei minbiguk     |  There was a starving caterpillar.
+coumas ei minbiguk       |  There was a starving caterpillar.
+mum naun maukmum         |  Water benefits fish.
+kana                     |  There's a dog.
+kana bik bikmauk         |  Dogs eat meat.
+bikmauk naun kana        |  The dog likes meat.
+am kana tat              |  There is (or was) a big dog.
+am kana naun             |  There's a good dog.
+ak minbik fin hih        |  It might be hungry now.
+um kana tat naun pun     |  We like big dogs.
+maukmum naun fila sou    |  Does the cat like fish?
+fila bik ei am mazgu zous maukmum. na bik ei mazgu bikmauk. na bik ei am mazgu zouc mura  |  Yesterday, the cat ate fish. Today, it is eating meat. Tomorrow, it will eat mice.
+pun neimguih nuh         |  I see you.
+eis nuh tif ous          |  Where do you live?
+pun am pun naun papsa    |  I can speak Papsa well.
   </pre>
-TODO "ciftoldi" is a loanword from Lojban, and I probably don't want it or mlatu or gerku on this page.
-TODO:
+TODO: These still use words from before v0.2, like `sun` for negation and `naunais` for preferring.
 
-The big cat likes water, but the small dog prefers meat. -> mum naun im mlatu tat ! cuc li bikmauk naunais im gerku hat
-Water benefits fish. -> mum naun maukmum
-The dog likes meat, and the cat prefers fish. -> bikmauk naun gerku ! maukmum naunais mlatu
-Dogs eat meat. -> gerku bik bikmauk
-There's a dog. -> gerku
-There's a big dog. -> am gerku tat
-There was a big dog. -> am gerku tat
-The cat's fish is bigger than the dog's meat. -> maukmum ui mlatu suucat bikmauk ui gerku
-Both animals are happy. -> um sik mauk niimnaun
-If it rains tomorrow, the cat will stay inside. -> humum ii am sam tcadi ul suip li mlatu am sun kuh fufih
+The big cat likes water, but the small dog prefers meat. -> mum naun im fila tat. cuc li bikmauk naunais im kana hat
+The dog likes meat, and the cat prefers fish. -> bikmauk naun kana. maukmum naunais fila
+The cat's fish is bigger than the dog's meat. -> maukmum ui fila suucat bikmauk ui kana
+Both animals are happy. -> um sik mauk neimnaun
+If it rains tomorrow, the cat will stay inside. -> humum ei am mazgu zouc ul suip li fila am sun kuh fufih
 It hasn't rained for three days. -> at sun humum fin am cluut tcadi
-The dog said that it wanted to eat, but it couldn't find any food. -> gerku pun li lu bik ul min ! cuc li am sun muf bik
-It might be hungry now. -> ak minbik fin hih
-Please feed the cat every morning. -> uuii maskuimain suip li pifbik mlatu uuii
-Don't forget to give it water twice a day. -> am sun pifcin li mum am sik pif ci sus tcadi uuii
-There's a good dog. -> am gerku naun
-Yesterday, the cat ate fish. Today, it is eating meat. Tomorrow, it will eat mice. -> mlatu bik ii am clam tcadi maukmum ! bik ii am sun tcadi bikmauk ! bik ii am sam tcadi smacu
-Does the cat like fish? -> maukmum naun mlatu suu
-No, it doesn't like fish. -> cis ! maukmum am sun naun
-Why doesn't the big dog like small cats? -> iis uus kut li um mlatu hat am sun naun im gerku tat
+The dog said that it wanted to eat, but it couldn't find any food. -> kana pun li lu bik ul min. cuc li am sun muf bik
+Please feed the cat every morning. -> ouei maskuimain suip li pifbik fila ouei
+Don't forget to give it water twice a day. -> am sun pifcin li mum am sik pif ci sus tcadi ouei
+No, it doesn't like fish. -> ciz. maukmum am sun naun
+Why doesn't the big dog like small cats? -> eis ous kut li um fila hat am sun naun im kana tat
 Because it prefers large animals. -> um mauk tat naunais ul kut
-I see you. -> pun nukiuh nuh
-You don't see me. -> nuh am sun nukiuh pun
-We like big dogs. -> um gerku tat naun pun
-They don't like small cats. -> um mlatu hat am sun naun
-Where do you live? -> iis nuh tif uus
-What is your name? -> iis uus paunup nuh
-How old are you? -> iis uus susmuk nuh
-I can speak Papsa well. -> pun am pun naun papsa
+You don't see me. -> nuh am sun neimguih pun
+They don't like small cats. -> um fila hat am sun naun
+What is your name? -> eis ous paunup nuh
+How old are you? -> eis ous susmuk nuh
 
 The fire shines brightly. -> fire (glow glow)
 The bright fire glows. -> [fire glow] glow
@@ -1904,7 +1909,74 @@ tigab | net
   
   <h3>Gender and Sexuality</h3>
   
-  <h3>Taxonomy of Earth Organisms</h3>
+  <h3 id="taxonomy">Taxonomy of Earth Organisms</h3>
+
+  <p>The broadest word for living things is <code>`muk`</code>, and it's the right word when
+  speculating about life on other planets. Three core words are more specific.
+  <code>`mauk`</code> is for animals, or more generally, organisms with <em>behavior</em>, moving
+  about and processing information in complex ways. <code>`bup`</code> is for plants, but also
+  for fungi, seaweed, and anything else that's big and stationary. <code>`coum`</code> is for
+  germs and bugs: bacteria, viruses, and other microorganisms, along with invertebrates and
+  parasites more generally. (Prions count as <code>`coum`</code>, even though they're probably not
+  <code>`muk`</code>.) Humans are understood to be <code>`mauk`</code>, but the usual word for them is
+  <code>`nup`</code>.</p>
+
+  <p>Like Aristotle and young children, Papsa sorts organisms by their most salient traits rather
+  than by their ancestry. Compounds like <code>`buptat`</code> (tree) carve reality at its obvious
+  joints. (Important, since <a href="https://www.lesswrong.com/s/cuwFMDLAKguxmGkGY/p/fRwdkop6tyhi3d22L">there's no such thing as
+  a tree from a phylogenetic perspective!</a>) Papsa can talk about phylogeny too, but it's rarer than
+  naming things by how they look. In natural edge cases, like jellyfish, barnacles, or Venus flytraps,
+  speakers must simply make a judgment call for that context, or pick a word specific enough to fit
+  cleanly.</p>
+
+  <pre>
+nup mauk                |  People are animals.
+buptat bup              |  Trees are plants.
+coum muk sou            |  Are germs alive?
+mauk ei bup             |  It's a plant-like animal (like a barnacle).
+coumas maukcoum         |  Caterpillars are bugs.
+knidaria maukmum        |  Cnidarians are sea-creatures.
+  </pre>
+
+  <p>Papsa compounds are too long, too vague, or both, for most particular kinds of animal. Many
+  regions have local names, easy for bilingual children, like <code>`kiti`</code> or
+  <code>`dagi`</code>. But the international way to be specific is to import the Latin name from
+  biological taxonomy, the way Italian and Spanish inherited their nouns: take the accusative form,
+  drop the final <em>-m</em>, and spell what's left with its classical pronunciation. Short
+  <em>e</em> and <em>o</em> are open enough to become <code>`a`</code>, while long <em>ē</em> and
+  <em>ō</em> close up into <code>`i`</code> and <code>`u`</code>. The diphthongs <em>ae</em> and
+  <em>au</em> become "ai" and "au", consonantal <em>v</em> and <em>i</em> are the vowels
+  <code>`u`</code> and <code>`i`</code>, <em>y</em> becomes <code>`i`</code>, and
+  <em>c</em> is always hard. This matches classical Latin pronunication, and so diverges sometimes
+  from how English speakers are used to reading Latin names. (For example, pronouncing the leading
+  plosive in `knidaria`.) So <em>Canis</em> (accusative <em>canem</em>) becomes <code>`kana`</code>,
+  <em>Fēlis</em> (<em>fēlem</em>) becomes <code>`fila`</code>, and <em>Lepidoptera</em> becomes
+  <code>`lapidaptara`</code>.</p>
+
+  <p>In some cases, the Latin word is too small to produce a Papsa name. Consider sheep, whose Latin
+  name is <em>Ovis</em> (accusative <em>ovem</em>) and would get written in Papsa as "aua". In these
+  cases, one can prepend the name with "mauk-", or — more typically — just use a
+  nearby word that means roughly the same thing (e.g. Ovis aries or Caprinae).</p>
+
+  <pre data-table="organismNames">
+| Papsa Name    | English              | Latin                 | Notes |
+|---------------|----------------------|-----------------------|-------|
+| `kana`        | dog                  | <em>Canis</em>        | Strictly the genus, which also includes wolves, coyotes and jackals. |
+| `fila`        | cat                  | <em>Felis</em>        | Also small wildcats. |
+| `mura`        | mouse                | <em>Mus</em>          |       |
+| `ratu`        | rat                  | <em>Rattus</em>       |       |
+| `galu`        | chicken              | <em>Gallus</em>       |       |
+| `kapra`       | goat                 | <em>Capra</em>        |       |
+| `rana`        | frog                 | <em>Rana</em>         |       |
+| `farmika`     | ant                  | <em>Formica</em>      |       |
+| `lapidaptara` | butterfly, moth      | <em>Lepidoptera</em>  | An order, rather than a genus. |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Organism Names</summary><pre><code>
+for (const [name,row] of organismNames["Papsa Name"]) {
+  names[baseLetters(name)] = { word: name, meaning: row['English'], notes: row['Notes'] };
+}
+  </code></pre></details>
 
 </section>
 
@@ -2611,6 +2683,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
 | `maukuh` | `mauk`, `xuh` | to behave like a bird | bird, avian | avian, birdlike, feathered | - | |
 | `maukmum` | `mauk`, `mum` | to behave like a marine animal | fish, shellfish, whale, dolphin, shark, plankton, jellyfish | aquatic, marine, fishy | - | |
 | `maukcoum` | `mauk`, `coum` | to swarm, to squirm, to crawl | insect, arthropod, arachnid, worm, bug | insectile, swarming, skittering, crawling | - | |
+| `coumas` | `coum`, `has` | to wriggle, to inch along | caterpillar, worm, maggot, larva, grub | wormy, larval, wriggling | - | A stage of life as much as a kind of creature, since many `coumas` grow up into something else. |
 | `xufik` | `xuh`, `fik` | to (with many colors) hang above | rainbow, spectrum | spectral | - | |
 | `xujuc` | `xuh`, `juc` | to drop, to be below, to sink, to fall off, to descend from | land, underworld, lowlands, ocean floor, gravity well | low, fallen, sunken, downward | - | |
 | `hascap` | `has`, `cap` | to stab, to impale, to gouge, to skewer | blade, spike, sword, spear, barb, skewer | pointy, spiky, sharp | sharply | |
@@ -2736,6 +2809,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
 | `kimnaun` | `kim`, `naun` | to play with, to explore | toy, game, adventure, make-believe, play | playful | playfully | |
 | `bikmum` | `bik`, `mum` | to eat seafood | seafood, fish, shellfish | - | - | Technically also includes freshwater fare and seaweed. |
 | `bikbup` | `bik`, `bup` | to eat produce | produce, vegetable, fruit | - | - | |
+| `bikmauk` | `bik`, `mauk` | to eat meat | meat, flesh | carnivorous, meaty | - | |
 | `vinjuc` | `vin`, `juc` | to depart, to leave, to exit, to walk away | there, then, that | distant, far, away | distantly | |
 | `bibih` | `bih`, `bih` |  to subdivide, to sub-specialize | subdivision, finger, toe | subdivided | subdividedly | |
 | `faftaz` | `faf`, `taz` |  to equal, to balance, to be the same as | equality, identity | equal, balanced, identical, matched | equally, identically | |
@@ -2816,7 +2890,6 @@ bed -> base-fluff
 run -> traveler-traveler
 vegetable -> edible-plant
 preference -> boon-measured
-meat -> edible-beast
 is smaller than -> past-shrink
 is larger than -> future-shrink
 clothing -> useful-guard
@@ -3295,6 +3368,7 @@ function reverseSearch(query) {
   };
   scan(coreWords, ['nounMeaning', 'verbMeaning', 'adjectiveMeaning', 'adverbMeaning']);
   scan(grammarWords, ['meaning']);
+  scan(names, ['meaning']);
   return hits;
 }
 
