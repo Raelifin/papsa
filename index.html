@@ -130,7 +130,8 @@
     .table-wrap.oneline tbody tr { cursor: pointer; }
     .table-wrap.oneline tbody tr:hover { background: #f2f2ec; }
     .table-wrap.oneline tr.open td { white-space: normal; overflow: visible; background: #f5f5ef; }
-    .table-wrap.oneline :is(th, td):first-child { width: var(--word-col); overflow: visible; }
+    /* The word itself never wraps, even in an open row (the body's overflow-wrap would split it). */
+    .table-wrap.oneline tr :is(th, td):first-child { width: var(--word-col); overflow: visible; white-space: nowrap; }
 
     .table-toggle {
       font-family: system-ui, sans-serif; font-size: 0.8rem;
@@ -1947,9 +1948,9 @@ knidaria maukmum        |  Cnidarians are sea-creatures.
   <em>ō</em> close up into <code>`i`</code> and <code>`u`</code>. The diphthongs <em>ae</em> and
   <em>au</em> become "ai" and "au", consonantal <em>v</em> and <em>i</em> are the vowels
   <code>`u`</code> and <code>`i`</code>, <em>y</em> becomes <code>`i`</code>, and
-  <em>c</em> is always hard. This matches classical Latin pronunication, and so diverges sometimes
+  <em>c</em> is always hard. This matches classical Latin pronunciation, and so diverges sometimes
   from how English speakers are used to reading Latin names. (For example, pronouncing the leading
-  plosive in `knidaria`.) So <em>Canis</em> (accusative <em>canem</em>) becomes <code>`kana`</code>,
+  plosive in <code>`knidaria`</code>.) So <em>Canis</em> (accusative <em>canem</em>) becomes <code>`kana`</code>,
   <em>Fēlis</em> (<em>fēlem</em>) becomes <code>`fila`</code>, and <em>Lepidoptera</em> becomes
   <code>`lapidaptara`</code>.</p>
 
