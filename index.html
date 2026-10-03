@@ -1367,23 +1367,46 @@ eis nuh min kai ous soun saum  |  Do you want option #0 or #1?
 
   <p>When we augment a noun with a number, we think of the number as counting the noun. When we
   augment a verb, we think of the number as counting the number of times the action happens. To say
-  that there's an absence, we simply use the number zero.</p>
+  that there's an absence, we simply use the number zero. This is how Papsa says "not": an action
+  that happens zero times doesn't happen.</p>
 
   <pre>
-bik ei sat guk   |   Three foods burned.
-bik guk ei sat   |   The food was burned three times.
-nup ei soun      |   nobody
+bik ei sat guk         |   Three foods burned.
+bik guk ei sat         |   The food was burned three times.
+nup ei soun            |   nobody
+maukmum naun ei soun   |   It doesn't like fish.
+na tat ei soun         |   It isn't big.
+  </pre>
+
+  <p>An absence isn't an opposite. To say that the opposite is the case, augment with
+  <code>`juc`</code> instead. (Augmenting with <code>`ciz`</code> would say that something about
+  the action is false, such as speaking a falsehood rather than staying silent.)</p>
+
+  <pre>
+maukmum naun ei juc    |   Fish repels it.
+nuh pun ei soun        |   You're silent.
+nuh pun ei ciz         |   You're lying.
   </pre>
 
   <p>To express that something comes after some number of things in an ordering, we associate it
-  with the number of things that came before. This leads to an off-by-one dynamic when translating
-  between Papsa and languages like English. The "first" item is associated with zero, the "second"
-  goes with one, and so on. See <a href="#numbers">the appendix</a> for more on numbers.</p>
+  with the <em>negative</em> of the number of things that came before. Rankings count down, since
+  first place outranks second. This also leads to an off-by-one dynamic when translating between
+  Papsa and languages like English. The "first" item is associated with zero, the "second" goes
+  with negative one, and so on. See <a href="#numbers">the appendix</a> for more on numbers.</p>
 
   <pre>
-bik ui sat guk   |   The fourth food burned.
-bik guk ui sat   |   The food was burned by the fourth flame.
-nup ui soun      |   first people
+bik ui crat guk   |   The fourth food burned.
+bik guk ui crat   |   The food was burned by the fourth flame.
+nup ui croun      |   first people
+  </pre>
+
+  <p>So the later something is in an ordering, the lesser its number. When things are ordered by
+  size, <code>`zous ei tat`</code> ("lesser in size") means smaller, and <code>`zouc ei tat`</code>
+  means bigger. These have the compounds <code>`zoujuctat`</code> and <code>`zouctat`</code>.</p>
+
+  <pre>
+maukmum ui fila zouctat bikmauk ui kana   |   The cat's fish is bigger than the dog's meat.
+fila zoujuctat kana                       |   The cat is smaller than the dog.
   </pre>
   
 </section>
@@ -1467,25 +1490,23 @@ fila bik ei am mazgu zous maukmum. na bik ei mazgu bikmauk. na bik ei am mazgu z
 pun neimguih nuh         |  I see you.
 eis nuh tif ous          |  Where do you live?
 pun am pun naun papsa    |  I can speak Papsa well.
+mum naun im fila tat. iur bikmauk naunais im kana hat  |  The big cat likes water, but the small dog prefers meat.
+bikmauk naun kana. uas maukmum naunais fila            |  The dog likes meat, and the cat prefers fish.
+maukmum ui fila zouctat bikmauk ui kana                |  The cat's fish is bigger than the dog's meat.
+mauk ei suk neimnaun                                   |  Both animals are happy.
+humum ei am mazgu zouc ul zuip li fila am kuh soun tci fut  |  If it rains tomorrow, the cat will stay inside.
+na humum ei soun θu zus mazgu ei sat                   |  It hasn't rained for three days.
+kana pun li lu bik ul min. iur am muf soun bik         |  The dog said that it wanted to eat, but it couldn't find any food.
+ouei mazguimain zuip li pif bik θu kuh fila ouei        |  Please feed the cat every morning.
+ceiou pifcin li ak pif suk mazguih mum ceiou           |  Don't forget to give it water twice a day.
+ciz. maukmum naun ei soun                              |  No, it doesn't like fish.
+eis ous kut li um fila hat am naun soun im kana tat    |  Why doesn't the big dog like small cats?
+um mauk tat naunais ul kut                             |  Because it prefers large animals.
+nuh am neimguih soun pun                               |  You don't see me.
+um fila hat am naun soun                               |  They don't like small cats.
+eis ous paunup nuh                                     |  What is your name?
+eis ous zusmuk nuh                                     |  How old are you?
   </pre>
-TODO: These still use words from before v0.2, like `sun` for negation and `naunais` for preferring.
-
-The big cat likes water, but the small dog prefers meat. -> mum naun im fila tat. cuc li bikmauk naunais im kana hat
-The dog likes meat, and the cat prefers fish. -> bikmauk naun kana. maukmum naunais fila
-The cat's fish is bigger than the dog's meat. -> maukmum ui fila suucat bikmauk ui kana
-Both animals are happy. -> um sik mauk neimnaun
-If it rains tomorrow, the cat will stay inside. -> humum ei am mazgu zouc ul suip li fila am sun kuh fufih
-It hasn't rained for three days. -> at sun humum fin am cluut tcadi
-The dog said that it wanted to eat, but it couldn't find any food. -> kana pun li lu bik ul min. cuc li am sun muf bik
-Please feed the cat every morning. -> ouei maskuimain suip li pifbik fila ouei
-Don't forget to give it water twice a day. -> am sun pifcin li mum am sik pif ci sus tcadi ouei
-No, it doesn't like fish. -> ciz. maukmum am sun naun
-Why doesn't the big dog like small cats? -> eis ous kut li um fila hat am sun naun im kana tat
-Because it prefers large animals. -> um mauk tat naunais ul kut
-You don't see me. -> nuh am sun neimguih pun
-They don't like small cats. -> um fila hat am sun naun
-What is your name? -> eis ous paunup nuh
-How old are you? -> eis ous susmuk nuh
 
 The fire shines brightly. -> fire (glow glow)
 The bright fire glows. -> [fire glow] glow
@@ -2929,7 +2950,6 @@ woman -> nupmukikfun or nupikfu
 menarche -> person-life-two-origin-new (nupmukikfumain)
 outside -> place-free
 now -> local-time
-to forget (or to lose track of) -> generous-veiled
 trick -> receiver-veiled
 school (event) -> time-mind-you
 school (place) -> place-mind-you
@@ -2993,6 +3013,13 @@ investigator/detective -> person-paps-listen
 
 More words!!
 Body Parts, Buildings, Towns, and Cities
+| `naunais` | `naun`, `nais` | to be preferred by, to be the preference of | preference, favorite | preferred, favorite | preferably | `naun` on its own is an objective sort of good. Compounding with `nais` says that the good is in a mind's judgment. |
+| `zouctat` | `zouc`, `tat` | to be bigger than, to outsize | - | bigger, larger | - | Greater in an ordering by size. See <a href="#semantics">Cardinals and Ordinals</a> for why. |
+| `zoujuctat` | `zouc`, `juc`, `tat` | to be smaller than | - | smaller, lesser | - | The double negative (not greater in size) keeps it from sounding like `zouctat`. |
+| `paunup` | `paun`, `nup` | to name, to be the name of | name | named, nominal | by name | |
+| `mazguimain` | `mazguih`, `main` | to dawn on | dawn, morning, daybreak, sunrise | early, matutinal | at dawn | |
+| `pifcin` | `pif`, `cin` | to forget, to lose track of | forgetting, oversight, lapse | forgotten, forgetful | forgetfully | To drop in a way that conceals. `niŋ ei soun` is just not knowing, which doesn't capture losing what one once knew. |
+| `zusmuk` | `zus`, `muk` | to be the age of (a living thing) | age, lifetime | aged | - | |
   </pre>
   
   <details class="spec-code"><summary class="code-title">Compound Word Lookup</summary><pre><code>
