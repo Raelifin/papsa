@@ -802,7 +802,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 |------|------|------|-----------|--------|-------|
 | `zus` | to be the time of, to be the duration of | time, period, duration, era, event, moment, instant | temporal, chronological | temporally, lengthily | |
 | `suat` | to multiply, to abound, to throng | multitude, plethora, abundance, crowd, swarm | many, plentiful, numerous, multiple, abundant, manifold | abundantly | |
-| `suaf` | to perpetuate, to extend, to continue | infinity, eternity | infinite, boundless, unending, limitless, eternal, continual | eternally, infinitely, endlessly | TODO: Figure out infinity language with the number system |
+| `suaf` | to perpetuate, to extend, to continue | infinity, eternity | infinite, boundless, unending, limitless, eternal, continual | eternally, infinitely, endlessly | |
 | `sual` | to demark the limit of | limit, edge, bound, boundary | finite, bounded, limited | finitely | |
 | `suin` | to exist, to occur, to be possible, to happen at any time | anything, instance, possibility, existence | existing, possible, real, any | ever, anytime, anywhere | |
 | `zuip` | to encompass, to include, to rule, to enforce, to imply | everything, universe, all, rule, law, total, totality | universal, omnipresent, whole, complete, total | universally, completely, totally | |
@@ -1767,7 +1767,8 @@ I met a little cottage girl; she was eight years old, she said.
 | `ikseip`    | blue              | `fik` + `seip`        |       |
 | `iksif`     | purple/magenta    | `fik` + `sif`         |       |
 | `ikiaz`     | x-ray/ultraviolet | `fik` + "-iaz-"       |       |
-    TODO MORE
+| `suafou`    | ℵ₀                | `suaf` + `soun`       |       |
+| `iasuafou`  | 𝔠, the continuum  | "-iaz-" + `suafou`    | 6^ℵ₀ = 2^ℵ₀ = 𝔠 |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Papsa Names</summary><pre><code>
@@ -2458,7 +2459,25 @@ for (const [word, row] of angles['Papsa']) {
 
   <h3>Infinity and Infinitesimal Calculus</h3>
 
-  <p>TODO: I can’t be bothered to count (>2 implied) = suat; I couldn’t count if I tried, but it’s possible in principle = suatuat; Infinite (vague) = suaf; Countably infinite (ℵ₀) = suafun; Uncountably infinite (𝔠) = suafuʃ (“swafoosh”)</p>
+  <p>When a quantity can't be stated, it's either because counting is too much trouble, or because
+  the quantity is infinite. Papsa has words for both, typically used as augments (e.g. <code>`ei`</code>)
+  like an ordinary number. The two most important infinities are <code>`suafou`</code>
+  ("infinity zero"), also known as ℵ₀, which is the cardinality of the set of integers,
+  and <code>`iasuafou`</code> ("six to the power of infinity zeor), which is the cardinality of the
+  uncountable continuum of real numbers.</p>
+
+  <pre>
+guixuh ei suat                                |  many stars (I can't be bothered to count)
+guixuh ei suatsuat                            |  myriad stars (theoretically finite, but uncountable in practice)
+sip ei suaf                                   |  infinite set (vague)
+sip ei suafou                                 |  countably infinite set
+sip ei iasuafou                               |  uncountably infinite set
+na sisuin suafou. iur am sisuin soun iasuafou |  One can enumerate the elements of ℵ₀, but 𝔠 is uncountable.
+  </pre>
+
+  <p>An infinitesimal is <code>`hatsuaf`</code>, "infinitely small".</p>
+
+  <p>TODO: −∞, infinite ordinals, limits, derivatives, integrals</p>
 
   <h3>Category and Set Theory</h3>
 
@@ -2935,6 +2954,9 @@ document.querySelectorAll('[data-glyph]').forEach(el => el.replaceChildren(
 | `mazguimain` | `mazguih`, `main` | to dawn on | dawn, morning, daybreak, sunrise | early, matutinal | at dawn | |
 | `pifcin` | `pif`, `cin` | to forget, to lose track of | forgetting, oversight, lapse | forgotten, forgetful | forgetfully | To drop in a way that conceals. `niŋ ei soun` is just not knowing, which doesn't capture losing what one once knew. |
 | `zusmuk` | `zus`, `muk` | to be the age of (a living thing) | age, lifetime | aged | - | |
+| `suatsuat` | `suat`, `suat` | to outnumber counting | myriad, countless multitude | countless, innumerable, myriad | innumerably | Finite, unlike `suaf`: countable in principle, but not in practice. |
+| `sisuin` | `sih`, `suin` | to be able to list, to be able to count | - | countable, listable, enumerable | countably | |
+| `hatsuaf` | `hat`, `suaf` | to shrink without end | infinitesimal | infinitesimal | infinitesimally | |
 
 TODO:
 adultery/infidelity/cheating/secret romance -> love-new-veiled (papmaincin)
