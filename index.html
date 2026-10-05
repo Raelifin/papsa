@@ -611,7 +611,7 @@ for (const [ltr,row] of alphabet["Letter"]) {
 | `.`                                            | Sentence divider                               |
 | `uas`, `iur`                                   | {"And", "But"}                                 |
 | `tu`                                           | Addressing a specific listener                 |
-| `ouei`, `ceiou`                                | Command mark, Prohibition (anti-command) mark  |
+| `ouei`, `ceiou`                                | {Command, Prohibition (anti-command)} mark     |
 | `sou`                                          | Yes/no question mark                           |
 | `eis`                                          | Complex question mark                          |
 | `ous`                                          | "what/where/why/..."                           |
@@ -626,8 +626,17 @@ for (const [ltr,row] of alphabet["Letter"]) {
   </pre>
 
   <details class="spec-code"><summary class="code-title">Grammar Word Lookup</summary><pre><code>
+// A "{a, b, ...}" in the usage gives one option per word in the row, in order.
+const usageOf = (word, row) => {
+  const words = row['Word(s)'].split(',').map(w => w.trim());
+  return row['Usage'].replace(/\{([^}]*)\}/g, (_, opts) => {
+    opts = opts.split(',').map(o => o.trim());
+    if (opts.length !== words.length) throw new Error(`{${opts}} needs one option per word in ${words}`);
+    return opts[words.indexOf(word)];
+  });
+};
 for (const [word,row] of phraseWordMeanings["Word(s)"]) {
-  const meaning = row['Usage'];
+  const meaning = usageOf(word, row);
   const phraseMode = ['aug','assoc','add'].find(m => meaning.toLowerCase().includes(m));
   const numLetter = [...word].find(c => "nmktpf".includes(c));
   const slot = numLetter ? meaning[0] : undefined;
@@ -636,7 +645,7 @@ for (const [word,row] of phraseWordMeanings["Word(s)"]) {
 }
 const VOWEL_SLOT = { u: 'S', a: 'V', i: 'O' };
 for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
-  const r = {word, meaning: row['Usage']};
+  const r = {word, meaning: usageOf(word, row)};
   if (/^l[uai]$/.test(word))      { r.clause = 'open';  r.slot = VOWEL_SLOT[word[1]]; }
   else if (/^[uai]l$/.test(word)) { r.clause = 'close'; r.slot = VOWEL_SLOT[word[0]]; }
   grammarWords[baseLetters(word)] = r;
