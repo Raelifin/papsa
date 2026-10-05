@@ -222,8 +222,8 @@
       h3 { margin-top: 1.4rem; }
       .tagline { font-size: 1rem; }
 
-      /* Two compact rows that scroll sideways, rather than a nav that wraps
-         to five lines and eats the screen. */
+      /* Two compact rows that scroll sideways together, rather than a nav
+         that wraps to five lines and eats the screen. */
       .site-nav { padding: 0.4rem 0 0.6rem; }
       .site-nav::after {
         content: "";
@@ -235,12 +235,12 @@
         transition: opacity 0.15s ease;
       }
       .site-nav.at-end::after { opacity: 0; } /* hide once scrolled to the end */
-      nav {
-        font-size: 0.85rem; gap: 0.9rem;
-        flex-wrap: nowrap; overflow-x: auto;
+      .nav-rows {
+        overflow-x: auto;
         scrollbar-width: none; -webkit-overflow-scrolling: touch;
       }
-      nav::-webkit-scrollbar { display: none; }
+      .nav-rows::-webkit-scrollbar { display: none; }
+      nav { font-size: 0.85rem; gap: 0.9rem; flex-wrap: nowrap; width: max-content; }
       nav a { white-space: nowrap; }
 
       table { font-size: 0.85rem; }
@@ -272,7 +272,7 @@
   <p class="meta">Specification v0.1.0</p>
 </header>
 
-<div class="site-nav">
+<div class="site-nav"><div class="nav-rows">
   <nav aria-labelledby="nav-main-label">
     <span class="nav-label" id="nav-main-label">Jump to:</span>
     <a href="#translate">Translate</a>
@@ -293,7 +293,7 @@
     <a href="#compounds">Compounds</a>
     <a href="#resources">Resources</a>
   </nav>
-</div>
+</div></div>
 
 <section id="about">
   <p>Papsa is a constructed language in the logical-language tradition — comparable to Lojban, but
@@ -1744,33 +1744,31 @@ I met a little cottage girl; she was eight years old, she said.
   <code>`iuman`</code> as the word for "human", even though non-English Papsa speakers would not. Still,
   there are some proper nouns that are so important and common that they get universal names.</p>
   
-  <pre data-table="papsaNames">  
-  TODO Fill in etymologies!
-| Papsa Name  | English           | Etymology        | Notes |
-|-------------|-------------------|------------------|-------|
-| `vufua`     | Earth             |                  |       |
-| `vufuduta`  | Luna              |                  |       |
-| `guixuvina` | Sol               |                  | Often just "ina" |
-| `vufusama`  | Milky Way         |                  |       |
-| `mazgu`     | day               |                  | 24 hour period |
-| `aihat`     | sit               |                  | Papsa is intended to be so neutral that it doesn't even privilege the human form. As such, there's no core word for sitting, as that pose isn't universal among body plans. The closest core word is `fifsaihat` (literally "half pose"), which is used for deliberately being diagonal. `aihat` is a pun on that and `hat`, since sitting down can also make someone take up less space. |
-| `ikneimfic` | laugh             |                  | Where `neimfic` is about the experience of humor, `ikneimfic` is about the sound of laughter and the specific expression of amusement. Can also be used to capture humorless laughter. |
-| `ikneimcun` | cry, weep         |                  | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
-| `aisbib`    | fingertip unit    | `nais` + `bibih` |       |
-| `aisas`     | stretch unit      | `nais` + `has`   |       |
-| `aisasuh`   | tower unit        | `nais` + `hasuh` |       |
-| `aisin`     | Papsan Mile       | `nais` + i + n   |       |
-| `ikaih`     | radio/infrared    | `fik` + "-aih-"  |       |
-| `iksoun`    | red               | `fik` + `soun`   |       |
-| `iksaum`    | yellow            | `fik` + `saum`   |       |
-| `iksuk`     | green             | `fik` + `suk`    |       |
-| `iksat`     | cyan              | `fik` + `sat`    |       |
-| `ikseip`    | blue              | `fik` + `seip`   |       |
-| `iksif`     | purple/magenta    | `fik` + `sif`    |       |
-| `ikiaz`     | x-ray/ultraviolet | `fik` + "-iaz-"  |       |
-| `suafou`    | ℵ₀, countable infinity | `suaf` + `soun` |  |
-| `iasuafou`  | 𝔠, the continuum | "-iaz-" + `suafou` | 6^ℵ₀, which is the same as 2^ℵ₀ |
-    TODO MORE
+  <pre class="oneline" data-table="papsaNames">
+| Papsa Name  | English           | Etymology             | Notes |
+|-------------|-------------------|-----------------------|-------|
+| `vufua`     | Earth             | `vufuh`               |       |
+| `vufuduta`  | Luna              | `vufudut`             |       |
+| `guixuvina` | Sol               | `guixuh` + `vin`      | Often just "ina" |
+| `vufusauma` | Milky Way         | `vufusaum`            |       |
+| `mazgu`     | day               | `mazguih`             | 24 hour period |
+| `aihat`     | sit               | `fifsaihat` (& `hat`) | Papsa is intended to be so neutral that it doesn't even privilege the human form. As such, there's no core word for sitting, as that pose isn't universal among body plans. The closest core word is `fifsaihat` (literally "half pose"), which is used for deliberately being diagonal. `aihat` is a pun on that and `hat`, since sitting down can also make someone take up less space. |
+| `ikneimfic` | laugh             | `hik` + `neimfic`     | Where `neimfic` is about the experience of humor, `ikneimfic` is about the sound of laughter and the specific expression of amusement. Can also be used to capture humorless laughter. |
+| `ikneimcun` | cry, weep         | `hik` + `neimcun`     | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
+| `aisbib`    | fingertip unit    | `nais` + `bibih`      |       |
+| `aisas`     | stretch unit      | `nais` + `has`        |       |
+| `aisasuh`   | tower unit        | `nais` + `hasuh`      |       |
+| `aisin`     | Papsan Mile       | `nais` + i + n        |       |
+| `ikaih`     | radio/infrared    | `fik` + "-aih-"       |       |
+| `iksoun`    | red               | `fik` + `soun`        |       |
+| `iksaum`    | yellow            | `fik` + `saum`        |       |
+| `iksuk`     | green             | `fik` + `suk`         |       |
+| `iksat`     | cyan              | `fik` + `sat`         |       |
+| `ikseip`    | blue              | `fik` + `seip`        |       |
+| `iksif`     | purple/magenta    | `fik` + `sif`         |       |
+| `ikiaz`     | x-ray/ultraviolet | `fik` + "-iaz-"       |       |
+| `suafou`    | ℵ₀                | `suaf` + `soun`       |       |
+| `iasuafou`  | 𝔠, the continuum  | "-iaz-" + `suafou`    | 6^ℵ₀ = 2^ℵ₀ = 𝔠 |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Papsa Names</summary><pre><code>
@@ -2462,16 +2460,18 @@ for (const [word, row] of angles['Papsa']) {
   <h3>Infinity and Infinitesimal Calculus</h3>
 
   <p>When a quantity can't be stated, it's either because counting is too much trouble, or because
-  the quantity is infinite. Papsa has words for both, and they go after <code>`ei`</code> like any number.
-  The two most important infinities get names, not core words: <code>`suafou`</code>
-  ("infinity zero") is ℵ₀, and <code>`iasuafou`</code> is six to the power of it, the continuum.</p>
+  the quantity is infinite. Papsa has words for both, typically used as augments (e.g. <code>`ei`</code>)
+  like an ordinary number. The two most important infinities are <code>`suafou`</code>
+  ("infinity zero"), also known as ℵ₀, which is the cardinality of the set of integers,
+  and <code>`iasuafou`</code> ("six to the power of infinity zeor), which is the cardinality of the
+  uncountable continuum of real numbers.</p>
 
   <pre>
-guih ei suat                                  |  many stars (too many to bother counting)
-guih ei suatsuat                              |  countless stars (too many to count even if you tried, but finitely many)
-zus ei suaf                                   |  infinite time, eternity
-sih ei suafou                                 |  a countably infinite list
-sih ei iasuafou                               |  an uncountably infinite list
+guixuh ei suat                                |  many stars (I can't be bothered to count)
+guixuh ei suatsuat                            |  myriad stars (theoretically finite, but uncountable in practice)
+sip ei suaf                                   |  infinite set (vague)
+sip ei suafou                                 |  countably infinite set
+sip ei iasuafou                               |  uncountably infinite set
 na sisuin suafou. iur am sisuin soun iasuafou |  One can enumerate the elements of ℵ₀, but 𝔠 is uncountable.
   </pre>
 
@@ -3580,14 +3580,13 @@ translate(inp.value);
   else window.addEventListener('resize', () => { syncHeight(); updateFade(); });
 
   // ── Edge fade ──
-  // On narrow screens the nav rows scroll sideways behind a right-edge fade
-  // (see .site-nav::after). Drop the fade once every row is scrolled to its end.
-  const rows = [...bar.querySelectorAll('nav')];
+  // On narrow screens the nav rows scroll sideways together behind a right-edge
+  // fade (see .site-nav::after). Drop the fade once they're scrolled to the end.
+  const rows = bar.querySelector('.nav-rows');
   function updateFade() {
-    const atEnd = rows.every(r => r.scrollLeft + r.clientWidth >= r.scrollWidth - 1);
-    bar.classList.toggle('at-end', atEnd);
+    bar.classList.toggle('at-end', rows.scrollLeft + rows.clientWidth >= rows.scrollWidth - 1);
   }
-  rows.forEach(r => r.addEventListener('scroll', updateFade, { passive: true }));
+  rows.addEventListener('scroll', updateFade, { passive: true });
   updateFade();
 
   const sections = links
@@ -3647,12 +3646,9 @@ translate(inp.value);
         if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
       });
       // When the nav rows scroll sideways (narrow screens), keep the active link in view rather than off the edge.
-      if (found) {
-        const row = found.a.parentElement;
-        if (row.scrollWidth > row.clientWidth + 4) {
-          const link = found.a.getBoundingClientRect(), box = row.getBoundingClientRect();
-          row.scrollBy({ left: (link.left + link.width / 2) - (box.left + box.width / 2), behavior: 'smooth' });
-        }
+      if (found && rows.scrollWidth > rows.clientWidth + 4) {
+        const link = found.a.getBoundingClientRect(), box = rows.getBoundingClientRect();
+        rows.scrollBy({ left: (link.left + link.width / 2) - (box.left + box.width / 2), behavior: 'smooth' });
       }
     }
   }
