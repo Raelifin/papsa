@@ -209,10 +209,7 @@
 
     hr { border: none; border-top: 1px solid #ddd; margin: 2.5rem 0; }
 
-    #report p {
-      margin-top: 1.5rem;
-      font-size: 1.4rem;
-    }
+    #report p { margin-top: 1.5rem; }
 
     /* ── Small screens ── */
     @media (max-width: 640px) {
@@ -255,7 +252,6 @@
       details.spec-code pre { font-size: 0.75rem; padding: 0 0.8rem 0.8rem; }
 
       #translate-input, #translate-output { font-size: 1rem; }
-      #report p { font-size: 1.15rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3359,7 +3355,7 @@ if (issues) {
     for (const x of xs) addRow(kind, `<code lang="art-x-papsa">${x.text}</code>`, x.reason);
   report.appendChild(wrapTable(table));
 } else {
-  report.innerHTML = `<p>All ${passes} examples of Papsa text successfully validated!</p>`;
+  report.innerHTML = `<p>All ${passes} examples of Papsa text on this page were successfully validated!</p>`;
 }
 
 // Dictionary rows are clipped to one line (see .oneline); a click opens one in place.
@@ -3538,7 +3534,7 @@ function translate(text) {
     const hits = reverseSearch(t).slice(0, 12);
     if (hits.length)
       html += `<div style="font-family:system-ui,sans-serif;font-size:.85rem;color:#555;margin-bottom:.3rem">Papsa words meaning \u201C${escapeHTML(t)}\u201D:</div>` +
-        hits.map(h => `<div style="margin:.1rem 0"><span style="font-family:'Courier New',monospace;color:#1a5faa">${escapeHTML(h.word)}</span> <span style="color:#777;font-size:.85rem">\u2014 ${escapeHTML(firstFew(h.gloss, 3))}</span></div>`).join('');
+        hits.map(h => `<div style="margin:.1rem 0"><a href="#translate" data-word="${escapeHTML(h.word)}" style="font-family:'Courier New',monospace;color:#1a5faa">${escapeHTML(h.word)}</a> <span style="color:#777;font-size:.85rem">\u2014 ${escapeHTML(firstFew(h.gloss, 3))}</span></div>`).join('');
     out.innerHTML = html || `<div style="font-family:system-ui,sans-serif;color:#777">No dictionary match for \u201C${escapeHTML(t)}\u201D.</div>`;
     return;
   }
@@ -3569,6 +3565,15 @@ function translate(text) {
     out.appendChild(s);
   }
 }
+
+// Clicking a search hit looks it up, as if it had been typed in.
+out.addEventListener('click', (e) => {
+  const a = e.target.closest('a[data-word]');
+  if (!a) return;
+  e.preventDefault();
+  inp.value = a.dataset.word;
+  translate(inp.value);
+});
 
 let inpTimer;
 inp.addEventListener('input', () => {
