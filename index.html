@@ -94,6 +94,12 @@
       padding: 0 1.2rem 1.2rem;
       overflow-x: auto;
     }
+    details.spec-code .tok-comment { color: #7f849c; font-style: italic; }
+    details.spec-code .tok-keyword { color: #cba6f7; }
+    details.spec-code .tok-string  { color: #a6e3a1; }
+    details.spec-code .tok-regex   { color: #f5c2e7; }
+    details.spec-code .tok-number,
+    details.spec-code .tok-literal { color: #fab387; }
 
     /* ── Tables ── */
     table { border-collapse: collapse; margin: 1rem 0; width: 100%; font-size: 0.93rem; }
@@ -3261,6 +3267,29 @@ const fail = s => { throw new Error(s) };
 
 const escapeHTML = (s) => String(s).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c]));
 
+// Colors the JavaScript in a spec code block. A small scanner, not a full parser: it only has to
+// tell comments, strings, regexes, numbers and keywords apart in the page's own code.
+const JS_KEYWORDS = new Set(('async await break case catch class const continue default delete do else extends ' +
+  'finally for function if in instanceof let new of return switch throw try typeof var void while yield').split(' '));
+const JS_LITERALS = new Set('false null this true undefined NaN Infinity'.split(' '));
+const JS_TOKEN = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\[\s\S]|[^`\\])*`)|(\/(?:\\.|\[(?:\\.|[^\]\\\n])*\]|[^\/\\\n\[])+\/[a-z]*)|(\b(?:0x[\da-f]+|\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b)|([a-z_$][\w$]*)|(\s+|[\s\S])/gi;
+
+function highlightJS(src) {
+  let html = '', regexOK = true, m;
+  JS_TOKEN.lastIndex = 0;
+  while ((m = JS_TOKEN.exec(src))) {
+    let [tok, comment, str, re, num, word, other] = m;
+    // A slash after a value is division, not the start of a regex.
+    if (re && !regexOK) { tok = other = '/'; re = undefined; JS_TOKEN.lastIndex = m.index + 1; }
+    const cls = comment ? 'comment' : str ? 'string' : re ? 'regex' : num ? 'number'
+      : JS_KEYWORDS.has(word) ? 'keyword' : JS_LITERALS.has(word) ? 'literal' : null;
+    html += cls ? `<span class="tok-${cls}">${escapeHTML(tok)}</span>` : escapeHTML(tok);
+    if (!comment && !/^\s/.test(tok))
+      regexOK = JS_KEYWORDS.has(word) || (other !== undefined && /[(,=:[!&|?{};+\-*%<>~^]/.test(other));
+  }
+  return html;
+}
+
 // Put a generated table in a scroll container so wide tables scroll sideways on
 // narrow screens instead of overflowing. Classes on the source <pre> carry over;
 // `tall` additionally caps the height and adds a show-all toggle.
@@ -3405,7 +3434,8 @@ document.querySelectorAll('pre').forEach(pre => {
     runningBlock = pre.closest('details')?.querySelector('summary')?.textContent?.trim() ?? 'inline code block';
     document.head.appendChild(s);
     runningBlock = null;
-    // TODO: syntax-highlight codeEl content for easier reading.
+    const code = pre.querySelector('code');
+    code.innerHTML = highlightJS(code.textContent);
   } else {
     // ── Minor changes to translation block ──────────────────────────────
     const table = document.createElement('table');
