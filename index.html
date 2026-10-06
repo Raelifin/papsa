@@ -2330,8 +2330,9 @@ for (const [fraction, row] of commonFractions['Fraction']) {
   number comes after the syllable. If the preceding number is elided, it's assumed to be 1. In
   other words, this lets us efficiently express things in scientific notation.</p>
 
-  <p>The exponent can be elided too, in which case it's also 1. So <code>`siaz`</code> is six, and
-  it's the usual way to say it.</p>
+  <p>The exponent can be elided too, in which case it's also 1. So <code>`siaz`</code> is six.
+  Since <code>`sounaum`</code> is two syllables and <code>`slaukt`</code> is a mouthful, but six
+  is a very foundational/special number, <code>`siaz`</code> is the most common representation.</p>
 
   <p>The exponent is a whole number, written with the same kind of digits as the rest of the word:
   basic digits in a basic number, compact digits in a compact number, and little-endian either way.
@@ -2396,9 +2397,9 @@ craihaum           |  −1/36
 craumiajat         |  −1 × 6⁻³ = −1/216 (a negative number with a negative exponent)
   </pre>
 
-  <p>There are no negative basic numbers. "c" alone can't be the prefix, because words like
-  <code>`cuk`</code> are already taken, and children learn the basic numbers well before they need
-  to go below zero. The "cr" also can't be dropped the way "sl" sometimes is, since what's left
+  <p>There are no negative basic numbers. "c" alone can't be the prefix. Words like
+  <code>`cuk`</code> are already taken, and children learn advanced numbers well before they need
+  to go below zero. The "cr" can't be dropped the way "sl" sometimes is, since what's left
   would read as a positive number.</p>
 
   <h3 id="constants">Constants</h3>
@@ -2482,7 +2483,7 @@ for (const [word, row] of angles['Papsa']) {
   <p>The word <code>`faf`</code> is vague. It can mean "to be," or merely "to relate to."
   <code>`faftaz`</code> is specifically about two things having the same value. But in mathematics
   the context makes the meaning clear, so equations just use <code>`faf`</code>. To say that two
-  things aren't equal, invert it with <code>`juc`</code>.</p>
+  things aren't equal, invert it by compounding with <code>`juc`</code>.</p>
 
   <pre>
 suk faf suk       |  2 = 2
@@ -2502,19 +2503,20 @@ soun zousfaf suk   |  0 ≤ 2
   </pre>
 
   <p>Papsa prefers to put the predecessor in the subject slot and the successor in the object slot.
-  The relationship can be flipped by using <code>`zouc`</code> instead, but since the two words sound
-  alike, it's more common to flip an inequality by augmenting it with <code>`juc`</code>. Most often,
-  one simply sticks to the "base" forms.</p>
+  The relationship can be flipped by using <code>`zouc`</code> instead (<code>`zoucsaum`</code> is
+  particularly common). But since the two words sound alike, it's more common to flip an inequality
+  by augmenting it with <code>`jamz`</code>. (`juc` inverts the inequality, sending less-than to
+  greater-than-or-equal-to and vice-versa.) Most often, we just use the standard direction.</p>
 
   <pre>
-suk zoucfaf suk           |  2 ≥ 2
-suk zousfaf ei juc soun   |  2 ≥ 0
-suk zousis ei juc soun    |  2 > 0
+suk zoucfaf suk            |  2 ≥ 2
+suk zousfaf ei jamz soun   |  2 ≥ 0
+suk zousis ei jamz soun    |  2 > 0
   </pre>
 
-  <p>There are three ways to add: grouping phrases, putting several pieces of content in the same
+  <p>Papsa has three ways to add: grouping phrases, putting several pieces of content in the same
   slot, and <code>`sis`</code>. Grouping is the most common, but each has its place. For example,
-  <code>`sis`</code> is how one talks about a sum.</p>
+  <code>`sis`</code> is how one explicitly talks about a sum.</p>
 
   <pre>
 saum ou saum faf suk       |  1 and 1 are 2
@@ -2528,21 +2530,21 @@ sis ui sih faf sleipark    |  The list's sum is 328.
   multiplication. But just as adding is usually done by grouping, multiplying is usually done by
   augmentation. Augmentation covers more than multiplication, though. In mathematics, it's function
   application: the base is the input, and the augment is the function. A number used as an augment
-  is treated (much like casting, in programming) as the function that multiplies its input by that
+  is treated (akin to casting, in programming) as the function that multiplies its input by that
   number.</p>
 
   <pre>
 eis suk ei suk faf ous        |  What equals two 2s?
 na faf seip                   |  It's 4.
 eis suk ei zoucsaum faf ous   |  What equals one-after 2?
+na faf sat                    |  It's 3.
   </pre>
 
   <p>To negate, multiply by <code>`craum`</code>, or apply <code>`juc`</code>, which gives the negative
-  of its input (for numbers whose type allows them to be negative). Negation is usually written with
-  a forethought word like <code>`um`</code>, so that subtracting is grouping with the opposite. Seeing
-  "ou um" is a good sign that the <code>`ou`</code> is a subtraction. Division works the same way, with
-  <code>`jamz`</code> for the reciprocal. More generally, <code>`jamz`</code> inverts a function, and
-  since a number used as a function scales its input, its inverse is its reciprocal.</p>
+  of its input. Negation is usually written with a forethought word like <code>`um`</code>, and so
+  "ou um" is a good sign that the operation will turn out to be subtraction. Division works the same way,
+  with <code>`jamz`</code> flipping numbers into their the reciprocals. More generally, <code>`jamz`</code>
+  inverts functions, and since a number used as a function multiplies its input, its inverse divides.</p>
 
   <pre>
 sif ou um suk juc faf sat      |  5 + −2 = 3
@@ -2560,9 +2562,8 @@ saum ou um suk sat faf slaux     |  1 + 2 × 3 = 7
 
   <p>Variables are pronouns. Any pronoun will do, but mathematicians like to use ones that start
   with "is-", for clarity. The most common are <code>`isnu`</code>, <code>`isma`</code>, and
-  <code>`iski`</code>, much like x, y, and z. Which pronouns come next, when there are more than three
-  variables, depends on the field. That's a feature, since it helps identify the context of an
-  expression. The word for a variable (or an assumption, pointer, or placeholder) is
+  <code>`iski`</code>, much like x, y, and z. Which pronouns are used in more complex expressions
+  depends on the field. The word for a variable (or assumption/pointer/placeholder) is
   <code>`tikpaun`</code>.</p>
 
   <p>Definitions use <code>`paun`</code>. Defined symbols are usually names rather than pronouns,
@@ -2575,8 +2576,8 @@ ouzus paun sif   |  Ouzus ≝ 5
 
   <h3 id="functions">Functions</h3>
 
-  <p>The word for "function" is <code>`mamzuip`</code>, the word for "algorithm" is
-  <code>`mamtik`</code>, and an arrow in category theory is a <code>`mamas`</code>. But in most
+  <p>The word for "function" is <code>`mamzuip`</code>. (The word for "algorithm" is
+  <code>`mamtik`</code>, and an arrow in category theory is a <code>`mamas`</code>). But in most
   mathematical contexts, one simply uses <code>`mam`</code> ("transformation"). A clause with
   <code>`mam`</code> as its verb is a lambda, with the variables in the subject slot and the expression
   in the object slot. Lambdas are the normal way to define functions.</p>
@@ -2602,7 +2603,7 @@ zoucsaum faf saum ei sis     |  successor = (1 +)
   matter, but not every function is so forgiving. For example, in mathematics <code>`kan`</code> is
   the power function. As a rule, when a function can be written as a verb, its first argument is the
   subject and its second is the object. So <code>`suk ei kan`</code> is the squaring function, and
-  <code>`sat ei kan`</code> is the cubing function. Nesting augments avoids the need for clauses.</p>
+  <code>`sat ei kan`</code> is the cubing function.</p>
 
   <pre>
 suk kan sat ul faf slark      |  3² = 9 (the subject is 2 and the object is 3)
@@ -2610,13 +2611,14 @@ sat kan suk ul faf slurt      |  2³ = 8
 sat ei um suk kan faf slark   |  3² = 9 (this time 3 comes first)
   </pre>
 
-  <p>Since the base is the input and the augment is the function, Papsa math resembles reverse Polish
-  notation. That can be useful, but it can also be hard to follow, and it multiplies words like
+  <p>Since the base is the input and the augment is the function, Papsa math resembles <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">reverse Polish
+  notation</a>. That can be useful, but it can also be hard to follow, and it demands lots of words like
   <code>`um`</code>. Association words like <code>`ui`</code> allow for more natural expressions,
   without resorting to clauses. In mathematics they behave much like the matching augmentation words,
-  except that the first piece of content is the function and the later pieces are its inputs. And
+  except that the first piece of content is the function and the later pieces are its inputs. Notably,
   they feed those inputs in the <em>opposite order</em> from <code>`ei`</code>: object first, then
-  subject.</p>
+  subject. (In some cases they can also change the interpretation of the function. See the following
+  sub-section on tensors for more.)</p>
 
   <pre>
 kau kan sat suk faf slark   |  3² = 9
@@ -2633,6 +2635,8 @@ ukan paun kan ui skat       |  Ukan ≝ (e^)
 kan ei jamz ui suk                  |  log₂
 kan ei jamz ui skat faf eijuiskat   |  logₑ = ln
   </pre>
+
+  <p>TODO: Pairing and swapping and uncurrying to invert operators more generally.</p>
 
   <h3 id="infinity">Infinity and Infinitesimal Calculus</h3>
 
@@ -2672,7 +2676,7 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 
   <h3 id="linear-algebra">Tensors and Linear Algebra</h3>
 
-  <p>TODO</p>
+  <p>TODO. Note the collision between the sum of entries in a list and the sum of two lists. (ui vs ei)</p>
 
   <h3 id="logic">Proofs and Logic</h3>
 
