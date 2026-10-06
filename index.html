@@ -541,14 +541,12 @@ const tokenParsers = [ // Defined as a list so we can later extend with number t
 
   <details class="spec-code"><summary class="code-title">Letter Names</summary><pre><code>
 for (const [ltr,row] of alphabet["Letter"]) {
-  const entry = row;  // TODO: probably should augment with more info, such as canonical pronunciation and other notes. See later entry construction in lexicon.
-  if (isV(row.index)) {
-    names[ltr+'LU'] = entry;
-    names[ltr+'LUPAUN'] = entry;
-  } else {
-    names['A'+ltr+'A'] = entry;
-    names['A'+ltr+'APAUN'] = entry;
-  }
+  const r = ltr === '!' ? "'" : ltr.toLowerCase();  // romanized letter
+  const meaning = `letter “${ltr === '!' ? ltr : r}”`, notes = row['Atmosphere'].replace(/<[^>]*>/g, '').trim();
+  const [short, full] = isV(row.index) ? [r+'lu', r+'lupaun'] : ['a'+r+'a', 'a'+r+'apaun'];
+  names[baseLetters(short)] = { word: short, meaning, notes };
+  names[baseLetters(full)]  = { word: full,  meaning: meaning+' (full name)', notes };
+  if (isC(row.index)) names[ltr] = names[baseLetters(short)];  // written alone, read as a_a
 }
   </code></pre></details>
 
@@ -3693,6 +3691,7 @@ function definitionHTML(t) {
   if (t.value !== undefined)        rows.push(['number', `${t.value}  ·  base-6 ${t.baseSix}`]);
   else if (t.type === 'grammar')    rows.push(['grammar', t.meaning || '\u2014']);
   else {
+    if (t.meaning)          rows.push([t.type, t.meaning]);
     if (t.verbMeaning)      rows.push(['verb', t.verbMeaning]);
     if (t.nounMeaning)      rows.push(['noun', t.nounMeaning]);
     if (t.adjectiveMeaning) rows.push(['adj',  t.adjectiveMeaning]);
@@ -3703,7 +3702,7 @@ function definitionHTML(t) {
     `<div style="margin:.15rem 0"><span style="display:inline-block;width:4rem;color:#767676;font-size:.8rem">${k}</span>${escapeHTML(v)}</div>`).join('');
   return `<div style="font-family:system-ui,sans-serif;font-size:.95rem;color:#222">
     <div style="font-family:'Courier New',monospace;font-size:1.2rem;color:#1a5faa">${escapeHTML(t.word)}
-      <span style="color:#999;font-size:.85rem">${safePronounce(t.rawTok)}</span>
+      <span style="color:#999;font-size:.85rem">${safePronounce(t.word)}</span>
       <span style="color:#aaa;font-size:.72rem">\u00B7 ${t.type}</span></div>${body}</div>`;
 }
 
