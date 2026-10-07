@@ -211,6 +211,19 @@
       display: flex; flex-wrap: wrap; gap: 0.7rem;
     }
     #translate-legend span { display: flex; align-items: center; gap: 0.3rem; }
+    /* Interlinear gloss: each word over its gloss and slot, with brackets around nested structure. */
+    .ilg { display: flex; flex-wrap: wrap; row-gap: 0.7rem; word-spacing: normal; line-height: 1.35; }
+    .ilg-unit { display: inline-flex; }
+    .ilg-col { display: inline-flex; flex-direction: column; padding: 0 0.25rem; }
+    .ilg-gloss, .ilg-slot, .ilg-status { font-family: system-ui, sans-serif; padding: 0 3px; }
+    .ilg-gloss { font-size: 0.85rem; color: #333; }
+    .ilg-gram { font-variant: small-caps; text-transform: lowercase; letter-spacing: 0.04em; color: #7f3fbf; }
+    .ilg-slot { font-size: 0.7rem; color: #999; }
+    .ilg-foreign .tok { font-style: italic; }
+    .ilg-br { width: 0.3rem; border: 1.5px solid #bbb; margin: 0 0.1rem; }
+    .ilg-open { border-right: none; border-radius: 3px 0 0 3px; }
+    .ilg-close { border-left: none; border-radius: 0 3px 3px 0; }
+    .ilg-status { font-size: 0.78rem; color: #b83d00; margin-top: 0.5rem; }
     #translate-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: currentColor; }
 
     hr { border: none; border-top: 1px solid #ddd; margin: 2.5rem 0; }
@@ -316,9 +329,8 @@
 <section id="translate">
   <h2>Try It</h2>
 
-  <p>Type any Papsa sentence to see its structure and a rough English translation.
-  Enter a single Papsa word for its full definition, or a single English word for the closest matches in
-  the Papsa dictionary.</p>
+  <p>Type any Papsa sentence to see its structure and a rough English gloss. Enter a single Papsa word
+  for its full definition, or a single English word for the closest matches in the Papsa dictionary.</p>
 
   <!-- See loader code at the bottom of the page for interactive tool implementation. -->
   <input type="text" id="translate-input" aria-label="Papsa text or an English word" autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off">
@@ -606,30 +618,30 @@ for (const [ltr,row] of alphabet["Letter"]) {
   See <a href="#syntax">Syntax</a> for usage.</p>
 
   <pre data-table="miscGrammarWordMeanings">
-| Word(s)                                        | Usage                                          |
-|:----------------------------------------------:|------------------------------------------------|
-| `.`                                            | Sentence divider                               |
-| `uas`, `iur`                                   | {"And", "But"}                                 |
-| `tu`                                           | Addressing a specific listener                 |
-| `ouei`, `ceiou`                                | {Command, Prohibition (anti-command)} mark     |
-| `sou`                                          | Yes/no question mark                           |
-| `eis`                                          | Complex question mark                          |
-| `ous`                                          | "what/where/why/..."                           |
-| `lu`, `la`, `li`                               | Start {subject, verb, object} clause           |
-| `ul`, `al`, `il`                               | End {subject, verb, object} clause             |
-| `θu`, `tci`                                    | Preposition mark (clause is {subject, object}) |
-| `untc`, `antc`, `intc`                         | End preposition ({subject, verb, object} next) |
-| `uip`, `uin`                                   | {"Mine", "Yours"}                              |
-| `uau`                                          | Foreign word mark                              |
-| `uai`                                          | Foreign speech mark                            |
-| `iau`                                          | Open quote mark (closed with `,`)              |
+| Word(s)                                        | Usage                                          | Gloss              |
+|:----------------------------------------------:|------------------------------------------------|--------------------|
+| `.`                                            | Sentence divider                               | .                  |
+| `uas`, `iur`                                   | {"And", "But"}                                 | {and, but}         |
+| `tu`                                           | Addressing a specific listener                 | VOC                |
+| `ouei`, `ceiou`                                | {Command, Prohibition (anti-command)} mark     | {IMP, PROH}        |
+| `sou`                                          | Yes/no question mark                           | Q                  |
+| `eis`                                          | Complex question mark                          | WH.Q               |
+| `ous`                                          | "what/where/why/..."                           | WH                 |
+| `lu`, `la`, `li`                               | Start {subject, verb, object} clause           | {S.CL, V.CL, O.CL} |
+| `ul`, `al`, `il`                               | End {subject, verb, object} clause             | {S.CL, V.CL, O.CL} |
+| `θu`, `tci`                                    | Preposition mark (clause is {subject, object}) | {PREP, PREP.REV}   |
+| `untc`, `antc`, `intc`                         | End preposition ({subject, verb, object} next) | {→S, →V, →O}       |
+| `uip`, `uin`                                   | {"Mine", "Yours"}                              | {my, your}         |
+| `uau`                                          | Foreign word mark                              | FOREIGN            |
+| `uai`                                          | Foreign speech mark                            | FOREIGN            |
+| `iau`                                          | Open quote mark (closed with `,`)              | QUOTE              |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Grammar Word Lookup</summary><pre><code>
-// A "{a, b, ...}" in the usage gives one option per word in the row, in order.
-const usageOf = (word, row) => {
+// A "{a, b, ...}" in a cell gives one option per word in the row, in order.
+const usageOf = (word, row, col='Usage') => {
   const words = row['Word(s)'].split(',').map(w => w.trim());
-  return row['Usage'].replace(/\{([^}]*)\}/g, (_, opts) => {
+  return row[col].replace(/\{([^}]*)\}/g, (_, opts) => {
     opts = opts.split(',').map(o => o.trim());
     if (opts.length !== words.length) throw new Error(`{${opts}} needs one option per word in ${words}`);
     return opts[words.indexOf(word)];
@@ -641,11 +653,12 @@ for (const [word,row] of phraseWordMeanings["Word(s)"]) {
   const numLetter = [...word].find(c => "nmktpf".includes(c));
   const slot = numLetter ? meaning[0] : undefined;
   const phraseSize = numLetter ? primalNum(numLetter)+1 : null;
-  grammarWords[baseLetters(word)] = {word, meaning, phraseMode, slot, phraseSize };
+  const gloss = { aug: 'AUG', assoc: 'ASSOC', add: 'AND' }[phraseMode] + (phraseSize ? phraseSize-1 : '');
+  grammarWords[baseLetters(word)] = {word, meaning, phraseMode, slot, phraseSize, gloss: slot ? slot+'.'+gloss : gloss };
 }
 const VOWEL_SLOT = { u: 'S', a: 'V', i: 'O' };
 for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
-  const r = {word, meaning: usageOf(word, row)};
+  const r = {word, meaning: usageOf(word, row), gloss: usageOf(word, row, 'Gloss')};
   if (/^l[uai]$/.test(word))      { r.clause = 'open';  r.slot = VOWEL_SLOT[word[1]]; }
   else if (/^[uai]l$/.test(word)) { r.clause = 'close'; r.slot = VOWEL_SLOT[word[0]]; }
   grammarWords[baseLetters(word)] = r;
@@ -1016,11 +1029,11 @@ babi pun li lu bik ul min  |  Bobby said that eating was desired.
 // Forethought Clause
 mainContentParsers.push((ctx, inp, out) => {
   if (inp[0]?.clause === 'open') {
-    const slot = inp.shift().slot;
-    const clauseContent = parseClause({...ctx, ignoreAftClause: slot}, inp);
+    const w = inp.shift();
+    const clauseContent = parseClause({...ctx, ignoreAftClause: w.slot}, inp);
     // We parse ignoring the matching closer, so now we need to consume it, if present.
-    if (inp[0]?.clause === 'close' && inp[0]?.slot === slot) inp.shift();
-    return out.push({ slot, clauseContent });
+    const closer = inp[0]?.clause === 'close' && inp[0]?.slot === w.slot ? inp.shift() : undefined;
+    return out.push({ ...w, clauseContent, ...(closer && { closer }) });
   }
 });
 
@@ -1094,8 +1107,8 @@ const parsePreposition = (ctx, inp, out) => {
     while (parseContent(ctx, w.word === 'θu' ? 'O' : 'S', inp, prepContent)) {}
     while (parsePreposition({...ctx, prepDepth: ctx.prepDepth+1}, inp, prepContent)) {}
 
-    const nextSlot = /^[uai]ntc$/.test(inp[0]?.word) ? VOWEL_SLOT[inp.shift().word[0]] : null;
-    return out.push({ ...w, prepContent, ...(nextSlot && { nextSlot }) });
+    const closer = /^[uai]ntc$/.test(inp[0]?.word) ? inp.shift() : undefined;
+    return out.push({ ...w, prepContent, ...(closer && { closer, nextSlot: VOWEL_SLOT[closer.word[0]] }) });
   }
 }
 miscClauseParsers.push(parsePreposition);
@@ -1246,8 +1259,9 @@ mainContentParsers.push((ctx, inp, out) => {
     const quote = parseExpression(inp, ctx.quoteDepth + 1);
     // Unlike most places, quoted speech checks for the specific rawTok.
     // This is arguably not a perfect reflection of the spec, but it makes errors much more obvious.
-    if (inp.shift()?.rawTok !== ',') fail("All Papsa quotes must be explicitly closed.");
-    return out.push({ ...w, slot: ctx.defaultSlot, quote });
+    const closer = inp.shift();
+    if (closer?.rawTok !== ',') fail("All Papsa quotes must be explicitly closed.");
+    return out.push({ ...w, slot: ctx.defaultSlot, quote, closer });
   }
 });
 
@@ -1258,7 +1272,8 @@ mainContentParsers.push((ctx, inp, out) => {
     // Unlike most places, quoted speech checks for the specific rawTok.
     // This is arguably not a perfect reflection of the spec, but it makes errors much more obvious.
     const i = inp.findIndex(t => t.rawTok === ',') + 1 || fail("`uau` demands an explicit closer.");
-    return out.push({ ...w, slot: ctx.defaultSlot, foreign: inp.splice(0,i).slice(0,-1) }); // Slice out click.
+    const foreign = inp.splice(0,i), closer = foreign.pop(); // Split off the click.
+    return out.push({ ...w, slot: ctx.defaultSlot, foreign, closer });
   }
 });
 
@@ -2716,14 +2731,14 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   with the lines on a page being stacked top to bottom, with pages turned front to back, just like
   English.</p>
 
-  <p>Every letter is naturally the same width, and almost all of them share a single horizontal
+  <p>Letters are naturally the same width, and almost all of them share a single horizontal
   baseline that runs through the middle. The shape of each letter is a hint to its sound, with big,
   smooth nasals, sharp plosives, soft fricatives, and vowels that share a common shape.</p>
 
   <pre data-table="scriptLetters">
-| Letter | Glyph                            | Shape                                                                                       |
-|:------:|----------------------------------|---------------------------------------------------------------------------------------------|
-|  `N`   | <span data-glyph="n" data-size="3"></span> | A smooth figure that swings both above and below the baseline                              |
+| Letter | Glyph                                      | Shape                                                                                       |
+|:------:|--------------------------------------------|---------------------------------------------------------------------------------------------|
+|  `N`   | <span data-glyph="n" data-size="3"></span> | A smooth figure that swings both above and below the baseline                               |
 |  `M`   | <span data-glyph="m" data-size="3"></span> | A smooth hump that curls down under the baseline; visibly a sibling of `N`                  |
 |  `K`   | <span data-glyph="k" data-size="3"></span> | A short, sharp hook below the baseline                                                      |
 |  `T`   | <span data-glyph="t" data-size="3"></span> | A sharp zigzag that reaches both the top and the bottom of the line                         |
@@ -2732,12 +2747,14 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 |  `H`   | <span data-glyph="h" data-size="3"></span> | A straight line along the baseline, like the neutral mouth that makes it                    |
 |  `C`   | <span data-glyph="c" data-size="3"></span> | A tall closed loop through the baseline; a sibilant, so it resembles `S` (and `F`)          |
 |  `S`   | <span data-glyph="s" data-size="3"></span> | Like `C`, but left open on the right                                                        |
-|  `L`   | <span data-glyph="l" data-size="3"></span> | A crossed loop that hangs below the baseline; the consonant closest in form to the vowels           |
+|  `L`   | <span data-glyph="l" data-size="3"></span> | A crossed loop that hangs below the baseline; the consonant closest in form to the vowels   |
 |  `U`   | <span data-glyph="u" data-size="3"></span> | A round arch with a small loop at its crown                                                 |
 |  `A`   | <span data-glyph="a" data-size="3"></span> | A plain round arch                                                                          |
 |  `I`   | <span data-glyph="i" data-size="3"></span> | A sharp spike                                                                               |
-|  `.`   | <span data-glyph="." data-size="3"></span> | A single vertical bar, abrupt like the sounds it stands for; the only letter off the baseline |
+|  `.`   | <span data-glyph="." data-size="3"></span> | A single vertical bar, as abrupt and distinct from the other letters as its sound           |
   </pre>
+
+  <!-- TODO: While the data-glyph code is maybe reasonable for the above table, I think it'd be better if most of the examples of papsatasa were rendered in papsatasa as a font. -->
 
   <p>Every letter except the click enters at the left end of the baseline and leaves at the right
   end, so the letters of a word join end to end and the whole word is written as a single
@@ -2745,6 +2762,11 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   <span data-glyph="guk" data-size="3"></span></p>
 
   <p>And here is <code>`papsa`</code>: <span data-glyph="papsa" data-size="3"></span></p>
+
+  <p>Two-vowel diphthongs are very common in Papsa, and most fonts squeeze adjacent vowels together
+  so that words like <code>`muk`</code> and <code>`mauk`</code> take up the same width.</p>
+
+  <p><span data-glyph="muk mauk" data-size="3"></span></p>
 
   <p>Words are separated by a space. The click never touches the baseline, so writing it always
   means lifting the pen, which suits a letter that almost only appears as its own word marking a
@@ -2809,12 +2831,14 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
   in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
 
+  <h3>Numerals and Symbols</h3>
+
+  <p>TODO Papsa has numeral-symbols from 0 to 35 as well as a set of shorthand symbols that allow common words,
+  especially in math (eg faf, paun, mam, ei), to be compressed.</p>
+  
   <h3>Font Generator</h3>
 
   <p>TODO have an interactive tool that shows SVG versions in addition to papsatasa. Let the page generate the font file?</p>
-  
-  <!-- TODO: Numerals. The basic-numbers table lists a "Papsa Numeral" column; document whether
-       numerals have their own glyphs or are written with letters. -->
 
   <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
 // TODO: This code was written by Claude and probably needs to be manually inspected at some point.
@@ -3493,16 +3517,20 @@ function tipText(tok) {
   return ipa ? `${gloss}  ${ipa}` : gloss;
 }
 
+function tokSpan(tok) {
+  const span = document.createElement('span');
+  span.className = 'tok tok-'+tok.type;
+  span.textContent = tok.rawTok || tok.word;
+  span.dataset.tip = tipText(tok);   // dataset avoids escaping quotes in tips like uip's
+  return span;
+}
+
 function decorate(el, tokens) {
   el.textContent = '';
   tokens.forEach((tok, i) => {
     const attached = i === 0 || tok.word === '.';  // no space before clicks
     if (!attached) el.appendChild(document.createTextNode(' '));
-    const span = document.createElement('span');
-    span.className = 'tok tok-'+tok.type;
-    span.textContent = tok.rawTok || tok.word;
-    span.dataset.tip = tipText(tok);   // dataset avoids escaping quotes in tips like uip's
-    el.appendChild(span);
+    el.appendChild(tokSpan(tok));
   });
 }
   
@@ -3638,52 +3666,72 @@ const out = document.getElementById('translate-output');
 const isKnown = (t) => t.type === 'grammar' || t.value !== undefined ||
   !!(t.nounMeaning || t.verbMeaning || t.adjectiveMeaning || t.adverbMeaning || t.meaning);
 
-// Pick an English sense for a leaf, biased by its grammatical slot.
-const senseOf = (t, slot) => {
+// ── Interlinear gloss ──
+// Content words take the sense their role calls for: a head gets its slot's sense (noun or verb), an
+// augment an adjective or adverb, and anything else (an associate, an addressee) a noun. Grammar words
+// show their lexicon gloss.
+const senseOf = (t, slot, role) => {
   if (t.value !== undefined) return String(t.value);
-  if (slot === 'V') return (firstFew(t.verbMeaning || t.nounMeaning || t.adjectiveMeaning, 1) || t.rawTok).replace(/^to /, '');
-  return firstFew(t.nounMeaning || t.verbMeaning || t.adjectiveMeaning, 1) || t.rawTok;
+  if (t.type === 'grammar') return t.gloss;
+  if (t.type === 'name' || t.type === 'pronoun')
+    return t.meaning ? firstFew(t.meaning, 1) : t.rawTok[0].toUpperCase() + t.rawTok.slice(1);
+  const order = role === 'aug' ? (slot === 'V' ? ['adverb', 'adjective', 'verb'] : ['adjective', 'noun'])
+    : slot === 'V' && role === 'head' ? ['verb', 'noun', 'adjective'] : ['noun', 'verb', 'adjective'];
+  const m = order.map(k => t[k+'Meaning']).find(Boolean);
+  return m ? firstFew(m, 1).replace(/^to /, '') : '?';
 };
-const modSenseOf = (t, slot) => t.value !== undefined ? String(t.value)
-  : firstFew(slot === 'V' ? (t.adverbMeaning || t.adjectiveMeaning) : (t.adjectiveMeaning || t.nounMeaning), 1)
-    || senseOf(t, slot);
 
-// Best-effort gloss of one parsed content node.
-function glossNode(c) {
-  if (!c || typeof c !== 'object') return '';
-  const slot = c.slot || 'S';
-  if (c.word === 'uip') return 'my ' + glossNode(c.phraseContent[0]);
-  if (c.word === 'uin') return 'your ' + glossNode(c.phraseContent[0]);
+// Walks a parse, glossing each token in place (by its .pos) and collecting the [first, last] token
+// positions of every phrase, clause, preposition, quote, and foreign insert.
+function glossTree(c, slot, role, toks, spans) {
+  let lo = Infinity, hi = -Infinity;
+  const see = (p) => { if (p !== undefined) { lo = Math.min(lo, p); hi = Math.max(hi, p); } };
+  const sub = (x, s, r) => { const [a, b] = glossTree(x, s, r, toks, spans); see(a); see(b); };
+  see(c.pos); see(c.closer?.pos);
   if (c.phraseContent) {
-    const [base, ...rest] = c.phraseContent;
-    if (c.phraseMode === 'assoc') return glossNode(base) + (rest.length ? ' of ' + rest.map(glossNode).join(', ') : '');
-    if (c.phraseMode === 'add')   return [base, ...rest].map(glossNode).join(' and ');
-    const mods = rest.map(r => (r.phraseContent || r.clauseContent) ? glossNode(r) : modSenseOf(r, slot)).join(' ');
-    return (slot === 'V' ? `${glossNode(base)} ${mods}` : `${mods} ${glossNode(base)}`).trim();
+    const [base, ...rest] = c.phraseContent, s = c.slot ?? slot;
+    sub(base, s, role);
+    rest.forEach(r => sub(r, s, c.phraseMode === 'aug' ? 'aug' : c.phraseMode === 'assoc' ? 'other' : role));
   }
-  if (c.clauseContent) return '(' + c.clauseContent.map(glossNode).join(' ') + ')';
-  if (c.prepContent) {
-    const obj = c.prepContent.slice(1).map(glossNode).join(' ');
-    return `[${glossNode(c.prepContent[0])}${obj ? ' ' + obj : ''}]`;
-  }
-  if (c.quote)     return '\u201C' + glossExpr(c.quote) + '\u201D';
-  if (c.foreign)   return c.foreign.map(t => t.rawTok).join(' ');
-  if (c.addressee) return '(to ' + c.addressee.map(glossNode).join(' ') + ')';
-  if (c.word === 'ous') return 'what';
-  return senseOf(c, slot);
+  for (const k of ['clauseContent', 'prepContent']) c[k]?.forEach(x => sub(x, x.slot, 'head'));
+  c.addressee?.forEach(x => sub(x, x.slot, 'other'));
+  c.quote?.forEach(item => item.clause?.forEach(x => sub(x, x.slot, 'head')));
+  c.foreign?.forEach(t => { toks[t.pos].foreign = true; see(t.pos); });
+  const nested = c.phraseContent || c.clauseContent || c.prepContent || c.quote || c.foreign;
+  if (c.pos !== undefined)  // A leaf, or the grammar word that marks a nested structure.
+    Object.assign(toks[c.pos], { gloss: senseOf(c, c.slot ?? slot, role), slot: role === 'head' && !nested && !c.addressee ? c.slot ?? slot : '' });
+  if (nested && hi > lo) spans.push([lo, hi]);
+  return [lo, hi];
 }
 
-function glossExpr(expr) {
-  return expr.map(item => {
-    if (!item || item.error) return item && item.error ? '\u2026?' : '';
-    if (item.clicks) return '.';
-    let s = (item.clause || []).map(glossNode).join(' ');
-    if (item.mood && (item.mood.word === 'sou' || item.mood.word === 'eis')) s += '?';
-    else if (item.mood && item.mood.word === 'ouei') s += '!';
-    if (item.connective && item.connective.word === 'uas') s = 'and ' + s;
-    else if (item.connective && item.connective.word === 'iur') s = 'but ' + s;
-    return s.trim();
-  }).filter(Boolean).join(' ');
+function interlinear(tokens, parsed) {
+  const toks = tokens.map(t => ({ t })), spans = [];
+  // Tokens the walk doesn't reach (moods, connectives, clicks, repeated markers) fall back to plain senses.
+  parsed?.forEach(item => item.clause?.forEach(c => glossTree(c, c.slot, 'head', toks, spans)));
+  const opens = toks.map(() => 0), closes = toks.map(() => 0);
+  for (const [a, b] of spans) { opens[a]++; closes[b]++; }
+  const el = document.createElement('div');
+  el.className = 'ilg';
+  const bracket = (side) => { const b = document.createElement('span'); b.className = 'ilg-br ilg-'+side; return b; };
+  toks.forEach((x, i) => {
+    const unit = document.createElement('span');   // keeps brackets on the same line as their word
+    unit.className = 'ilg-unit';
+    for (let n = 0; n < opens[i]; n++) unit.appendChild(bracket('open'));
+    const col = document.createElement('span');
+    col.className = 'ilg-col' + (x.foreign ? ' ilg-foreign' : '');
+    const gloss = x.gloss ?? (x.foreign ? '' : senseOf(x.t, 'S', 'head'));
+    const g = document.createElement('span');
+    g.className = 'ilg-gloss' + (/^[^a-z]*[A-Z][^a-z]*$/.test(gloss) ? ' ilg-gram' : '');  // small caps for abbreviations
+    g.textContent = gloss || ' ';
+    const sl = document.createElement('span');
+    sl.className = 'ilg-slot';
+    sl.textContent = x.slot || ' ';
+    col.append(tokSpan(x.t), g, sl);
+    unit.appendChild(col);
+    for (let n = 0; n < closes[i]; n++) unit.appendChild(bracket('close'));
+    el.appendChild(unit);
+  });
+  return el;
 }
 
 function definitionHTML(t) {
@@ -3724,7 +3772,7 @@ function reverseSearch(query) {
 function translate(text) {
   const t = text.trim();
   if (!t) { out.innerHTML = ''; return; }
-  const tokens = tokenize(t);
+  const tokens = tokenize(t).map((tok, pos) => ({ ...tok, pos }));
 
   if (tokens.length === 1) {
     const tok = tokens[0];
@@ -3741,29 +3789,16 @@ function translate(text) {
     return;
   }
 
-  // Multi-word: colored structure + rough gloss + parse status.
+  // Multi-word: interlinear gloss + parse status.
+  let parsed, status = '';
+  try { parsed = parseExpression([...tokens]); }   // parseExpression consumes its input
+  catch (e) { status = e.message + ' — glossed word by word'; }
   out.innerHTML = '';
-  const line = document.createElement('div');
-  decorate(line, tokens);
-  out.appendChild(line);
-
-  let gloss = '', status = '';
-  try {
-    const parsed = parseExpression(tokenize(t));   // fresh copy: parseExpression mutates its input
-    gloss = glossExpr(parsed);
-    if (parsed.some(s => s && s.error)) status = 'structure unclear \u2014 glossed word-by-word';
-  } catch (e) { status = e.message; }
-
-  if (gloss) {
-    const g = document.createElement('div');
-    g.style.cssText = 'font-family:system-ui,sans-serif;font-size:1rem;color:#222;margin-top:.6rem;word-spacing:normal;line-height:1.6';
-    g.textContent = gloss;
-    out.appendChild(g);
-  }
+  out.appendChild(interlinear(tokens, parsed));
   if (status) {
     const s = document.createElement('div');
-    s.style.cssText = 'font-family:system-ui,sans-serif;font-size:.78rem;color:#b83d00;margin-top:.35rem';
-    s.textContent = '\u26A0 ' + status;
+    s.className = 'ilg-status';
+    s.textContent = '⚠ ' + status;
     out.appendChild(s);
   }
 }
