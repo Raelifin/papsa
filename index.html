@@ -329,10 +329,8 @@
 <section id="translate">
   <h2>Try It</h2>
 
-  <p>Type any Papsa sentence to see it glossed word by word: each word's sense in context and its
-  slot (subject, verb, or object), with brackets around phrases and nested clauses.
-  Enter a single Papsa word for its full definition, or a single English word for the closest matches in
-  the Papsa dictionary.</p>
+  <p>Type any Papsa sentence to see its structure and a rough English gloss. Enter a single Papsa word
+  for its full definition, or a single English word for the closest matches in the Papsa dictionary.</p>
 
   <!-- See loader code at the bottom of the page for interactive tool implementation. -->
   <input type="text" id="translate-input" aria-label="Papsa text or an English word" autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off">
@@ -2735,14 +2733,14 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   with the lines on a page being stacked top to bottom, with pages turned front to back, just like
   English.</p>
 
-  <p>Every letter is naturally the same width, and almost all of them share a single horizontal
+  <p>Letters are naturally the same width, and almost all of them share a single horizontal
   baseline that runs through the middle. The shape of each letter is a hint to its sound, with big,
   smooth nasals, sharp plosives, soft fricatives, and vowels that share a common shape.</p>
 
   <pre data-table="scriptLetters">
-| Letter | Glyph                            | Shape                                                                                       |
-|:------:|----------------------------------|---------------------------------------------------------------------------------------------|
-|  `N`   | <span data-glyph="n" data-size="3"></span> | A smooth figure that swings both above and below the baseline                              |
+| Letter | Glyph                                      | Shape                                                                                       |
+|:------:|--------------------------------------------|---------------------------------------------------------------------------------------------|
+|  `N`   | <span data-glyph="n" data-size="3"></span> | A smooth figure that swings both above and below the baseline                               |
 |  `M`   | <span data-glyph="m" data-size="3"></span> | A smooth hump that curls down under the baseline; visibly a sibling of `N`                  |
 |  `K`   | <span data-glyph="k" data-size="3"></span> | A short, sharp hook below the baseline                                                      |
 |  `T`   | <span data-glyph="t" data-size="3"></span> | A sharp zigzag that reaches both the top and the bottom of the line                         |
@@ -2751,12 +2749,14 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 |  `H`   | <span data-glyph="h" data-size="3"></span> | A straight line along the baseline, like the neutral mouth that makes it                    |
 |  `C`   | <span data-glyph="c" data-size="3"></span> | A tall closed loop through the baseline; a sibilant, so it resembles `S` (and `F`)          |
 |  `S`   | <span data-glyph="s" data-size="3"></span> | Like `C`, but left open on the right                                                        |
-|  `L`   | <span data-glyph="l" data-size="3"></span> | A crossed loop that hangs below the baseline; the consonant closest in form to the vowels           |
+|  `L`   | <span data-glyph="l" data-size="3"></span> | A crossed loop that hangs below the baseline; the consonant closest in form to the vowels   |
 |  `U`   | <span data-glyph="u" data-size="3"></span> | A round arch with a small loop at its crown                                                 |
 |  `A`   | <span data-glyph="a" data-size="3"></span> | A plain round arch                                                                          |
 |  `I`   | <span data-glyph="i" data-size="3"></span> | A sharp spike                                                                               |
-|  `.`   | <span data-glyph="." data-size="3"></span> | A single vertical bar, abrupt like the sounds it stands for; the only letter off the baseline |
+|  `.`   | <span data-glyph="." data-size="3"></span> | A single vertical bar, as abrupt and distinct from the other letters as its sound           |
   </pre>
+
+  <!-- TODO: While the data-glyph code is maybe reasonable for the above table, I think it'd be better if most of the examples of papsatasa were rendered in papsatasa as a font. -->
 
   <p>Every letter except the click enters at the left end of the baseline and leaves at the right
   end, so the letters of a word join end to end and the whole word is written as a single
@@ -2764,6 +2764,11 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   <span data-glyph="guk" data-size="3"></span></p>
 
   <p>And here is <code>`papsa`</code>: <span data-glyph="papsa" data-size="3"></span></p>
+
+  <p>Two-vowel diphthongs are very common in Papsa, and most fonts squeeze adjacent vowels together
+  so that words like <code>`muk`</code> and <code>`mauk`</code> take up the same width.</p>
+
+  <p><span data-glyph="muk mauk" data-size="3"></span></p>
 
   <p>Words are separated by a space. The click never touches the baseline, so writing it always
   means lifting the pen, which suits a letter that almost only appears as its own word marking a
@@ -2828,12 +2833,14 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
   in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
 
+  <h3>Numerals and Symbols</h3>
+
+  <p>TODO Papsa has numeral-symbols from 0 to 35 as well as a set of shorthand symbols that allow common words,
+  especially in math (eg faf, paun, mam, ei), to be compressed.</p>
+  
   <h3>Font Generator</h3>
 
   <p>TODO have an interactive tool that shows SVG versions in addition to papsatasa. Let the page generate the font file?</p>
-  
-  <!-- TODO: Numerals. The basic-numbers table lists a "Papsa Numeral" column; document whether
-       numerals have their own glyphs or are written with letters. -->
 
   <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
 // TODO: This code was written by Claude and probably needs to be manually inspected at some point.
