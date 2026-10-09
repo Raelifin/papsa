@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Papsa, a Utopian Language</title>
   <meta name="description" content="Papsa is a utopian constructed language with a focus on simplicity and elegance.">
-  <style>
+  <style>)
     *, *::before, *::after { box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
@@ -2720,60 +2720,91 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   Basic text without annotations is sufficient for most uses, since the letters are unambiguous.
   Annotations are mostly important for names, to make script look fancier, or to help children
   learn to read. The expectation is that people jot things down in the basic script, and tech
-  like keyboards and text editors fills in annotations from context wherever they'd help a
+  like keyboards and text editors fills in annotations from context wherever it'd help a
   reader.</p>
 
-  <p>For <a href="https://utopiandreams.substack.com/p/writing">ergonomic reasons</a>, letters are mostly vertical, words and lines run left to right,
-  with the lines on a page being stacked top to bottom, with pages turned front to back, just like
-  English.</p>
+  <p>For <a href="https://utopiandreams.substack.com/p/writing">ergonomic reasons</a>, letters are
+  mostly vertical, words and lines run left to right, with the lines on a page being stacked top
+  to bottom, with pages turned front to back, just like English.</p>
 
   <p>Letters are naturally the same width, and almost all of them share a single horizontal
   baseline that runs through the middle. The shape of each letter is a hint to its sound, with big,
   smooth nasals, sharp plosives, soft fricatives, and vowels that share a common shape.</p>
 
   <pre data-table="scriptLetters">
-| Letter | Glyph                                      | Shape                                                                                       |
+| Letter | Glyph                                      | Stroke                                                                                      |
 |:------:|--------------------------------------------|---------------------------------------------------------------------------------------------|
-|  `N`   | <span data-glyph="N" data-size="3"></span> | A smooth figure that swings both above and below the baseline                               |
-|  `M`   | <span data-glyph="M" data-size="3"></span> | A smooth hump that curls down under the baseline; visibly a sibling of `N`                  |
-|  `K`   | <span data-glyph="K" data-size="3"></span> | A short, sharp hook below the baseline                                                      |
-|  `T`   | <span data-glyph="T" data-size="3"></span> | A sharp zigzag that reaches both the top and the bottom of the line                         |
-|  `P`   | <span data-glyph="P" data-size="3"></span> | A sharp, doubled point above the baseline                                                   |
-|  `F`   | <span data-glyph="F" data-size="3"></span> | A soft double hump above the baseline                                                       |
-|  `H`   | <span data-glyph="H" data-size="3"></span> | A straight line along the baseline, like the neutral mouth that makes it                    |
-|  `C`   | <span data-glyph="C" data-size="3"></span> | A tall closed loop through the baseline; a sibilant, so it resembles `S` (and `F`)          |
-|  `S`   | <span data-glyph="S" data-size="3"></span> | Like `C`, but left open on the right                                                        |
-|  `L`   | <span data-glyph="L" data-size="3"></span> | A crossed loop that hangs below the baseline; the consonant closest in form to the vowels   |
-|  `U`   | <span data-glyph="U" data-size="3"></span> | A round arch with a small loop at its crown                                                 |
-|  `A`   | <span data-glyph="A" data-size="3"></span> | A plain round arch                                                                          |
-|  `I`   | <span data-glyph="I" data-size="3"></span> | A sharp spike                                                                               |
-|  `.`   | <span data-glyph="!" data-size="3"></span> | A single vertical bar, as abrupt and distinct from the other letters as its sound           |
+|  `N`   | <span data-glyph="N" data-size="3"></span> | Curl up, cross down diagonally to make a loop, form a symmetrical loop, then return.        |
+|  `M`   | <span data-glyph="M" data-size="3"></span> | Curl up, cross down vertically to make a loop, then return diagonally.                      |
+|  `K`   | <span data-glyph="K" data-size="3"></span> | Curl down, hook back, stop on the baseline, then return on baseline.                        |
+|  `T`   | <span data-glyph="T" data-size="3"></span> | Curl up, hook back, go all the way down, then hook back again and curl into return.         |
+|  `P`   | <span data-glyph="P" data-size="3"></span> | Curl up sharply, stop half-way up, hook up, repeating, then hook back and curl into return. |
+|  `F`   | <span data-glyph="F" data-size="3"></span> | Rise sharply, cross above, drop sharply back to baseline and return.                        |
+|  `H`   | <span data-glyph="H" data-size="3"></span> | Cross on baseline.                                                                          |
+|  `C`   | <span data-glyph="C" data-size="3"></span> | Drop sharply, loop all the way around, returning to starting point, then cross on baseline. |
+|  `S`   | <span data-glyph="S" data-size="3"></span> | Drop sharply, loop along the bottom as with `C`, but stop on baseline and return.           |
+|  `L`   | <span data-glyph="L" data-size="3"></span> | Descend diagonally, go back along the bottom, rise diagonally and cross to return.          |
+|  `U`   | <span data-glyph="U" data-size="3"></span> | Curl up, form a tight loop at the top, curl back down, then cross to make a bigger loop.    |
+|  `A`   | <span data-glyph="A" data-size="3"></span> | Curl up, then curl back down, crossing to make a big loop.                                  |
+|  `I`   | <span data-glyph="I" data-size="3"></span> | Curl up to midpoint, then curl back, forming a spike.                                       |
+|  `.`   | <span data-glyph="!" data-size="3"></span> | Lift pen. Draw vertical bar straight down the full height, in the middle.                   |
   </pre>
 
   <p>Every letter except the click enters at the left end of the baseline and leaves at the right
   end, so the letters of a word join end to end and the whole word is written as a single
-  unbroken stroke. For example, here's <code>`guk`</code>, written without lifting the pen:
-  <span class="script script-sample">GUK</span></p>
-
-  <p>And here is <code>`papsa`</code>: <span class="script script-sample">PAPSA</span></p>
+  unbroken stroke. For example, here's <code>`papsa`</code>, written without lifting the pen:</p>
+  
+  <p class="script script-sample">PAPSA</p>
 
   <p>Two-vowel diphthongs are very common in Papsa, and most fonts squeeze adjacent vowels together
-  so that words like <code>`muk`</code> and <code>`mauk`</code> take up the same width.</p>
+  so that words like <code>`muk`</code> and <code>`mauk`</code> take up the same width. When <code>`U`</code>
+  is written in a tight space, such as when squeezed like this, it's often rendered by filling in the
+  entire big loop, to better distinguish it from <code>`A`</code>.</p>
 
   <p class="script script-sample">MUK MAUK</p>
 
-  <p>Words are separated by a space. The click never touches the baseline, so writing it always
-  means lifting the pen, which suits a letter that almost only appears as its own word marking a
-  boundary. In the rare cases where a click shows up inside a word, such as the glottal stop in
-  <code>`a'apaun`</code>, the pen lifts for the bar and comes back down to finish the word.
-  Here's the canonical Papsa pangram, <code>`neim kud. pif xarc sou`</code>:</p>
+  <p>Words are separated by a space. The click never touches the baseline, so writing it almost
+  always means lifting the pen, which suits a letter that almost only appears as its own word.
+  In the rare cases where a click shows up inside a word, such as the glottal stop in
+  <code>`a'apaun`</code>, the vertical bar usually gets annotations to indicate that connect with
+  the rest of the word, and preserve it as a single stroke.</p>
+  
+  <p class="script script-sample">A'APAUN</p>
+  
+  <p>Try reading the canonical Papsa pangram, <code>`neim kud. pif xarc sou`</code>:</p>
 
   <p class="script script-sample">NEIM KUD! PIF XARC SOU</p>
 
+  <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
+// Stroke centerlines for the basic letters, ported from the original papsatasa generator.
+// Units: each letter is 360 wide. The baseline is y = 0, negative y is above it, and no letter
+// reaches more than 396 from the baseline. Every letter except the click enters at (0,0) and
+// leaves at (360,0), which is what lets a whole word be written as one continuous stroke.
+const GLYPH = { width: 360, reach: 396, stroke: 36, markStroke: 24, wordGap: 180 };
+const glyphCurves = {
+  N: [['C', 180,72, 360,-360, 180,-360], ['C', 0,-360, 360,360, 180,360], ['C', 0,360, 180,-72, 360,0]],
+  M: [['C', 360,-72, 360,-360, 180,-360], ['C', 0,-360, 0,468, 180,216], ['C', 360,0, 180,216, 360,0]],
+  K: [['C', 144,0, 144,216, 72,324], ['C', 180,324, 360,0, 180,0], ['L', 360,0]],
+  T: [['C', 180,-144, 180,-396, 36,-396], ['C', 360,-396, 144,324, 72,324], ['C', 108,324, 180,0, 360,0]],
+  P: [['C', 288,-108, 288,-216, 108,-216], ['C', 288,-216, 180,-396, 36,-396], ['C', 360,-396, 180,0, 360,0]],
+  F: [['C', 72,0, 144,-324, 36,-324], ['C', 0,-324, 72,-180, 180,-180], ['C', 288,-180, 360,-324, 324,-324], ['C', 216,-324, 288,0, 360,0]],
+  H: [['L', 360,0]],
+  C: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 360,396, 360,-396, 180,-396], ['C', 36,-396, 36,0, 180,0], ['L', 360,0]],
+  S: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 288,396, 288,144, 288,144], ['C', 324,-396, 108,0, 360,0]],
+  L: [['C', 360,396, 360,396, 180,396], ['C', 0,396, 0,396, 360,0]],
+  U: [['C', 288,0, 288,-396, 180,-396], ['C', 108,-396, 108,-288, 180,-288], ['C', 252,-288, 252,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
+  A: [['C', 288,0, 288,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
+  I: [['C', 180,0, 180,-396, 180,-396], ['C', 180,-396, 180,0, 360,0]],
+};
+// A letter's strokes, as subpaths ({x, y} start plus segments). The click is the one letter drawn
+// apart from the baseline, so the pen lifts around it.
+const letterStrokes = (ltr) =&gt; ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 180,396]] }] : [{ x: 0, y: 0, segs: glyphCurves[ltr] }];
+  </code></pre></details>
+  
   <h3>Annotations</h3>
 
-  <p>Annotations are often drawn with a thinner or fainter line than the letter itself (or in a
-  different color), so the basic letter underneath always stays legible. TODO: more annotations</p>
+  <p>In many cases, annotations are drawn with a thinner or fainter line than the letter itself
+  (or in a different color), so the basic letter underneath stays legible.</p>
 
   <pre data-table="consonantAnnotations">
 | Mark                          | Meaning                               | Examples |
@@ -2782,16 +2813,18 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 | Downward chevron              | Voiced                                | <span data-glyph="g" data-size="3.5"></span> <span data-glyph="b" data-size="3.5"></span> <span data-glyph="z" data-size="3.5"></span> |
 | Overbar                       | Articulated nearer the lips           | <span data-glyph="n" data-size="3.5"></span> <span data-glyph="f" data-size="3.5"></span> <span data-glyph="x" data-size="3.5"></span> |
 | Underbar                      | Articulated nearer the throat         | <span data-glyph="ŋ" data-size="3.5"></span> <span data-glyph="θ" data-size="3.5"></span> <span data-glyph="h" data-size="3.5"></span> |
-| Vertical line through a hoop  | Lateral                               | <span data-glyph="l" data-size="3.5"></span> |
-| Cross inside a hoop           | Rhotic                                | <span data-glyph="r" data-size="3.5"></span> |
+| Vertical line through hoop    | Lateral                               | <span data-glyph="l" data-size="3.5"></span> |
+| Cross inside hoop             | Rhotic                                | <span data-glyph="r" data-size="3.5"></span> |
 | Bars above and below          | Dental click                          | <span data-glyph="." data-size="3.5"></span> |
 | Diagonals off the ends        | Emphatic click (ending a quote)       | <span data-glyph="," data-size="3.5"></span> |
 | Crossbar                      | Glottal stop (inside a word)          | <span data-glyph="'" data-size="3.5"></span> |
+  TODO: more annotations
   </pre>
 
-  <p>Voiceless sounds are smooth, so they get a round mark, while voiced sounds vibrate, so they
-  get a pointed one. (Put a hand on your throat while saying "sss" and then "zzz" to feel the
-  difference.) The voicing marks sit near the vertical middle of a letter, in whichever space the letter
+  <p>Annotations, like letters, are designed to be mildly synesthetic. Voiceless sounds are
+  smooth, so they get a round mark, while voiced sounds vibrate, so they get a pointed one.
+  (Put a hand on your throat while saying "sss" and then "zzz" to feel the difference.)
+  The voicing marks sit near the vertical middle of a letter, in whichever space the letter
   leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
   <code>`P`</code> (which rises above it). The place-of-articulation bars follow a pattern that
   also runs through the letterforms themselves: toward the top means toward the lips, toward the
@@ -2833,45 +2866,26 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
   
   <h3>Font</h3>
 
-  <p id="script-font">This page draws its own font, PapsaTasa, from the same strokes as the drawings above, and
-  uses it to show Papsa script as ordinary text, including in the <a href="#translate">translator</a>.
-  Each character is one Papsa letter, so it reads romanized Papsa as written: an uppercase letter is the
-  basic letter, and a lowercase letter is annotated with the sound it stands for. <code>K</code> and
-  <code>G</code> are both a bare <code>`K`</code>, while <code>g</code> is <code>`K`</code> with a
-  voiced chevron. The bare click is <code>!</code>, and the annotated ones are <code>.</code>,
-  <code>,</code>, and <code>'</code>. IPA works too, and vowel pairs are squeezed together. <a data-font-download download="PapsaTasa.ttf">Download PapsaTasa.ttf</a>.</p>
+  <p id="script-font">This page creates its own font, PapsaTasa, which renders ordinary text
+  as Papsa script. Uppercase letters are never annotated, and can be used when basic letters are
+  preferred. Lowercase consonants are annotated by default, allowing readers to distinguish 
+  <code class="script">`k`</code> (<code>`k`</code>) from <code class="script">`g`</code> (<code>`g`</code>),
+  for example. Because Papsa vowels are regular and flexible, and to make them more readable when
+  squeezed together, <code>`u`</code>, <code>`a`</code>, and <code>`i`</code> are not annotated by
+  default. (To support names and empower users, some other lowercase vowel characters are annotated
+  and there are an additional set of combining diacritic marks to facilitate annotating diphthongs.)
+  Feel free to <a data-font-download download="PapsaTasa.ttf">Download PapsaTasa.ttf</a> to use for
+  your own projects.</p>
+
+  <p>You can also use this interactive tool to experiment with the rendering engine. PapsaTasa
+  is drawn on the top, and SVG images are drawn below. The SVG rendering engine is provided to
+  guarantee PapsaTasa matches </p>
 
   <input type="text" id="script-input" value="neim kud. pif xarc sou" aria-label="Papsa text to draw in the script" autocomplete="off" spellcheck="false" autocapitalize="none">
   <p class="script script-sample" id="script-font-out"></p>
   <p id="script-svg-out"></p>
 
   <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
-// TODO: This code was written by Claude and probably needs to be manually inspected at some point.
-
-// Stroke centerlines for the basic letters, ported from the original papsatasa generator.
-// Units: each letter is 360 wide. The baseline is y = 0, negative y is above it, and no letter
-// reaches more than 396 from the baseline. Every letter except the click enters at (0,0) and
-// leaves at (360,0), which is what lets a whole word be written as one continuous stroke.
-const GLYPH = { width: 360, reach: 396, stroke: 36, markStroke: 24, wordGap: 180 };
-const glyphCurves = {
-  N: [['C', 180,72, 360,-360, 180,-360], ['C', 0,-360, 360,360, 180,360], ['C', 0,360, 180,-72, 360,0]],
-  M: [['C', 360,-72, 360,-360, 180,-360], ['C', 0,-360, 0,468, 180,216], ['C', 360,0, 180,216, 360,0]],
-  K: [['C', 144,0, 144,216, 72,324], ['C', 180,324, 360,0, 180,0], ['L', 360,0]],
-  T: [['C', 180,-144, 180,-396, 36,-396], ['C', 360,-396, 144,324, 72,324], ['C', 108,324, 180,0, 360,0]],
-  P: [['C', 288,-108, 288,-216, 108,-216], ['C', 288,-216, 180,-396, 36,-396], ['C', 360,-396, 180,0, 360,0]],
-  F: [['C', 72,0, 144,-324, 36,-324], ['C', 0,-324, 72,-180, 180,-180], ['C', 288,-180, 360,-324, 324,-324], ['C', 216,-324, 288,0, 360,0]],
-  H: [['L', 360,0]],
-  C: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 360,396, 360,-396, 180,-396], ['C', 36,-396, 36,0, 180,0], ['L', 360,0]],
-  S: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 288,396, 288,144, 288,144], ['C', 324,-396, 108,0, 360,0]],
-  L: [['C', 360,396, 360,396, 180,396], ['C', 0,396, 0,396, 360,0]],
-  U: [['C', 288,0, 288,-396, 180,-396], ['C', 108,-396, 108,-288, 180,-288], ['C', 252,-288, 252,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
-  A: [['C', 288,0, 288,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
-  I: [['C', 180,0, 180,-396, 180,-396], ['C', 180,-396, 180,0, 360,0]],
-};
-// A letter's strokes, as subpaths ({x, y} start plus segments). The click is the one letter drawn
-// apart from the baseline, so the pen lifts around it.
-const letterStrokes = (ltr) =&gt; ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 180,396]] }] : [{ x: 0, y: 0, segs: glyphCurves[ltr] }];
-
 // Annotation marks, each drawn relative to an anchor point on the letter it annotates (and not drawn
 // at all on a letter with no anchor for it). Voicing marks hang from a per-letter anchor in the
 // letter's empty space.
