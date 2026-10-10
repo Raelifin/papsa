@@ -439,7 +439,7 @@ const primalNum = (ch) => {
 
 const clickChars = new Set(['.', ',', "'"]);
 const vowelChars = new Set(['U', 'A', 'I']);
-const vowelIdxs      = new Set([...alphabet['Letter']].filter(([ch])  =>  vowelChars.has(ch)             ).map(([,r]) => r.index));
+const vowelIdxs      = new Set([...alphabet['Letter']].filter(([ch])  =>  vowelChars.has(ch)              ).map(([,r]) => r.index));
 const consonantIdxs  = new Set([...alphabet['Letter']].filter(([ch])  => !vowelChars.has(ch) && ch !== '!').map(([,r]) => r.index));
 const isV = (i) => vowelIdxs.has(i);
 const isC = (i) => consonantIdxs.has(i);
@@ -2747,9 +2747,39 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 |  `U`   | <span data-glyph="U" data-size="3"></span> | Curl up, form a tight loop at the top, curl back down, then cross to make a bigger loop.    |
 |  `A`   | <span data-glyph="A" data-size="3"></span> | Curl up, then curl back down, crossing to make a big loop.                                  |
 |  `I`   | <span data-glyph="I" data-size="3"></span> | Curl up to midpoint, then curl back, forming a spike.                                       |
-|  `.`   | <span data-glyph="!" data-size="3"></span> | Lift pen. Draw vertical bar straight down the full height, in the middle.                   |
+|  `!`   | <span data-glyph="!" data-size="3"></span> | Lift pen. Draw vertical bar straight down the full height, in the middle.                   |
   </pre>
 
+  <details class="spec-code"><summary class="code-title">Letter Strokes</summary><pre><code>
+// Glyph code assumes a standard width of 360 units, and half-width spaces.
+// Baseline is y=0. Negative y is up. Total height=792, thus ±396.
+// These special numbers are assumed rather than defined as constants for the sake of readability.
+
+// Strokes that are just a single x,y pair are straight lines.
+// More commonly, strokes consisting of three x,y pairs are interpreted as Bézier curves.
+const basicStrokes = {
+  N: [[180,72,  360,-360,  180,-360], [0,-360,  360,360,  180,360], [0,360,  180,-72,  360,0]],
+  M: [[360,-72,  360,-360,  180,-360], [0,-360,  0,468,  180,216], [360,0,  180,216,  360,0]],
+  K: [[144,0,  144,216,  72,324], [180,324,  360,0,  180,0], [360,0]],
+  T: [[180,-144,  180,-396,  36,-396], [360,-396,  144,324,  72,324], [108,324,  180,0,  360,0]],
+  P: [[288,-108,  288,-216,  108,-216], [288,-216,  180,-396,  36,-396], [360,-396,  180,0,  360,0]],
+  F: [[72,0,  144,-324,  36,-324], [0,-324,  72,-180,  180,-180], [288,-180,  360,-324,  324,-324], [216,-324,  288,0,  360,0]],
+  H: [[360,0]],
+  C: [[252,0,  36,-396,  72,144], [72,144,  72,396,  180,396], [360,396,  360,-396,  180,-396], [36,-396,  36,0,  180,0], [360,0]],
+  S: [[252,0,  36,-396,  72,144], [72,144,  72,396,  180,396], [288,396,  288,144,  288,144], [324,-396,  108,0,  360,0]],
+  L: [[360,396,  360,396,  180,396 ], [0,396,  0,396,  360,0]],
+  U: [[288,0,  288,-396,  180,-396], [108,-396,  108,-288,  180,-288], [252,-288,  252,-396,  180,-396], [72,-396,  72,0,  360,0]],
+  A: [[288,0,  288,-396,  180,-396], [ 72,-396,  72,0,  360,0]],
+  I: [[180,0,  180,-396,  180,-396], [180,-396,  180,0,  360,0]],
+};
+const letterStrokes = (ltr) => ltr === '!' ? {x:180, y:-396, segs:[[180,396]]} : {x:0, y:0, segs:basicStrokes[ltr]};
+
+const segSVGCmd = (s) => s.length === 2 ? 'L' : s.length === 6 ? 'C' : fail("Unrecognized SVG Command: "+s);
+// The w parameter is a scaling factor for the x-coordinate {0.5, 1}, that enables half-width vowels.
+const segmentSVG = (s,x,y,w) => s.reduce((r,p,i) => r+' '+(i % 2 === 0 ? p*w + x : p + y), segSVGCmd(s));
+const strokeSVG = (s,x,y,w) => s.segs.reduce((r,seg) => r+' '+segmentSVG(seg,x,y,w), ` M${s.x*w + x} ${s.y+y}`);
+  </code></pre></details>
+  
   <p>Every letter except the click enters at the left end of the baseline and leaves at the right
   end, so the letters of a word join end to end and the whole word is written as a single
   unbroken stroke. For example, here's <code>`papsa`</code>, written without lifting the pen:</p>
@@ -2775,25 +2805,43 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 
   <p class="script script-sample">NEIM KUD! PIF XARC SOU</p>
 
-  <details class="spec-code"><summary class="code-title">Basic Glyphs</summary><pre><code>
-// Baseline is y=0. Negative y is up. Total height=792.
-const GLYPH = { width: 360, reach: 396, stroke: 36, markStroke: 24, wordGap: 180 };
-const glyphCurves = {
-  N: [['C', 180,72, 360,-360, 180,-360], ['C', 0,-360, 360,360, 180,360], ['C', 0,360, 180,-72, 360,0]],
-  M: [['C', 360,-72, 360,-360, 180,-360], ['C', 0,-360, 0,468, 180,216], ['C', 360,0, 180,216, 360,0]],
-  K: [['C', 144,0, 144,216, 72,324], ['C', 180,324, 360,0, 180,0], ['L', 360,0]],
-  T: [['C', 180,-144, 180,-396, 36,-396], ['C', 360,-396, 144,324, 72,324], ['C', 108,324, 180,0, 360,0]],
-  P: [['C', 288,-108, 288,-216, 108,-216], ['C', 288,-216, 180,-396, 36,-396], ['C', 360,-396, 180,0, 360,0]],
-  F: [['C', 72,0, 144,-324, 36,-324], ['C', 0,-324, 72,-180, 180,-180], ['C', 288,-180, 360,-324, 324,-324], ['C', 216,-324, 288,0, 360,0]],
-  H: [['L', 360,0]],
-  C: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 360,396, 360,-396, 180,-396], ['C', 36,-396, 36,0, 180,0], ['L', 360,0]],
-  S: [['C', 252,0, 36,-396, 72,144], ['C', 72,144, 72,396, 180,396], ['C', 288,396, 288,144, 288,144], ['C', 324,-396, 108,0, 360,0]],
-  L: [['C', 360,396, 360,396, 180,396], ['C', 0,396, 0,396, 360,0]],
-  U: [['C', 288,0, 288,-396, 180,-396], ['C', 108,-396, 108,-288, 180,-288], ['C', 252,-288, 252,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
-  A: [['C', 288,0, 288,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
-  I: [['C', 180,0, 180,-396, 180,-396], ['C', 180,-396, 180,0, 360,0]],
+  <details class="spec-code"><summary class="code-title">Glyph Drawing</summary><pre><code>
+// Adjacent vowels squeeze into one letter's width (so `muk` and `mauk` are equally long).
+const letterWidth = (ltr,i,wrd) => isV(ltr) && (isV(wrd[i+1]) || isV(wrd[i-1])) ? 180 : 360;
+
+const textPathData = (txt, diacriticLookup) => {
+  let letterPath = '', diacriticPath = '', x = 0;
+  // Clicks written as ".", ",", or "!" stand apart like independent words.
+  for (const wrd of txt.match(/[.,!]|[^\s.,!]+/g) ?? []) {
+    if (x > 0) x += 180; // Word gap
+    // TODO I don't like the confusion between letter indexes in the alphabet and letter indexes in the word here.
+    wordIdxs(wrd).forEach((ltrIdx, i, ltrIdxs) => {
+      const baseLtr = baseLetter(wrd[i]);
+      const w = letterWidth(ltrIdx,i,ltrIdxs);
+      letterPath += strokeSVG(letterStrokes(baseLtr),x,0,w/360);
+      for (const d of diacriticLookup(wrd[i])) {
+        const a = d.anchor(baseLtr);
+        if (a) for (const s of d.strokes) diacriticPath += strokeSVG(s,x+a[0]*w/360,a[1],w/360);
+      }
+      x += w;
+    });
+  }
+  return { letterPath, diacriticPath, width: x };
 };
-const letterStrokes = (ltr) => ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 180,396]] }] : [{ x: 0, y: 0, segs: glyphCurves[ltr] }];
+
+// Stroke weight is 36 units, with annotations being only 24.
+const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
+  const pad = 18, w = width + 2*pad, h = 792 + 2*pad;
+  const label = txt.replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`); // Escape XML
+  return `<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label} in Papsa script"
+      viewBox="${-pad} ${-396 - pad} ${w} ${h}"
+      style="height:${size}em; width:${size * w / h}em; vertical-align:middle; overflow:visible"
+      fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <title>${label}</title>
+    <path d="${letterPath}" stroke-width="36"/>
+    ${diacriticPath && `<path d="${diacriticPath}" stroke-width="24" opacity="0.5"/>`}
+  </svg>`;
+};
   </code></pre></details>
   
   <h3>Annotations</h3>
@@ -2854,6 +2902,47 @@ const letterStrokes = (ltr) => ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 18
   and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
   in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
 
+  <details class="spec-code"><summary class="code-title">Diacritic Drawing</summary><pre><code>
+// Annotation marks, each drawn relative to an anchor point on the letter it annotates (and not drawn
+// at all on a letter with no anchor for it). Voicing marks hang from a per-letter anchor in the
+// letter's empty space.
+const voiceAnchor = { K: [126,-108], T: [28,64], P: [126,54], F: [126,54], H: [126,108], C: [126,108], S: [126,54] };
+const onLetters = (...ltrs) => (l) => ltrs.length && ! ltrs.includes(l) ? undefined : [0, 0];
+// Vowel marks hang under the arch. The overbar sits a little higher on a vowel, clear of its crown.
+const vowelAnchor = (l) => vowelChars.has(l) ? [126, 108] : undefined;
+const glyphMarks = {
+  unvoiced: { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[0,-72, 108,-72, 108,0], [108,72, 0,72, 0,0]] }] },
+  voiced:   { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[54,54], [108,0]] }] },
+  overbar:  { anchor: l => [0, vowelChars.has(l) ? -60 : 0], strokes: [{ x: 36, y: -396, segs: [[324,-396]] }] },
+  underbar: { anchor: onLetters(),    strokes: [{ x: 36, y: 396,  segs: [[324,396]] }] },
+  lateral:  { anchor: onLetters('L'), strokes: [{ x: 180, y: 396, segs: [[180,-108]] }] },
+  rhotic:   { anchor: onLetters('L'), strokes: [{ x: 64, y: 372, segs: [[254,280]] }, { x: 106, y: 280, segs: [[296,372]] }] },
+  tense:    { anchor: vowelAnchor,    strokes: [{ x: 27, y: -54, segs: [[81,0], [27,54]] }] },
+  lax:      { anchor: vowelAnchor,    strokes: [{ x: 81, y: -54, segs: [[27,0], [81,54]] }] },
+  back:     { anchor: vowelAnchor,    strokes: [{ x: 108, y: 0, segs: [[0,0]] }, { x: 36, y: -36, segs: [[0,0], [36,36]] }] },
+  dental:   { anchor: onLetters('!'), strokes: [{ x: 0, y: -396, segs: [[360,-396]] }, { x: 0, y: 396, segs: [[360,396]] }] },
+  emphatic: { anchor: onLetters('!'), strokes: [{ x: 72, y: -288, segs: [[180,-396]] }, { x: 72, y: 288, segs: [[180,396]] }] },
+  glottal:  { anchor: onLetters('!'), strokes: [{ x: 72, y: 0, segs: [[288,0]] }] },
+};
+
+// The marks each lowercase romanized letter (or IPA vowel) is drawn with. Uppercase letters are drawn bare,
+// and so are the characters not listed (m, a, IPA consonants, ...).
+const charMarks = {
+  k: ['unvoiced'], g: ['voiced'], t: ['unvoiced'], d: ['voiced'], p: ['unvoiced'], b: ['voiced'],
+  f: ['unvoiced', 'overbar'], v: ['voiced', 'overbar'], 'θ': ['underbar'], x: ['overbar'], h: ['underbar'],
+  c: ['unvoiced'], j: ['voiced'], s: ['unvoiced'], z: ['voiced'],
+  n: ['overbar'], 'ŋ': ['underbar'], l: ['lateral'], r: ['rhotic'], '.': ['dental'], ',': ['emphatic'], "'": ['glottal'],
+  i: ['tense'], u: ['tense'], e: ['back'], o: ['back'],
+  'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'], 'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
+};
+
+// Draw every element with data-glyph="...". Add data-size for scale (in em).
+document.querySelectorAll('[data-glyph]').forEach(el => {
+  const { letterPath, diacriticPath, width } = textPathData(el.dataset.glyph, (ch) => (charMarks[ch] ?? []).map(m => glyphMarks[m]));
+  el.innerHTML = glyphSVG(el.dataset.glyph, letterPath, diacriticPath, width, +el.dataset.size || 2.4);
+});
+  </code></pre></details>
+  
   <h3>Numerals and Symbols</h3>
 
   <p>TODO Papsa has numeral-symbols from 0 to 35 as well as a set of shorthand symbols that allow common words,
@@ -2873,118 +2962,11 @@ const letterStrokes = (ltr) => ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 18
   your own projects.</p>
 
   <p>You can also use this interactive tool to experiment with the rendering engine. PapsaTasa
-  is drawn on the top, and SVG images are drawn below. The SVG rendering engine is provided to
-  guarantee PapsaTasa matches </p>
+  is drawn on the top, and SVG images are drawn below.</p>
 
   <input type="text" id="script-input" value="neim kud. pif xarc sou" aria-label="Papsa text to draw in the script" autocomplete="off" spellcheck="false" autocapitalize="none">
   <p class="script script-sample" id="script-font-out"></p>
   <p id="script-svg-out"></p>
-
-  <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
-// Annotation marks, each drawn relative to an anchor point on the letter it annotates (and not drawn
-// at all on a letter with no anchor for it). Voicing marks hang from a per-letter anchor in the
-// letter's empty space.
-const voiceAnchor = { K: [126,-108], T: [28,64], P: [126,54], F: [126,54], H: [126,108], C: [126,108], S: [126,54] };
-const onLetters = (...ltrs) =&gt; (l) =&gt; ltrs.length &amp;&amp; ! ltrs.includes(l) ? undefined : [0, 0];
-// Vowel marks hang under the arch. The overbar sits a little higher on a vowel, clear of its crown.
-const vowelAnchor = (l) =&gt; vowelChars.has(l) ? [126, 108] : undefined;
-const glyphMarks = {
-  unvoiced: { anchor: l =&gt; voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [['C', 0,-72, 108,-72, 108,0], ['C', 108,72, 0,72, 0,0]] }] },
-  voiced:   { anchor: l =&gt; voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [['L', 54,54], ['L', 108,0]] }] },
-  overbar:  { anchor: l =&gt; [0, vowelChars.has(l) ? -60 : 0], strokes: [{ x: 36, y: -396, segs: [['L', 324,-396]] }] },
-  underbar: { anchor: onLetters(),    strokes: [{ x: 36, y: 396,  segs: [['L', 324,396]] }] },
-  lateral:  { anchor: onLetters('L'), strokes: [{ x: 180, y: 396, segs: [['L', 180,-108]] }] },
-  rhotic:   { anchor: onLetters('L'), strokes: [{ x: 64, y: 372, segs: [['L', 254,280]] }, { x: 106, y: 280, segs: [['L', 296,372]] }] },
-  tense:    { anchor: vowelAnchor,    strokes: [{ x: 27, y: -54, segs: [['L', 81,0], ['L', 27,54]] }] },
-  lax:      { anchor: vowelAnchor,    strokes: [{ x: 81, y: -54, segs: [['L', 27,0], ['L', 81,54]] }] },
-  back:     { anchor: vowelAnchor,    strokes: [{ x: 108, y: 0, segs: [['L', 0,0]] }, { x: 36, y: -36, segs: [['L', 0,0], ['L', 36,36]] }] },
-  dental:   { anchor: onLetters('!'), strokes: [{ x: 0, y: -396, segs: [['L', 360,-396]] }, { x: 0, y: 396, segs: [['L', 360,396]] }] },
-  emphatic: { anchor: onLetters('!'), strokes: [{ x: 72, y: -288, segs: [['L', 180,-396]] }, { x: 72, y: 288, segs: [['L', 180,396]] }] },
-  glottal:  { anchor: onLetters('!'), strokes: [{ x: 72, y: 0, segs: [['L', 288,0]] }] },
-};
-
-// The marks each lowercase romanized letter (or IPA vowel) is drawn with. Uppercase letters are drawn bare,
-// and so are the characters not listed (m, a, IPA consonants, ...).
-const charMarks = {
-  k: ['unvoiced'], g: ['voiced'], t: ['unvoiced'], d: ['voiced'], p: ['unvoiced'], b: ['voiced'],
-  f: ['unvoiced', 'overbar'], v: ['voiced', 'overbar'], 'θ': ['underbar'], x: ['overbar'], h: ['underbar'],
-  c: ['unvoiced'], j: ['voiced'], s: ['unvoiced'], z: ['voiced'],
-  n: ['overbar'], 'ŋ': ['underbar'], l: ['lateral'], r: ['rhotic'], '.': ['dental'], ',': ['emphatic'], "'": ['glottal'],
-  i: ['tense'], u: ['tense'], e: ['back'], o: ['back'],
-  'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'], 'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
-};
-
-// Romanized Papsa text -&gt; the letters to draw, each { ltr, x, w, marks }, plus the total width.
-// A click written as ".", ",", or "!" stands apart like a word of its own. Two vowels in a row squeeze
-// into one letter's width (so `muk` and `mauk` are equally long).
-const scriptLayout = (text) =&gt; {
-  const placed = [];
-  let x = 0;
-  for (const word of text.match(/[.,!]|[^\s.,!]+/g) ?? []) {
-    let prev = null;
-    for (const ch of word) {
-      const ltr = baseLetter(ch.toLowerCase());
-      const marks = charMarks[ch] ?? [];
-      if (vowelChars.has(ltr) &amp;&amp; vowelChars.has(prev?.ltr) &amp;&amp; prev.w === GLYPH.width) {
-        prev.w /= 2;
-        placed.push(prev = { ltr, x: prev.x + prev.w, w: prev.w, marks });
-      } else {
-        placed.push(prev = { ltr, x, w: GLYPH.width, marks });
-        x += GLYPH.width;
-      }
-    }
-    x += GLYPH.wordGap;
-  }
-  return { placed, width: Math.max(0, x - GLYPH.wordGap) };
-};
-
-// A subpath as SVG path data, with each point moved by `at`.
-const subpathD = (sp, at) =&gt; ` M${at(sp.x, sp.y)}` + sp.segs.map(([cmd, ...p]) =&gt;
-  ' ' + cmd + p.filter((_, j) =&gt; j % 2 === 0).map((px, j) =&gt; at(px, p[2*j + 1])).join(' ')).join('');
-
-// Romanized Papsa text -&gt; { letters, marks, width }, as SVG path data.
-const glyphPaths = (text) =&gt; {
-  const { placed, width } = scriptLayout(text);
-  let letters = '', marks = '';
-  for (const { ltr, x, w, marks: ms } of placed) {
-    const sx = w / GLYPH.width;
-    for (const sp of letterStrokes(ltr)) letters += subpathD(sp, (px, py) =&gt; `${x + sx * px},${py}`);
-    for (const m of ms) {
-      const a = glyphMarks[m].anchor(ltr);
-      if (a) for (const sp of glyphMarks[m].strokes) marks += subpathD(sp, (px, py) =&gt; `${x + sx * (a[0] + px)},${a[1] + py}`);
-    }
-  }
-  return { letters, marks, width };
-};
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-const glyphSVG = (text, { size = 2.4 } = {}) =&gt; {
-  const { letters, marks, width } = glyphPaths(text);
-  const pad = GLYPH.stroke / 2, height = 2 * (GLYPH.reach + pad);
-  const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', `${-pad} ${-GLYPH.reach - pad} ${width + 2 * pad} ${height}`);
-  svg.setAttribute('role', 'img');
-  svg.setAttribute('aria-label', `${text} in Papsa script`);
-  svg.style.cssText = `height:${size}em; width:${size * (width + 2 * pad) / height}em; vertical-align:middle; overflow:visible`;
-  const title = document.createElementNS(SVG_NS, 'title');
-  title.textContent = text;
-  svg.appendChild(title);
-  const addPath = (d, strokeWidth, opacity) =&gt; {
-    if ( ! d) return;
-    const path = document.createElementNS(SVG_NS, 'path');
-    for (const [k, v] of Object.entries({ d, fill: 'none', stroke: 'currentColor', 'stroke-width': strokeWidth,
-      'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity })) path.setAttribute(k, v);
-    svg.appendChild(path);
-  };
-  addPath(letters, GLYPH.stroke, 1);
-  addPath(marks, GLYPH.markStroke, 0.5);  // Annotations are fainter than the letters they sit on.
-  return svg;
-};
-
-// Draw every &lt;span data-glyph="..."&gt; on the page. Add data-size for scale (in em).
-document.querySelectorAll('[data-glyph]').forEach(el =&gt; el.replaceChildren(
-  glyphSVG(el.dataset.glyph, { size: +el.dataset.size || 2.4 })));
-  </code></pre></details>
 
   <details class="spec-code"><summary class="code-title">Script Font</summary><pre><code>
 // The PapsaTasa font is built here, from the same strokes as the drawings above, so the two can't
@@ -2993,7 +2975,7 @@ document.querySelectorAll('[data-glyph]').forEach(el =&gt; el.replaceChildren(
 
 // Font units match the drawings. The script's baseline sits a quarter em above the Latin one, so a
 // line of Papsa centers on the lowercase letters of the text around it.
-const FONT = { em: 2 * GLYPH.reach, raise: GLYPH.reach / 2 };
+const FONT = { em: 792, raise: 792 / 4 };
 
 // ── Outlines ──
 // A font can't stroke a path, so each stroke is traced as filled outlines: a band along each segment, with
@@ -3076,27 +3058,27 @@ const scriptGlyphs = (() =&gt; {
   const add = (g) =&gt; { gid[g.name] = glyphs.length; glyphs.push({ contours: [], advance: 0, ...g }); };
   // Letters placed as scriptLayout places them, with their marks.
   const draw = (placed) =&gt; placed.flatMap(({ ltr, x, w, marks = [] }) =&gt; {
-    const sx = w / GLYPH.width;
-    return [...strokeContours(letterStrokes(ltr), GLYPH.stroke, (px, py) =&gt; [x + sx * px, FONT.raise - py]),
+    const sx = w / 360;
+    return [...strokeContours([letterStrokes(ltr)], 36, (px, py) =&gt; [x + sx * px, FONT.raise - py]),
       ...marks.flatMap(m =&gt; { const a = glyphMarks[m].anchor(ltr);
-        return a ? strokeContours(glyphMarks[m].strokes, GLYPH.markStroke, (px, py) =&gt; [x + sx * (a[0] + px), FONT.raise - a[1] - py]) : []; })];
+        return a ? strokeContours(glyphMarks[m].strokes, 24, (px, py) =&gt; [x + sx * (a[0] + px), FONT.raise - a[1] - py]) : []; })];
   });
   add({ name: '.notdef' });
-  add({ name: 'space', advance: GLYPH.wordGap });
+  add({ name: 'space', advance: 180 });
   const letters = [...alphabet['Letter']].map(([ltr]) =&gt; ltr);
-  const letter = (ltr, marks = []) =&gt; ({ advance: GLYPH.width, contours: draw([{ ltr, x: 0, w: GLYPH.width, marks }]),
+  const letter = (ltr, marks = []) =&gt; ({ advance: 360, contours: draw([{ ltr, x: 0, w: 360, marks }]),
                                           vowel: vowelChars.has(ltr) &amp;&amp; { ltr, marks } });
   for (const ltr of letters) add({ name: ltr, ...letter(ltr) });
   // The click as a word of its own, set apart from the word before it (see scriptLayout).
-  const clickWord = (marks) =&gt; ({ advance: GLYPH.wordGap + GLYPH.width, contours: draw([{ ltr: '!', x: GLYPH.wordGap, w: GLYPH.width, marks }]) });
+  const clickWord = (marks) =&gt; ({ advance: 180 + 360, contours: draw([{ ltr: '!', x: 180, w: 360, marks }]) });
   add({ name: '!.word', ...clickWord() });
   for (const [ch, marks] of Object.entries(charMarks))
     add({ name: 'rom.' + ch, ...(ch === '.' || ch === ',' ? clickWord(marks) : letter(baseLetter(ch), marks)) });
   // Squeezed vowel pairs. Each half is the same whatever it's paired with, so it's only drawn once.
-  const half = GLYPH.width / 2, vowels = glyphs.filter(g =&gt; g.vowel);
+  const half = 360 / 2, vowels = glyphs.filter(g =&gt; g.vowel);
   const halves = vowels.map(g =&gt; [0, half].map(x =&gt; draw([{ ...g.vowel, x, w: half }])));
   vowels.forEach((a, i) =&gt; vowels.forEach((b, j) =&gt;
-    add({ name: a.name + '_' + b.name, ligature: [a.name, b.name], advance: GLYPH.width, contours: [...halves[i][0], ...halves[j][1]] })));
+    add({ name: a.name + '_' + b.name, ligature: [a.name, b.name], advance: 360, contours: [...halves[i][0], ...halves[j][1]] })));
 
   // Every character that names a Papsa letter, in either case.
   const cmap = new Map([[0x20, gid.space]]);
@@ -3184,10 +3166,10 @@ const scriptFont = (() =&gt; {
         return withKids(o =&gt; [...u16(1), ...u16(o[0]), ...u16(firsts.length), ...o.slice(1).flatMap(u16)], [coverage(firsts), ...sets]);
       })()],
     ]),
-    'OS/2': [...u16(4), ...u16(GLYPH.width), ...u16(400), ...u16(5), ...u16(0), ...Array(20).fill(0), ...u16(0),
+    'OS/2': [...u16(4), ...u16(360), ...u16(400), ...u16(5), ...u16(0), ...Array(20).fill(0), ...u16(0),
              ...Array(10).fill(0), ...Array(16).fill(0), ...tag('NONE'), ...u16(0x00C0), ...u16(cps[0]), ...u16(cps.at(-1)),
              ...u16(yMax), ...u16(yMin), ...u16(0), ...u16(yMax), ...u16(-yMin), ...Array(8).fill(0),
-             ...u16(FONT.raise), ...u16(FONT.raise + GLYPH.reach), ...u16(0), ...u16(0x20), ...u16(2)],
+             ...u16(FONT.raise), ...u16(FONT.raise + 396), ...u16(0), ...u16(0x20), ...u16(2)],
     cmap: [...u16(0), ...u16(2), ...u16(0), ...u16(3), ...u32(20), ...u16(3), ...u16(1), ...u32(20), ...format4],
     glyf,
     head: [...u32(0x00010000), ...u32(0x00010000), ...u32(0), ...u32(0x5F0F3CF5), ...u16(0x0009), ...u16(FONT.em),
@@ -3200,7 +3182,7 @@ const scriptFont = (() =&gt; {
     maxp: [...u32(0x00010000), ...u16(glyphs.length), ...u16(Math.max(...glyphs.map(g =&gt; g.contours.flat().length))),
            ...u16(Math.max(...glyphs.map(g =&gt; g.contours.length))), ...u16(0), ...u16(0), ...u16(2), ...Array(16).fill(0)],
     name,
-    post: [...u32(0x00030000), ...u32(0), ...u16(-GLYPH.reach), ...u16(GLYPH.stroke), ...Array(20).fill(0)],
+    post: [...u32(0x00030000), ...u32(0), ...u16(-396), ...u16(36), ...Array(20).fill(0)],
   };
 
   // The table directory, then the tables, each padded to four bytes and checksummed.
@@ -3246,7 +3228,7 @@ const fontCheck = scriptFace.load().then(() =&gt; {
   const viaSVG = ink(ctx =&gt; {
     Object.assign(ctx, { lineCap: 'round', lineJoin: 'round' });
     ctx.setTransform(scale, 0, 0, scale, pad, mid);
-    for (const [d, lineWidth] of [[letters, GLYPH.stroke], [marks, GLYPH.markStroke]]) { ctx.lineWidth = lineWidth; ctx.stroke(new Path2D(d)); }
+    for (const [d, lineWidth] of [[letters, 36], [marks, 24]]) { ctx.lineWidth = lineWidth; ctx.stroke(new Path2D(d)); }
   });
   let differ = 0, inked = 0;
   viaFont.forEach((a, i) =&gt; { differ += Math.abs(a - viaSVG[i]) &gt; 160; inked += Math.max(a, viaSVG[i]) &gt; 127; });
