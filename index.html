@@ -1518,8 +1518,8 @@ nuh am neimguih soun pun                               |  You don't see me.
 am neimnaun soun im fila hait                          |  They don't like small cats.
 eis ous paunup nuh                                     |  What is your name?
 eis ous zusmuk nuh                                     |  How old are you?
-  </pre>
 
+TODO:
 The fire shines brightly. -> fire (glow glow)
 The bright fire glows. -> [fire glow] glow
 The sun is shining. -> Sol glow
@@ -1736,7 +1736,7 @@ The house stands where three roads meet.
 He has far more money than brains.
 Evidently that gate is never opened, for the long grass and the great hemlocks grow close against it.
 I met a little cottage girl; she was eight years old, she said.
-  
+  </pre>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -2775,11 +2775,8 @@ sih kuh im suaf craum   |  The sequence goes to −∞.
 
   <p class="script script-sample">NEIM KUD! PIF XARC SOU</p>
 
-  <details class="spec-code"><summary class="code-title">Script Glyphs</summary><pre><code>
-// Stroke centerlines for the basic letters, ported from the original papsatasa generator.
-// Units: each letter is 360 wide. The baseline is y = 0, negative y is above it, and no letter
-// reaches more than 396 from the baseline. Every letter except the click enters at (0,0) and
-// leaves at (360,0), which is what lets a whole word be written as one continuous stroke.
+  <details class="spec-code"><summary class="code-title">Basic Glyphs</summary><pre><code>
+// Baseline is y=0. Negative y is up. Total height=792.
 const GLYPH = { width: 360, reach: 396, stroke: 36, markStroke: 24, wordGap: 180 };
 const glyphCurves = {
   N: [['C', 180,72, 360,-360, 180,-360], ['C', 0,-360, 360,360, 180,360], ['C', 0,360, 180,-72, 360,0]],
@@ -2796,9 +2793,7 @@ const glyphCurves = {
   A: [['C', 288,0, 288,-396, 180,-396], ['C', 72,-396, 72,0, 360,0]],
   I: [['C', 180,0, 180,-396, 180,-396], ['C', 180,-396, 180,0, 360,0]],
 };
-// A letter's strokes, as subpaths ({x, y} start plus segments). The click is the one letter drawn
-// apart from the baseline, so the pen lifts around it.
-const letterStrokes = (ltr) =&gt; ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 180,396]] }] : [{ x: 0, y: 0, segs: glyphCurves[ltr] }];
+const letterStrokes = (ltr) => ltr === '!' ? [{ x: 180, y: -396, segs: [['L', 180,396]] }] : [{ x: 0, y: 0, segs: glyphCurves[ltr] }];
   </code></pre></details>
   
   <h3>Annotations</h3>
