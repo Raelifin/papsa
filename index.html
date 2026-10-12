@@ -2906,9 +2906,9 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 
   <p>Vowels are annotated with small chevrons and arrows beneath the letter, along with the same
   overbar and underbar used for consonants. The chevron gives tenseness (pointing right for a tense
-  vowel, left for a lax one), the arrow gives backness, and the bars give height. Diphthongs are
-  simply written as two vowel letters. Here are the annotations for the most common vowel sounds of
-  English.</p>
+  vowel, left for a lax one), the arrow gives backness, and the bars give height. In many contexts,
+  vowels don't get rendered with annotations, but here are the annotations for the most common
+  vowel sounds of English.</p>
 
   <pre data-table="englishVowelAnnotations">
 | Sound (IPA) | As in...         | Letter   | Annotation | Glyph |
@@ -2958,14 +2958,14 @@ const glyphMarks = {
 };
 
 // The marks each lowercase romanized letter (or IPA vowel) is drawn with. Uppercase letters are drawn bare,
-// and so are the characters not listed (m, a, IPA consonants, ...).
+// and so are the characters not listed (m, i, u, a, ...). TODO Fill this out more properly!
 const charMarks = {
   k: ['unvoiced'], g: ['voiced'], t: ['unvoiced'], d: ['voiced'], p: ['unvoiced'], b: ['voiced'],
   f: ['unvoiced', 'overbar'], v: ['voiced', 'overbar'], 'θ': ['underbar'], x: ['overbar'], h: ['underbar'],
   c: ['unvoiced'], j: ['voiced'], s: ['unvoiced'], z: ['voiced'],
   n: ['overbar'], 'ŋ': ['underbar'], l: ['lateral'], r: ['rhotic'], '.': ['dental'], ',': ['emphatic'], "'": ['glottal'],
-  i: ['tense'], u: ['tense'], e: ['back'], o: ['back'],
-  'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'], 'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
+  e: ['back'], o: ['back'], 'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'],
+  'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
 };
 
 // How far the script reaches above and below the baseline, sampled from the strokes themselves with half
@@ -3060,7 +3060,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 //   - The SVG drawings in the playground are handled by the Diacritic Drawing block. This block only
 //     needs to fill #script-font-out and give the download link its href.
 
-// CODE ELIDED TO FOCUS ON SURROUNDING CODE FIRST
+// TODO
   </code></pre></details>
 </section>
 
