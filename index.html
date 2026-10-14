@@ -113,6 +113,9 @@
       box-shadow: inset 0 -1px 0 #ddd;
     }
 
+    /* class="stacked": each cell's Papsa word sits on its own line above its gloss. */
+    .table-wrap.stacked td code { display: block; }
+
     .table-wrap.oneline table {
       table-layout: fixed;
       /* Room for the word column plus --col-min for every other column.
@@ -1928,32 +1931,81 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
   </pre>
 
   <h3>Coordinates and Directions</h3>
-  
-  <p>TODO Add these to the dictionary and explain https://utopiandreams.substack.com/p/maps-and-addresses</p>
+
+  <p>Maps put east at the top, where the day begins. Small regions are close enough to flat that places
+  in them can be found on a grid, so every place gets an <strong>address</strong>: how far it is from a
+  corner of its province, counted in units of six stretches (about 7 meters, so a Mile is 216 of
+  them). See <a href="https://utopiandreams.substack.com/p/maps-and-addresses">Maps and Addresses</a>
+  for the reasoning.</p>
+
+  <p>Each distance is written as two <strong>address words</strong>, which are ordinary compound words
+  whose three consonants are the digits of a number from 0 to 215. Like all Papsa numbers, they're
+  little-endian base six, so <code>`tigab`</code> (t-g-b, 3-2-4) is 3 + 2×6 + 4×36 = 159, and a pair of
+  words counts up to 216² − 1. That's enough to cover a province about 329 km on a side. An address is two pairs,
+  with the province's name between them: the first pair counts south from the province's northeast corner,
+  and the second counts west.</p>
 
   <pre>
-naunuŋ | value (subjective)
-miniŋ | curiosity (non-emotive)
-kanuŋ | to learn
-tinuŋ | soul
-paunaun | hint
-funuŋ | culture (especially what was learned in childhood)
-neimin | yearning (TK check with other emotions)
-mamin | improve (things change in a desired way)
-kimain | awaken (or start moving)
-tumain | inventor
-pimain | new parent, new caretaker, adoptive parent
-feimain | fusion (new/young blending/combining)
-nikan | optimal
-..
-pauneim | emotional expression
-..
-figuk | red
-..
-nikud | motivation
-..
-tigab | net
+tigab figuk olguin nikud pauneim | Red Net, Olguin, Crying Motive: 19383 units south and 8760 west (≈ 136.5 km, 61.7 km)
   </pre>
+
+  <p>Because the digits can be read off the words, anyone who knows where a province is can walk to an
+  address in it without a map. The words are chosen for meanings that are easy to picture and hard to mishear.
+  A few numbers have no regular compound, so their words drop a consonant at the join (marked †).</p>
+
+  <pre class="tall stacked" data-table="addressWords">
+| Base | +0 | +1 | +2 | +3 | +4 | +5 |
+|------|----|----|----|----|----|----|
+| 0 | `naunuŋ` value | `miniŋ` curiosity | `kanuŋ` learn | `tinuŋ` soul | `paunaun` hint | `funuŋ` culture |
+| 6 | `neimin` yearning | `mamin` improve | `kimain` awaken | `tumain` invent | `pimain` new parent | `feimain` fusion |
+| 12 | `nikan` optimal | `mukan` heal | `gukan` kindle | `tikan` upgrade | `bikan` spice | `fikan` dye |
+| 18 | `nutiŋ` gist | `maitiŋ` embryo† | `katun` relief | `tautun` door | `bitiŋ` hub | `futun` unpack |
+| 24 | `nupaun` ID | `mipaun` advert† | `kupaun` signpost | `dupaun` alarm | `pipaun` price | `vupaun` landmark† |
+| 30 | `nuifun` border crossing | `muvin` welcome | `kuvin` arrival | `tivin` settle | `pivin` delivery | `vuvin` vicinity |
+| 36 | `nuneim` touch-read | `maineim` first impression | `kuneim` walk | `tineim` gut feeling | `pauneim` emote | `vineim` presence |
+| 42 | `neimum` taste | `mumum` water | `kimum` ripple | `tumum` brew | `pimum` water (plants) | `feimum` dissolve |
+| 48 | `nikim` approach | `maukim` migrate | `gaukim` motor | `tikim` operate | `bikim` chew | `fikim` shimmer |
+| 54 | `nutum` compose | `mutum` breed† | `katum` wind up | `tautum` found | `bitum` specialist | `futum` pottery |
+| 60 | `nupim` nanny | `maipim` midwife† | `kupim` guide | `dupim` custodian | `papim` elder | `vupim` ranger† |
+| 66 | `nuifeim` blur | `mufeim` absorb | `kufeim` mingle | `tifeim` commune | `pifeim` potluck | `vufeim` crossroads |
+| 72 | `naunik` ideal | `minik` ambition | `kanik` training | `tinik` priority | `punik` voice | `funik` accent |
+| 78 | `neimik` hear | `mamuk` metamorphosis | `kimuk` animate | `tumik` instrument | `pimauk` herder | `feimauk` hybrid |
+| 84 | `niguk` flare | `mukik` heartbeat | `guiguk` lamp | `tigaug` appliance | `biguk` cook | `figuk` red |
+| 90 | `nutik` earpiece | `mutik` faucet† | `kutik` lever | `dutik` hammer | `bitik` fork | `futik` toolbox |
+| 96 | `nubik` feast | `maibik` breakfast† | `gabik` catch | `dubik` preserve | `pibik` grocery | `fibik` recipe† |
+| 102 | `nuifik` outline | `mufik` stain | `guifik` prism | `tifik` doorbell | `pifik` applause | `fifik` rhythm |
+| 108 | `naunait` discount | `minait` contentment | `kanait` refine | `tiŋait` summary | `paunait` abbreviation | `vinait` instant |
+| 114 | `neimait` numb | `mumait` droplet | `kimait` nudge | `tumait` miniature | `pimait` wean | `feimait` pinch |
+| 120 | `nikud` motive | `maukat` crouch | `gukait` spark | `tikat` bow | `bikat` ration | `fikat` contrast |
+| 126 | `nutait` megaphone | `maitaut` cornerstone† | `kutaut` station | `taudut` wall | `bitaut` outpost | `futaut` shelf |
+| 132 | `nupait` humility | `mubait` moss† | `gabait` stitch | `dupait` bandage | `poupait` favor | `vupait` camp† |
+| 138 | `nuifut` brim | `mufut` mailbox | `kufut` ride | `tifait` hut | `pifut` parcel | `fafait` mote |
+| 144 | `naunup` darling | `mainup` child | `kanup` student | `tinup` protagonist | `paunup` name | `funup` ancestor |
+| 150 | `neimup` empath† | `mumup` swimmer† | `kimup` athlete† | `tumup` artisan† | `pimup` ward† | `feimup` teammate† |
+| 156 | `nigab` goal (sport) | `maugab` animal trap | `gugab` grill | `tigab` net | `bigab` network | `figab` tapestry |
+| 162 | `nudup` sentry | `mudup` immunity† | `kadup` vigilance | `taudup` fortress | `bidup` splint | `fudup` lock |
+| 168 | `nupap` crowd | `maibup` sprout† | `kupap` caravan | `dupap` patrol | `papoup` cooperative | `vupap` neighborhood† |
+| 174 | `nuifup` outsider† | `mufup` heir† | `kuvup` commuter† | `tifup` householder† | `pifup` donor† | `vufup` landowner† |
+| 180 | `nuŋif` plan | `mainif` starting point | `kanif` technique | `tiŋif` principle | `paunif` directions | `vinif` bearing |
+| 186 | `neimuf` soft | `mumif` current | `kimif` turn | `tumuf` knit | `pimuf` blanket | `feimif` detour |
+| 192 | `nikif` course | `maukuf` fur | `gukuf` ash | `tikuf` brush | `bikuf` bread | `fikuf` pastel |
+| 198 | `nutif` auditorium | `mautif` barn† | `kutif` inn | `tautuf` bed | `bitif` annex | `futif` warehouse |
+| 204 | `nupif` generosity | `mupif` pour† | `kupif` courier | `dupuf` padding | `bupuf` cotton | `vupif` hospitality† |
+| 210 | `nuivuf` borderland | `muvuf` harbor | `kuvuf` road | `tivuf` address | `bivuf` district | `favuf` soil |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Address Words</summary><pre><code>
+// Every address word spells its own number: its consonants are the number's base-six digits, little-endian.
+for (const [base, row] of addressWords['Base']) for (let d = 0; d < 6; d++) {
+  const word = row['+' + d].split(' ')[0];
+  const digits = [...baseLetters(word)].filter(l => !vowelChars.has(l)).map(primalNum);
+  const value = digits.reduce((sum, x, i) => sum + x * 6 ** i, 0);
+  if (digits.length !== 3 || value !== +base + d) throw new Error(`${word} spells ${value}, not ${+base + d}`);
+}
+  </code></pre></details>
+
+  <p>For places on the scale of the whole Earth, Papsa replaces latitude with distance from the North Pole,
+  and counts longitude from 0° to 360°, increasing westward.</p>
 
   <h3>Credence, Speculation, and Theory</h3>
   
@@ -3553,6 +3605,190 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 | `pauneim` | `paun`, `neim` | to express feeling about, to emote, to show how one feels | emotional expression, affect, tone, body language | expressive, emotive, demonstrative | expressively | The outward sign of an inner state, through whatever channel a speaker has — face, voice, posture, color, exhaust plume. Carries no claim of sincerity: a `pauneim` can be performed, mistaken, or read wrongly. |
 | `nikud` | `nik`, `kud` | to motivate, to drive toward a goal, to spur | motivation, drive, incentive, reason for acting | motivated, driven, motivating | - | The push toward a `nik`, from inside or out: appetite, duty, a paycheck and a threat are all `nikud`. Where `kud` is bare force, `nikud` is force with a direction. |
 | `tigab` | `tik`, `gab` | to net, to catch in a net, to ensnare deliberately | net, mesh, web, snare | netted, meshed, woven | - | `gab` covers webs and traps of every origin; `tigab` is the made kind, a `tik` built to entangle. The mesh sense extends readily to networks and grids, where what gets caught is traffic rather than fish. |
+| `mukan` | `muk`, `kan` | to heal, to cure, to nurse back to health | medicine, remedy, cure, healing | healing, medicinal | - | |
+| `gukan` | `guk`, `kan` | to kindle, to stoke, to fan (a fire) | kindling, tinder, bellows | - | - | |
+| `tikan` | `tik`, `kan` | to upgrade, to retrofit, to improve (a tool) | upgrade, improvement, attachment | upgraded | - | |
+| `bikan` | `bik`, `kan` | to season, to spice, to flavor | seasoning, spice, condiment | seasoned, spiced, savory | - | |
+| `fikan` | `fik`, `kan` | to dye, to saturate, to tint | dye, pigment, stain | dyed, saturated | - | |
+| `nutiŋ` | `nuh`, `tiŋ` | to get the gist of, to catch the point of | gist, point, crux, moral (of a story) | pointed, pithy | pointedly | |
+| `maitiŋ` | `main`, `tiŋ` | to be the embryo of | embryo, germ, kernel (of an idea) | embryonic, germinal | - | |
+| `katun` | `kat`, `hun` | to release, to relieve, to relax, to unwind | release, relief, relaxation | relieved, relaxed | - | |
+| `bitiŋ` | `bih`, `tiŋ` | to be the hub of | hub, trunk, junction | central, hub-like | - | |
+| `futun` | `fut`, `hun` | to unpack, to unbox, to empty | unpacking | unpacked, empty | - | |
+| `nupaun` | `nup`, `paun` | to sign, to identify (oneself) | signature, ID, badge, credential | signed, identified | - | |
+| `mipaun` | `min`, `paun` | to advertise, to promote | advertisement, ad, promotion, commercial | promotional | - | |
+| `kupaun` | `kuh`, `paun` | to sign (a route), to mark a way | signpost, road sign, waymark, trail blaze | signposted, marked | - | |
+| `dupaun` | `dup`, `paun` | to alarm, to alert, to warn of danger | alarm, alert, siren | alarmed, on alert | - | |
+| `pipaun` | `pip`, `paun` | to price, to cost | price, cost, price tag, fee | priced | - | |
+| `vupaun` | `vuf`, `paun` | to mark (a place) | landmark, monument, milestone | landmarked | - | |
+| `nuifun` | `nuif`, `hun` | to cross a border, to open a border | border crossing, checkpoint, customs | cross-border | - | |
+| `muvin` | `muf`, `vin` | to welcome, to receive (a visitor) | welcome, reception, host | welcoming, hospitable | welcomingly | |
+| `kuvin` | `kuh`, `vin` | to arrive (after a journey), to reach | arrival, journey's end | arrived | - | |
+| `tivin` | `tif`, `vin` | to settle, to move in | settler, newcomer (to a home), move-in | settled | - | |
+| `pivin` | `pif`, `vin` | to deliver, to hand over | delivery, handover | delivered | - | |
+| `vuvin` | `vuf`, `vin` | to surround, to be around | vicinity, surroundings, environs | nearby, local, surrounding | nearby | |
+| `maineim` | `main`, `neim` | to make a first impression on | first impression | - | - | |
+| `tineim` | `tiŋ`, `neim` | to intuit, to sense deep down | gut feeling, hunch, intuition | intuitive, instinctive | intuitively | |
+| `vineim` | `vin`, `neim` | to be present, to be mindful | presence, mindfulness, awareness of the moment | present, mindful | mindfully | |
+| `kimum` | `kim`, `mum` | to ripple, to slosh, to make waves | ripple, wave, wake | rippling | - | |
+| `tumum` | `tum`, `mum` | to brew, to steep, to infuse | brew, infusion, tea | brewed, steeped | - | |
+| `pimum` | `pim`, `mum` | to water, to irrigate | watering, irrigation, watering can | watered, irrigated | - | |
+| `feimum` | `feim`, `mum` | to dissolve, to stir in | solution, mixture (in liquid) | dissolved, soluble | - | |
+| `nikim` | `nik`, `kim` | to approach, to head for, to make for | approach | approaching, oncoming | - | |
+| `maukim` | `mauk`, `kim` | to migrate | migration, migrant (animal) | migratory | - | |
+| `gaukim` | `gaug`, `kim` | to power, to drive (by motor) | motor, engine | motorized, powered | - | |
+| `tikim` | `tik`, `kim` | to operate, to run (a machine) | mechanism, operation, works | mechanical, operating | mechanically | |
+| `bikim` | `bik`, `kim` | to chew, to munch | chewing, cud | chewy | - | |
+| `fikim` | `fik`, `kim` | to shimmer, to sparkle, to change color | shimmer, iridescence | iridescent, shimmering | - | |
+| `nutum` | `nuh`, `tum` | to compose (for listeners) | composition, piece (of music) | composed | - | |
+| `mutum` | `muk`, `tum` | to breed, to raise (animals or plants) | breeder, breeding | bred, domesticated | - | |
+| `katum` | `kat`, `tum` | to wind up, to cock, to load (a spring) | wind-up, clockwork | wound-up, loaded | - | |
+| `tautum` | `taut`, `tum` | to found, to establish, to set up | founder, foundation (act of founding) | founding | - | |
+| `bitum` | `bih`, `tum` | to specialize (in making) | specialist, technician | specialized | - | |
+| `futum` | `fut`, `tum` | to make containers, to throw (pots) | potter, pottery, cooper | - | - | |
+| `nupim` | `nup`, `pim` | to babysit | nanny, babysitter, au pair | - | - | |
+| `maipim` | `main`, `pim` | to deliver (a baby), to midwife | midwife, doula, obstetrician | obstetric | - | |
+| `kupim` | `kuh`, `pim` | to guide, to escort, to chaperone | guide, escort, chaperone | guided, escorted | - | |
+| `dupim` | `dup`, `pim` | to keep, to look after (property) | custodian, keeper, janitor | custodial | - | |
+| `papim` | `pap`, `pim` | to lead (a community) as an elder | elder, chief, matriarch, patriarch | elderly, venerable | - | |
+| `vupim` | `vuf`, `pim` | to tend (land), to keep (a park) | ranger, park keeper, groundskeeper | - | - | |
+| `nuifeim` | `nuif`, `feim` | to blur, to blend at the edges | blur, gradient, transition zone | blurry, fuzzy, gradual | gradually | |
+| `mufeim` | `muf`, `feim` | to absorb, to take in, to assimilate | absorption, sponge | absorbent, absorbed | - | |
+| `kufeim` | `kuh`, `feim` | to mingle, to circulate | mingling, mixer (social) | sociable | - | |
+| `tifeim` | `tif`, `feim` | to merge households | commune, shared household | communal | communally | |
+| `pifeim` | `pif`, `feim` | to pool (gifts), to chip in | potluck, pool, collection | pooled, communal | - | |
+| `vufeim` | `vuf`, `feim` | to meet (as roads), to cross | crossroads, intersection, junction | - | - | |
+| `naunik` | `naun`, `nik` | to idealize | ideal, aspiration | ideal, idealistic | ideally | |
+| `minik` | `min`, `nik` | to aspire to, to strive for | ambition, aspiration | ambitious | ambitiously | |
+| `kanik` | `kan`, `nik` | to train for, to practice for | training, practice, drill | trained | - | |
+| `tinik` | `tiŋ`, `nik` | to prioritize | priority, focus, main goal | primary, top-priority | primarily | |
+| `punik` | `pun`, `hik` | to voice, to vocalize, to speak up | voice | vocal, voiced | vocally | |
+| `funik` | `fun`, `hik` | to speak with an accent | accent, dialect, brogue | accented | - | |
+| `mamuk` | `mam`, `muk` | to metamorphose, to molt | metamorphosis, molt | metamorphic | - | |
+| `kimuk` | `kim`, `muk` | to animate, to bring to life | animation, liveliness | animated, lively | animatedly | |
+| `tumik` | `tum`, `hik` | to play (an instrument) | musical instrument | instrumental | - | |
+| `pimauk` | `pim`, `mauk` | to herd, to tend (animals) | herder, shepherd, rancher | pastoral | - | |
+| `feimauk` | `feim`, `mauk` | to crossbreed, to hybridize | hybrid, crossbreed, chimera | hybrid, mixed-breed | - | |
+| `niguk` | `nik`, `guk` | to send up a flare | flare, signal fire | - | - | |
+| `mukik` | `muk`, `hik` | to pulse, to beat (as a heart) | heartbeat, pulse | pulsing | - | |
+| `guiguk` | `guih`, `guk` | to light (a lamp) | lamp, lantern, light fixture | lit | - | |
+| `tigaug` | `tik`, `gaug` | to plug in, to electrify (a tool) | appliance, gadget, electronic device | electric, electronic | electronically | |
+| `biguk` | `bik`, `guk` | to cook, to bake, to roast | cooking, cuisine, cook | cooked | - | |
+| `nutik` | `nuh`, `tik` | to listen in (with a device) | earpiece, headphones, hearing aid, receiver | - | - | |
+| `mutik` | `mum`, `tik` | to pump, to tap (water) | faucet, tap, pump, spigot | - | - | |
+| `kutik` | `kud`, `tik` | to lever, to pry | lever, crowbar, handle | - | - | |
+| `dutik` | `dut`, `tik` | to hammer, to pound, to chisel | hammer, chisel, mallet | hammered | - | |
+| `bitik` | `bih`, `tik` | to fork, to spear | fork, prong, pitchfork | forked | - | |
+| `futik` | `fut`, `tik` | to pack (tools) | toolbox, kit, toolkit | - | - | |
+| `nubik` | `nup`, `bik` | to feast, to dine together | feast, banquet, shared meal | festive | - | |
+| `maibik` | `main`, `bik` | to breakfast, to break a fast | breakfast, first meal | - | - | |
+| `gabik` | `gab`, `bik` | to catch (food), to haul in | catch, haul, bag (of game) | caught | - | |
+| `dubik` | `dup`, `bik` | to preserve, to can, to pickle | preserves, canned food, pickles | preserved, pickled | - | |
+| `pibik` | `pip`, `bik` | to sell food, to shop for food | grocery, grocer, groceries | - | - | |
+| `fibik` | `fif`, `bik` | to follow a recipe, to prepare (a dish) | recipe, dish, menu | - | - | |
+| `nuifik` | `nuif`, `fik` | to outline, to trace (an edge) | outline, contour, silhouette | outlined | - | |
+| `mufik` | `muf`, `fik` | to stain, to tan, to take on color | stain, tan, blot | stained, tanned | - | |
+| `guifik` | `guih`, `fik` | to refract, to split (light) | prism, refraction | prismatic | - | |
+| `tifik` | `tif`, `hik` | to ring (at a door), to knock | doorbell, knock, knocker | - | - | |
+| `pifik` | `pif`, `hik` | to applaud, to cheer | applause, ovation, cheer | - | - | |
+| `fifik` | `fif`, `hik` | to keep time, to drum | rhythm, beat, meter, melody | rhythmic | rhythmically | |
+| `naunait` | `naun`, `hait` | to discount, to mark down | discount, sale, markdown | discounted, cheap | cheaply | |
+| `minait` | `min`, `hait` | to be content, to be satisfied | contentment, satisfaction | content, satisfied | contentedly | |
+| `kanait` | `kan`, `hait` | to refine, to distill, to hone | refinement, distillation | refined | - | |
+| `tiŋait` | `tiŋ`, `hait` | to summarize, to boil down | summary, abstract, digest | brief, concise | briefly | |
+| `paunait` | `paun`, `hait` | to abbreviate, to initial | abbreviation, initials, acronym | abbreviated | - | |
+| `vinait` | `vin`, `hait` | to be momentary | instant, moment, second | instant, momentary | instantly | |
+| `neimait` | `neim`, `hait` | to numb, to dull | numbness, anesthetic | numb, dull | numbly | |
+| `mumait` | `mum`, `hait` | to drip | drop, droplet, drip | drippy | - | |
+| `kimait` | `kim`, `hait` | to nudge, to budge, to twitch | nudge, twitch, budge | slight | slightly | |
+| `tumait` | `tum`, `hait` | to miniaturize, to model | miniature, model, scale model | miniature, scaled-down | - | |
+| `pimait` | `pim`, `hait` | to wean | weaning | weaned | - | |
+| `feimait` | `feim`, `hait` | to add a pinch of | pinch, dash, hint (of an ingredient) | - | - | |
+| `maukat` | `mauk`, `kat` | to crouch, to coil, to be poised to pounce | crouch, coil | poised, crouching | - | |
+| `tikat` | `tik`, `kat` | to draw (a bow), to launch | bow, slingshot, catapult | drawn | - | |
+| `bikat` | `bik`, `kat` | to ration, to set aside (food) | ration, provisions | rationed | - | |
+| `fikat` | `fik`, `kat` | to contrast, to clash | contrast | contrasting, high-contrast | - | |
+| `nutait` | `nuh`, `tait` | to amplify (a sound), to broadcast | megaphone, loudspeaker, amplifier | amplified, loud | loudly | |
+| `maitaut` | `main`, `taut` | to lay the cornerstone of | cornerstone, foundation stone, groundbreaking | foundational | - | |
+| `kutaut` | `kuh`, `taut` | to stop over, to call at | station, stop, depot, terminal | - | - | |
+| `bitaut` | `bih`, `taut` | to open a branch | outpost, branch office, satellite | - | - | |
+| `futaut` | `fut`, `taut` | to shelve | shelf, rack, cupboard | shelved | - | |
+| `nupait` | `nup`, `hait` | to humble, to belittle | humility, modesty | humble, modest | humbly | |
+| `mubait` | `muk`, `bup`, `hait` | to be mossy | moss, lichen | mossy | - | |
+| `gabait` | `gab`, `hait` | to stitch, to tack | stitch, tack | stitched | - | |
+| `dupait` | `dup`, `hait` | to bandage, to dress (a wound) | bandage, plaster, dressing | bandaged | - | |
+| `poupait` | `poup`, `hait` | to do a favor for | favor, kindness, small help | obliging | - | |
+| `vupait` | `vuf`, `pap`, `hait` | to camp, to pitch camp | camp, campsite, encampment | - | - | |
+| `nuifut` | `nuif`, `fut` | to fill to the brim | brim, rim, lid | brimming | - | |
+| `mufut` | `muf`, `fut` | to collect (mail) | mailbox, inbox, letterbox | - | - | |
+| `pifut` | `pif`, `fut` | to wrap, to package | parcel, package, gift box | wrapped | - | |
+| `naunup` | `naun`, `nup` | to cherish (a person) | darling, sweetheart, beloved | beloved, dear | dearly | |
+| `kanup` | `kan`, `nup` | to study, to apprentice | student, pupil, apprentice | studious | studiously | |
+| `tinup` | `tiŋ`, `nup` | to star in, to be central to | protagonist, hero, central figure, star | starring | - | |
+| `funup` | `fun`, `nup` | to be the ancestor of | ancestor, forebear | ancestral | - | |
+| `neimup` | `neim`, `nup` | to empathize | empath, sympathizer | empathetic | empathetically | |
+| `mumup` | `mum`, `nup` | to swim | swimmer, diver | - | - | |
+| `kimup` | `kim`, `nup` | to exercise, to play sport | athlete, dancer | athletic | athletically | |
+| `tumup` | `tum`, `nup` | to craft (by hand) | artisan, craftsperson | handmade, artisanal | - | |
+| `pimup` | `pim`, `nup` | to foster | ward, foster child | foster | - | |
+| `feimup` | `feim`, `nup` | to team up, to collaborate | teammate, collaborator, partner | collaborative | collaboratively | |
+| `nigab` | `nik`, `gab` | to score | goal (in sport), hoop | - | - | |
+| `maugab` | `mauk`, `gab` | to trap (an animal) | animal trap, cage | trapped | - | |
+| `gugab` | `guk`, `gab` | to grill, to barbecue | grill, grate, barbecue | grilled | - | |
+| `bigab` | `bih`, `gab` | to network, to interconnect | network, web (of connections) | networked, interconnected | - | |
+| `figab` | `fik`, `gab` | to weave (a pattern) | tapestry, plaid, woven pattern | woven | - | |
+| `nudup` | `nuh`, `dup` | to keep watch, to stand guard | sentry, lookout | watchful | watchfully | |
+| `mudup` | `muk`, `dup` | to immunize | immune system, immunity, vaccine | immune | - | |
+| `kadup` | `kat`, `dup` | to be on guard | vigilance, alertness | vigilant, alert | vigilantly | |
+| `taudup` | `taut`, `dup` | to fortify | fortress, fort, bastion, citadel | fortified | - | |
+| `bidup` | `bih`, `dup` | to splint, to brace | splint, brace, cast | braced | - | |
+| `fudup` | `fut`, `dup` | to lock, to secure | lock, safe, vault | locked, secure | securely | |
+| `nupap` | `nup`, `pap` | to crowd, to gather | crowd, public, populace | public, crowded | publicly | |
+| `maibup` | `main`, `bup` | to sprout | sprout, seedling, shoot | sprouting | - | |
+| `kupap` | `kuh`, `pap` | to travel together | caravan, convoy, procession | - | - | |
+| `dupap` | `dup`, `pap` | to patrol | patrol, militia, watch | - | - | |
+| `papoup` | `pap`, `poup` | to cooperate, to pitch in | cooperative, mutual aid | cooperative | cooperatively | |
+| `vupap` | `vuf`, `pap` | to be neighbors | neighborhood, community | neighborly | - | |
+| `nuifup` | `nuif`, `nup` | to live on the fringe | outsider, foreigner, frontiersman | foreign, outlandish | - | |
+| `mufup` | `muf`, `nup` | to inherit | heir, heiress, beneficiary | - | - | |
+| `kuvup` | `kuh`, `vuf`, `nup` | to commute | commuter | - | - | |
+| `tifup` | `tif`, `nup` | to keep house | householder, homeowner, head of household | domestic | - | |
+| `pifup` | `pif`, `nup` | to donate | donor, benefactor, giver | charitable | charitably | |
+| `vufup` | `vuf`, `nup` | to own land | landowner, landlord, landlady | landed | - | |
+| `nuŋif` | `nuŋ`, `hif` | to plan, to intend | plan, intention, strategy | planned, intentional | intentionally | |
+| `mainif` | `main`, `hif` | to start out (from) | starting point, origin (of coordinates), trailhead | initial | initially | |
+| `kanif` | `kan`, `hif` | to train (in a method) | technique, skill, know-how | skillful, technical | skillfully | |
+| `tiŋif` | `tiŋ`, `hif` | to orient by (a principle) | principle, guiding star, true north | principled | - | |
+| `paunif` | `paun`, `hif` | to give directions | directions (for getting somewhere) | - | - | |
+| `vinif` | `vin`, `hif` | to take one's bearings | current heading, bearing, "you are here" | - | - | |
+| `neimuf` | `neim`, `huf` | to soften | softness, plush | soft, fluffy, plush | softly | |
+| `mumif` | `mum`, `hif` | to flow (in a direction) | current, flow | downstream | - | |
+| `kimif` | `kim`, `hif` | to turn, to steer, to swerve | turn, maneuver | turning | - | |
+| `tumuf` | `tum`, `huf` | to knit, to felt, to stuff | knitting, felt, stuffing | knitted, woolen | - | |
+| `pimuf` | `pim`, `huf` | to swaddle, to tuck in | blanket, swaddle, quilt | snug | snugly | |
+| `feimif` | `feim`, `hif` | to meander, to zigzag, to detour | detour, zigzag, meander | meandering | - | |
+| `nikif` | `nik`, `hif` | to set a course for | course, heading, route to a goal | - | - | |
+| `maukuf` | `mauk`, `huf` | to shed (fur) | fur, pelt, fleece | furry, hairy | - | |
+| `gukuf` | `guk`, `huf` | to burn to ash | ash, soot, cinders | ashen, sooty | - | |
+| `tikuf` | `tik`, `huf` | to brush, to sweep, to dust | brush, broom, duster | brushed | - | |
+| `bikuf` | `bik`, `huf` | to bake (bread), to leaven | bread, pastry, dough | doughy | - | |
+| `fikuf` | `fik`, `huf` | to soften (a color) | pastel | pastel, pale | - | |
+| `nutif` | `nuh`, `tif` | to perform for (an audience) | auditorium, theater, hall | - | - | |
+| `mautif` | `mauk`, `tif` | to stable, to pen | barn, stable, kennel, pen | - | - | |
+| `kutif` | `kuh`, `tif` | to lodge (on a journey) | inn, hotel, hostel | - | - | |
+| `bitif` | `bih`, `tif` | to annex, to extend (a building) | annex, wing (of a building), extension | - | - | |
+| `futif` | `fut`, `tif` | to store, to warehouse | warehouse, storehouse, depot | stored | - | |
+| `nupif` | `nup`, `pif` | to be generous | generosity, philanthropy | generous | generously | |
+| `mupif` | `mum`, `pif` | to pour, to serve (a drink) | pour, serving (of drink) | - | - | |
+| `kupif` | `kuh`, `pif` | to carry (mail), to deliver on foot | courier, mail carrier, messenger | - | - | |
+| `dupuf` | `dup`, `huf` | to pad, to cushion | padding, packing, wadding | padded | - | |
+| `bupuf` | `bup`, `huf` | to go to seed (as a dandelion) | cotton, down, thistledown | downy | - | |
+| `vupif` | `vuf`, `pif` | to host, to put up (a guest) | hospitality, lodging (given) | hospitable | hospitably | |
+| `nuivuf` | `nuif`, `vuf` | to border | borderland, frontier, march | borderline | - | |
+| `muvuf` | `muf`, `vuf` | to dock, to harbor | harbor, port, dock | - | - | |
+| `kuvuf` | `kuh`, `vuf` | to travel by road | road, route, highway | - | - | |
+| `tivuf` | `tif`, `vuf` | to live at (an address) | address, lot, homestead | - | - | |
+| `bivuf` | `bih`, `vuf` | to divide into districts | district, quarter, ward | regional | - | |
 | `neimnaun` | `neim`, `naun` | to enjoy, to love, to be happy | happiness, joy, love, tranquility, serenity, ecstasy | happy, exuberant, joyous | happily | |
 | `neimfut` | `neim`, `fut` | to be grateful for, to appreciate, to recognize | gratitude, appreciation, recognition | grateful, appreciative | gratefully, appreciatively | |
 | `neimfic` | `neim`, `fic` | to laugh at, to find something funny, to be amused by, to enjoy | humor, joke | funny, hilarious, amusing | hilariously, amusingly | |
