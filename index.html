@@ -4396,11 +4396,38 @@ translate(inp.value);
     else if (run < -SHOW_RUN) setHidden(false);
   }
 
-  // A nav click kicks off a smooth scroll downwards; don't hide mid-jump.
-  bar.addEventListener('click', e => {
-    if (!e.target.closest('a[href^="#"]')) return;
-    holdUntil = Date.now() + 900;
+  // ── Jumps ──
+  // CSS smooth scrolling takes its time over long distances (~3s across this page),
+  // so in-page links glide here instead, never for longer than JUMP_MAX ms.
+  const JUMP_MAX = 1000;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  let jump = 0;
+  const stopJump = () => { cancelAnimationFrame(jump); jump = 0; };
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => addEventListener(t, stopJump, { passive: true }));
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+    if (!el || calm.matches) return;
+    e.preventDefault();
+    history.pushState(null, '', a.hash);
+    stopJump();
+    const from = window.scrollY;
+    const maxY = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.min(maxY, Math.max(0, from + el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).scrollMarginTop)));
+    const ms = Math.min(JUMP_MAX, 300 + Math.abs(to - from) / 10);
+    // Don't hide the bar mid-jump.
+    holdUntil = Date.now() + ms + 100;
     setHidden(false);
+    const t0 = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - t0) / ms);
+      const ease = t < 0.5 ? 4 * t * t * t : 1 - (2 - 2 * t) ** 3 / 2;   // cubic in-out
+      window.scrollTo({ top: from + (to - from) * ease, behavior: 'instant' });
+      jump = t < 1 ? requestAnimationFrame(step) : 0;
+    };
+    jump = requestAnimationFrame(step);
   });
   bar.addEventListener('focusin', () => setHidden(false));
 
