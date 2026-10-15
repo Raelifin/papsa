@@ -1953,55 +1953,74 @@ tigab figuk olguin nikud pauneim | Red Net, Olguin, Crying Motive: 19383 units s
   address in it without a map. The words are chosen for meanings that are easy to picture and hard to mishear.
   A few numbers have no regular compound, so their words drop a consonant at the join (marked †).</p>
 
-  <pre class="tall stacked" data-table="addressWords">
+  <pre id="address-words" class="tall stacked" data-table="addressWords">
 | Base | +0 | +1 | +2 | +3 | +4 | +5 |
 |------|----|----|----|----|----|----|
-| 0 | `naunuŋ` value | `miniŋ` curiosity | `kanuŋ` learn | `tinuŋ` soul | `paunaun` hint | `funuŋ` culture |
-| 6 | `neimin` yearning | `mamin` improve | `kimain` awaken | `tumain` invent | `pimain` new parent | `feimain` fusion |
-| 12 | `nikan` optimal | `mukan` heal | `gukan` kindle | `tikan` upgrade | `bikan` spice | `fikan` dye |
-| 18 | `nutiŋ` gist | `maitiŋ` embryo† | `katun` relief | `tautun` door | `bitiŋ` hub | `futun` unpack |
-| 24 | `nupaun` ID | `mipaun` advert† | `kupaun` signpost | `dupaun` alarm | `pipaun` price | `vupaun` landmark† |
-| 30 | `nuifun` border crossing | `muvin` welcome | `kuvin` arrival | `tivin` settle | `pivin` delivery | `vuvin` vicinity |
-| 36 | `nuneim` touch-read | `maineim` first impression | `kuneim` walk | `tineim` gut feeling | `pauneim` emote | `vineim` presence |
-| 42 | `neimum` taste | `mumum` water | `kimum` ripple | `tumum` brew | `pimum` water (plants) | `feimum` dissolve |
-| 48 | `nikim` approach | `maukim` migrate | `gaukim` motor | `tikim` operate | `bikim` chew | `fikim` shimmer |
-| 54 | `nutum` compose | `mutum` breed† | `katum` wind up | `tautum` found | `bitum` specialist | `futum` pottery |
-| 60 | `nupim` nanny | `maipim` midwife† | `kupim` guide | `dupim` custodian | `papim` elder | `vupim` ranger† |
-| 66 | `nuifeim` blur | `mufeim` absorb | `kufeim` mingle | `tifeim` commune | `pifeim` potluck | `vufeim` crossroads |
-| 72 | `naunik` ideal | `minik` ambition | `kanik` training | `tinik` priority | `punik` voice | `funik` accent |
-| 78 | `neimik` hear | `mamuk` metamorphosis | `kimuk` animate | `tumik` instrument | `pimauk` herder | `feimauk` hybrid |
-| 84 | `niguk` flare | `mukik` heartbeat | `guiguk` lamp | `tigaug` appliance | `biguk` cook | `figuk` red |
-| 90 | `nutik` earpiece | `mutik` faucet† | `kutik` lever | `dutik` hammer | `bitik` fork | `futik` toolbox |
-| 96 | `nubik` feast | `maibik` breakfast† | `gabik` catch | `dubik` preserve | `pibik` grocery | `fibik` recipe† |
-| 102 | `nuifik` outline | `mufik` stain | `guifik` prism | `tifik` doorbell | `pifik` applause | `fifik` rhythm |
-| 108 | `naunait` discount | `minait` contentment | `kanait` refine | `tiŋait` summary | `paunait` abbreviation | `vinait` instant |
-| 114 | `neimait` numb | `mumait` droplet | `kimait` nudge | `tumait` miniature | `pimait` wean | `feimait` pinch |
-| 120 | `nikud` motive | `maukat` crouch | `gukait` spark | `tikat` bow | `bikat` ration | `fikat` contrast |
-| 126 | `nutait` megaphone | `maitaut` cornerstone† | `kutaut` station | `taudut` wall | `bitaut` outpost | `futaut` shelf |
-| 132 | `nupait` humility | `mubait` moss† | `gabait` stitch | `dupait` bandage | `poupait` favor | `vupait` camp† |
-| 138 | `nuifut` brim | `mufut` mailbox | `kufut` ride | `tifait` hut | `pifut` parcel | `fafait` mote |
-| 144 | `naunup` darling | `mainup` child | `kanup` student | `tinup` protagonist | `paunup` name | `funup` ancestor |
-| 150 | `neimup` empath† | `mumup` swimmer† | `kimup` athlete† | `tumup` artisan† | `pimup` ward† | `feimup` teammate† |
-| 156 | `nigab` goal (sport) | `maugab` animal trap | `gugab` grill | `tigab` net | `bigab` network | `figab` tapestry |
-| 162 | `nudup` sentry | `mudup` immunity† | `kadup` vigilance | `taudup` fortress | `bidup` splint | `fudup` lock |
-| 168 | `nupap` crowd | `maibup` sprout† | `kupap` caravan | `dupap` patrol | `papoup` cooperative | `vupap` neighborhood† |
-| 174 | `nuifup` outsider† | `mufup` heir† | `kuvup` commuter† | `tifup` householder† | `pifup` donor† | `vufup` landowner† |
-| 180 | `nuŋif` plan | `mainif` starting point | `kanif` technique | `tiŋif` principle | `paunif` directions | `vinif` bearing |
-| 186 | `neimuf` soft | `mumif` current | `kimif` turn | `tumuf` knit | `pimuf` blanket | `feimif` detour |
-| 192 | `nikif` course | `maukuf` fur | `gukuf` ash | `tikuf` brush | `bikuf` bread | `fikuf` pastel |
-| 198 | `nutif` auditorium | `mautif` barn† | `kutif` inn | `tautuf` bed | `bitif` annex | `futif` warehouse |
-| 204 | `nupif` generosity | `mupif` pour† | `kupif` courier | `dupuf` padding | `bupuf` cotton | `vupif` hospitality† |
-| 210 | `nuivuf` borderland | `muvuf` harbor | `kuvuf` road | `tivuf` address | `bivuf` district | `favuf` soil |
+| 0 | `naunuŋ` | `miniŋ` | `kanuŋ` | `tinuŋ` | `paunaun` | `funuŋ` |
+| 6 | `neimin` | `mamin` | `kimain` | `tumain` | `pimain` | `feimain` |
+| 12 | `nikan` | `mukan` | `gukan` | `tikan` | `bikan` | `fikan` |
+| 18 | `nutiŋ` | `maitiŋ` | `katun` | `tautun` | `bitiŋ` | `futun` |
+| 24 | `nupaun` | `mipaun` | `kupaun` | `dupaun` | `pipaun` | `vupaun` |
+| 30 | `nuifun` | `muvin` | `kuvin` | `tivin` | `pivin` | `vuvin` |
+| 36 | `nuneim` | `maineim` | `kuneim` | `tineim` | `pauneim` | `vineim` |
+| 42 | `neimum` | `mumum` | `kimum` | `tumum` | `pimum` | `feimum` |
+| 48 | `nikim` | `maukim` | `gaukim` | `tikim` | `bikim` | `fikim` |
+| 54 | `nutum` | `mutum` | `katum` | `tautum` | `bitum` | `futum` |
+| 60 | `nupim` | `maipim` | `kupim` | `dupim` | `papim` | `vupim` |
+| 66 | `nuifeim` | `mufeim` | `kufeim` | `tifeim` | `pifeim` | `vufeim` |
+| 72 | `naunik` | `minik` | `kanik` | `tinik` | `punik` | `funik` |
+| 78 | `neimik` | `mamuk` | `kimuk` | `tumik` | `pimauk` | `feimauk` |
+| 84 | `niguk` | `mukik` | `guiguk` | `tigaug` | `biguk` | `figuk` |
+| 90 | `nutik` | `mutik` | `kutik` | `dutik` | `bitik` | `futik` |
+| 96 | `nubik` | `maibik` | `gabik` | `dubik` | `pibik` | `fibik` |
+| 102 | `nuifik` | `mufik` | `guifik` | `tifik` | `pifik` | `fifik` |
+| 108 | `naunait` | `minait` | `kanait` | `tiŋait` | `paunait` | `vinait` |
+| 114 | `neimait` | `mumait` | `kimait` | `tumait` | `pimait` | `feimait` |
+| 120 | `nikud` | `maukat` | `gukait` | `tikat` | `bikat` | `fikat` |
+| 126 | `nutait` | `maitaut` | `kutaut` | `taudut` | `bitaut` | `futaut` |
+| 132 | `nupait` | `mubait` | `gabait` | `dupait` | `poupait` | `vupait` |
+| 138 | `nuifut` | `mufut` | `kufut` | `tifait` | `pifut` | `fafait` |
+| 144 | `naunup` | `mainup` | `kanup` | `tinup` | `paunup` | `funup` |
+| 150 | `neimup` | `mumup` | `kimup` | `tumup` | `pimup` | `feimup` |
+| 156 | `nigab` | `maugab` | `gugab` | `tigab` | `bigab` | `figab` |
+| 162 | `nudup` | `mudup` | `kadup` | `taudup` | `bidup` | `fudup` |
+| 168 | `nupap` | `maibup` | `kupap` | `dupap` | `papoup` | `vupap` |
+| 174 | `nuifup` | `mufup` | `kuvup` | `tifup` | `pifup` | `vufup` |
+| 180 | `nuŋif` | `mainif` | `kanif` | `tiŋif` | `paunif` | `vinif` |
+| 186 | `neimuf` | `mumif` | `kimif` | `tumuf` | `pimuf` | `feimif` |
+| 192 | `nikif` | `maukuf` | `gukuf` | `tikuf` | `bikuf` | `fikuf` |
+| 198 | `nutif` | `mautif` | `kutif` | `tautuf` | `bitif` | `futif` |
+| 204 | `nupif` | `mupif` | `kupif` | `dupuf` | `bupuf` | `vupif` |
+| 210 | `nuivuf` | `muvuf` | `kuvuf` | `tivuf` | `pifif` | `favuf` |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Address Words</summary><pre><code>
 // Every address word spells its own number: its consonants are the number's base-six digits, little-endian.
 for (const [base, row] of addressWords['Base']) for (let d = 0; d < 6; d++) {
-  const word = row['+' + d].split(' ')[0];
+  const word = row['+' + d];
   const digits = [...baseLetters(word)].filter(l => !vowelChars.has(l)).map(primalNum);
   const value = digits.reduce((sum, x, i) => sum + x * 6 ** i, 0);
   if (digits.length !== 3 || value !== +base + d) throw new Error(`${word} spells ${value}, not ${+base + d}`);
 }
+
+// Each word is glossed by its first noun sense in the dictionary, which is read further down the page. A
+// regular compound keeps every consonant of its roots but h, merging a join where both sides share a letter.
+// A word with fewer consonants than that has been clipped, and is marked with †.
+addEventListener('DOMContentLoaded', () => {
+  const consonants = w => [...baseLetters(w)].filter(l => !vowelChars.has(l) && l !== 'H');
+  for (const code of document.querySelectorAll('#address-words td code')) {
+    const entry = compoundMeanings['Word'][code.textContent];
+    if (!entry) { reportSpecError('Address Words', `${code.textContent} isn't in the dictionary`); continue; }
+    let regular = 0, prev;
+    for (const root of entry['Roots'].split(',')) {
+      const cs = consonants(root.trim());
+      regular += cs.length - (cs[0] === prev);
+      prev = cs.at(-1);
+    }
+    const sense = entry['Noun'] !== '-' ? entry['Noun'] : entry['Verb'].replace(/^to /, '');
+    code.after(` ${firstFew(sense, 1)}${consonants(code.textContent).length < regular ? '†' : ''}`);
+  }
+});
   </code></pre></details>
 
   <p>For places on the scale of the whole Earth, Papsa replaces latitude with distance from the North Pole,
@@ -4161,6 +4180,7 @@ document.querySelectorAll('pre').forEach(pre => {
       });
     });
 
+    if (pre.id) table.id = pre.id;
     pre.replaceWith(wrapTable(table, pre.className));
   } else if (pre.querySelector('code')) {
     // ── Execute code block at global scope ──────────────────────────────
