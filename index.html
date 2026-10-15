@@ -1936,26 +1936,24 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
 
   <h3>Coordinates and Directions</h3>
 
-  <p>Maps put east at the top, where the day begins. Small regions are close enough to flat that places
-  in them can be found on a grid, so every place gets an <strong>address</strong>: how far it is from a
-  corner of its province, counted in units of six stretches (about 7 meters, so a Mile is 216 of
-  them). See <a href="https://utopiandreams.substack.com/p/maps-and-addresses">Maps and Addresses</a>
-  for the reasoning.</p>
+  <p>Papsa addresses are usually given as positive-number coordinates in some local region.
+  Coordinates, whether on a map or not, are usually read as the number of units to the right,
+  followed by the number of units down (then followed by the number of units forward, if in 3D).
+  Since Papsa maps are typically <a href="https://utopiandreams.substack.com/p/maps-and-addresses">oriented
+  with East at the top</a>, the first coordinate is how far south, and then the second is how far
+  West of the reference point. Units for local regions are assumed to be six-stretches long
+  (about 7 meters), so a Papsan Mile (≈ 1.52 km ≈ 0.95 (imperial) miles) is exactly 216 units.</p>
 
-  <p>Each distance is written as two <strong>address words</strong>, which are ordinary compound words
-  whose three consonants are the digits of a number from 0 to 215. Like all Papsa numbers, they're
-  little-endian base six, so <code>`tigab`</code> (t-g-b, 3-2-4) is 3 + 2×6 + 4×36 = 159, and a pair of
-  words counts up to 216² − 1. That's enough to cover a province about 329 km on a side. An address is two pairs,
-  with the province's name between them: the first pair counts south from the province's northeast corner,
-  and the second counts west.</p>
+  <p>While plain numbers can be used, addresses in Papsan culture are usually encoded as words for
+  ease of remembering and more efficient communication. These <strong>address words</strong>, each have
+  three primal consonants, which can be seen as (base-six) digits of a number from 0 to 215. Like all Papsa
+  numbers, they're little-endian, so <code>`tigab`</code> (t-g-b, 3-2-4) is 3 + 2×6 + 4×36 = 159.
+  Using two such words for each dimension, one can cover a province about 329 km on a side. The name of the
+  reference region is given between the parts of the address.</p>
 
   <pre>
-tigab figuk olguin nikud pauneim | Red Net, Olguin, Crying Motive: 19383 units south and 8760 west (≈ 136.5 km, 61.7 km)
+tigab figuk olguin nikud pauneim | "Red Net", Olguin, "Crying Motive" (ie 19383 units south and 8760 west)
   </pre>
-
-  <p>Because the digits can be read off the words, anyone who knows where a province is can walk to an
-  address in it without a map. The words are chosen for meanings that are easy to picture and hard to mishear.
-  A few numbers have no regular compound, so their words drop a consonant at the join (marked †).</p>
 
   <pre id="address-words" class="tall stacked" data-table="addressWords">
 | Base | +0 | +1 | +2 | +3 | +4 | +5 |
@@ -2007,28 +2005,21 @@ for (const [base, row] of addressWords['Base']) for (let d = 0; d < 6; d++) {
   if (digits.length !== 3 || value !== +base + d) throw new Error(`${word} spells ${value}, not ${+base + d}`);
 }
 
-// Each word is glossed by its first noun sense in the dictionary, which is read further down the page. A
-// regular compound keeps every consonant of its roots but h, merging a join where both sides share a letter.
-// A word with fewer consonants than that has been clipped, and is marked with †.
+// Each word is glossed by its first noun sense in the dictionary, or its raw meaning if it's a name.
+// Because compounds are defined further down the page, we wait to add glosses until after the page loads.
 addEventListener('DOMContentLoaded', () => {
   const consonants = w => [...baseLetters(w)].filter(l => !vowelChars.has(l) && l !== 'H');
   for (const code of document.querySelectorAll('#address-words td code')) {
+    // TODO Handle names!
     const entry = compoundMeanings['Word'][code.textContent];
     if (!entry) { reportSpecError('Address Words', `${code.textContent} isn't in the dictionary`); continue; }
-    let regular = 0, prev;
-    for (const root of entry['Roots'].split(',')) {
-      const cs = consonants(root.trim());
-      regular += cs.length - (cs[0] === prev);
-      prev = cs.at(-1);
-    }
     const sense = entry['Noun'] !== '-' ? entry['Noun'] : entry['Verb'].replace(/^to /, '');
-    code.after(` ${firstFew(sense, 1)}${consonants(code.textContent).length < regular ? '†' : ''}`);
+    code.after(` ${firstFew(sense, 1)}`);
   }
 });
   </code></pre></details>
 
-  <p>For places on the scale of the whole Earth, Papsa replaces latitude with distance from the North Pole,
-  and counts longitude from 0° to 360°, increasing westward.</p>
+  <p>TODO Directions</p>
 
   <h3>Credence, Speculation, and Theory</h3>
   
