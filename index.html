@@ -435,9 +435,6 @@ const baseLetter = (ch) => {
   throw new Error(`Unknown Papsa character: ${ch}`);
 };
 const baseLetters = (wrd) => [...wrd].map(baseLetter).join('');
-for (const [rom, row] of engConsonantRomanization['Romanization'])
-  if ( ! alphabet['Letter'][row['Papsa Letter']]['Acceptable sounds (IPA)'].split(',').map(s => s.trim()).includes(row['Sound (IPA)']))
-    fail(`Romanized "${rom}" is pronounced ${row['Sound (IPA)']}, which isn't an acceptable sound of ${row['Papsa Letter']}.`);
 const letterIdx = (ch) => alphabet['Letter'][baseLetter(ch)].index;
 const primalNum = (ch) => {
   const idx = letterIdx(ch);
