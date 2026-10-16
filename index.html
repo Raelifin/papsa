@@ -113,6 +113,9 @@
       box-shadow: inset 0 -1px 0 #ddd;
     }
 
+    /* class="stacked": each cell's Papsa word sits on its own line above its gloss. */
+    .table-wrap.stacked td code { display: block; }
+
     .table-wrap.oneline table {
       table-layout: fixed;
       /* Room for the word column plus --col-min for every other column.
@@ -341,7 +344,7 @@
     <span><span class="dot tok-pronoun"></span>pronoun</span>
     <span><span class="dot tok-name"></span>name</span>
     <span><span class="dot tok-unknown"></span>unknown</span>
-    <label><input type="checkbox" id="translate-annotate"> annotated script</label>
+    <label><input type="checkbox" id="translate-annotate" checked> annotated script</label>
   </div>
 </section>
 
@@ -735,7 +738,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 | `guih` | to shine, to illuminate, to reveal, to catch attention, to distract, to glow | light, glow, star | shiny, glowing, bright | brightly, luminously | |
 | `kan` | to enhance, to grow, to accelerate, to intensify, to increase, to learn, to improve, to raise, to uplift, to amplify, to strengthen, to exponentiate | enhancement, improvement, amplification, healer, teacher, assistant, technology, booster, exponentiation | powerful, empowering, supportive, enhancing, uplifting, elevating, accelerating, strengthening, reinforcing, promoting, healing | powerfully, increasingly | In mathematics, the exponent is the subject and the base is the object: `suk kan sat` is 3². |
 | `kat` | to await, to charge, to tense, to tighten, to stress, to strain | tension, stress, strain, readiness, spring, battery | tense, tight, strained, coiled, primed, prepared, waiting | tensely, readily | |
-| `kim` | to act, to move, to sway, to adjust, to wiggle | action, movement, restructuring, transition, move | active, transient, dynamic | actively, dynamically | |
+| `kim` | to act, to move, to sway, to adjust, to wiggle | action, movement, energy, restructuring, transition | active, transient, dynamic, energetic | actively, dynamically, energetically | |
   </pre>
 
   <h4><code>`T`</code> — Metal (Stone, Armor, Mass, Structure, Stability, Endurance, Tools, Construction, Simplicity)</h4>
@@ -1932,32 +1935,101 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
   </pre>
 
   <h3>Coordinates and Directions</h3>
-  
-  <p>TODO Add these to the dictionary and explain https://utopiandreams.substack.com/p/maps-and-addresses</p>
+
+  <p>Papsa addresses are usually given as positive-number coordinates in some local region.
+  Coordinates, whether on a map or not, are usually read as the number of units to the right,
+  followed by the number of units down (then followed by the number of units forward, if in 3D).
+  Since Papsa maps are typically <a href="https://utopiandreams.substack.com/p/maps-and-addresses">oriented
+  with East at the top</a>, the first coordinate is how far south, and then the second is how far
+  West of the reference point. Units for local regions are assumed to be six-stretches long
+  (about 7 meters), so a Papsan Mile (≈ 1.52 km ≈ 0.95 (imperial) miles) is exactly 216 units.</p>
+
+  <p>While plain numbers can be used, addresses in Papsan culture are usually encoded as words for
+  ease of remembering and more efficient communication. These <strong>address words</strong>, each have
+  three primal consonants, which can be seen as (base-six) digits of a number from 0 to 215. Like all Papsa
+  numbers, they're little-endian, so <code>`tigab`</code> (t-g-b, 3-2-4) is 3 + 2×6 + 4×36 = 159.
+  Using two such words for each dimension, one can cover a province about 329 km on a side. The name of the
+  reference region is given between the parts of the address.</p>
 
   <pre>
-naunuŋ | value (subjective)
-miniŋ | curiosity (non-emotive)
-kanuŋ | to learn
-tinuŋ | soul
-paunaun | hint
-funuŋ | culture (especially what was learned in childhood)
-neimin | yearning (TK check with other emotions)
-mamin | improve (things change in a desired way)
-kimain | awaken (or start moving)
-tumain | inventor
-pimain | new parent, new caretaker, adoptive parent
-feimain | fusion (new/young blending/combining)
-nikan | optimal
-..
-pauneim | emotional expression
-..
-figuk | red
-..
-nikud | motivation
-..
-tigab | net
+tigab figuk olguin nikud pauneim | "Red Net", Olguin, "Crying Motive" (ie 19383 units south and 8760 west of the Olguin refrence point)
   </pre>
+
+  <p>TODO: A lot of the necessary words don't exist, so I've filled them with names that follow the pattern _a_a_a for now.
+  This is a stopgap to keep from needing to add a ton of random, forced vocabulary at this stage in the language's development.
+  The final state of the table should have entirely defined names and compounds.</p>
+
+  <pre id="address-words" class="tall stacked" data-table="addressWords">
+| Base |        +0 |       +1 |       +2 |       +3 |        +4 |        +5 |
+|------|-----------|----------|----------|----------|-----------|-----------|
+|    0 |  `naunuŋ` |  `miniŋ` |  `kanuŋ` |  `tinuŋ` | `paunaun` |   `funuŋ` |
+|    6 |  `neimin` |  `mamin` | `kimain` | `tumain` |  `pimain` | `feimain` |
+|   12 |   `nikan` |  `mukan` |  `kukan` |  `tikan` |   `bikan` |   `fikan` |
+|   18 |  `natana` | `matana` | `katana` | `tautun` |  `patana` |  `fatana` |
+|   24 |  `napana` | `mapana` | `kapana` | `dupaun` |  `papana` |  `fapana` |
+|   30 |  `nafana` | `mafana` | `kavana` | `tafana` |  `pafana` |  `fafana` |
+|   36 |  `nuneim` | `manama` | `kuneim` | `tanama` | `pauneim` |  `fanama` |
+|   42 |  `neimum` |  `mumum` | `kamama` | `tamama` |   `pimum` |  `feimum` |
+|   48 |  `nakama` | `makama` | `kakama` | `takama` |  `pakama` |  `fakama` |
+|   54 |  `natama` | `matama` | `katama` | `tatama` |  `patama` |  `fatama` |
+|   60 |  `napama` | `mapama` | `kapama` | `tapama` |  `papama` |  `fapama` |
+|   66 | `nuifeim` | `mafama` | `kafama` | `tafama` |  `pafama` |  `fafama` |
+|   72 |  `nanaka` | `manaka` | `kanaka` | `tanaka` |  `panaka` |  `fanaka` |
+|   78 |  `neimik` |  `mumuk` | `kamaka` | `tamaka` |  `pamaka` |  `famaka` |
+|   84 |  `nakaka` | `makaka` | `kakaka` | `takaka` |  `pakaka` |   `figuk` |
+|   90 |  `nataka` | `mataka` | `kataka` | `tataka` |  `pataka` |   `futik` |
+|   96 |  `napaka` | `mapaka` | `kapaka` | `tapaka` |  `papaka` |  `fapaka` |
+|  102 |  `nafaka` | `mafaka` | `kafaka` | `tafaka` |  `pafaka` |  `fafaka` |
+|  108 |  `nanata` | `manata` | `kanata` | `tanata` |  `panata` |  `vanata` |
+|  114 |  `namata` | `mamata` | `kamata` | `tamata` |  `pamata` |  `famata` |
+|  120 |   `nikud` | `mukait` | `gukait` | `takata` |  `pakata` |  `fakata` |
+|  126 |  `natata` | `matata` | `katata` | `taudut` |  `patata` |  `fatata` |
+|  132 |  `napata` | `mapata` | `kapata` | `tapata` |  `papata` |  `fapata` |
+|  138 |  `nafata` | `mafata` |  `kufut` | `tifait` |  `pafata` |  `fafait` |
+|  144 |  `nanapa` | `mainup` | `kanapa` | `tanapa` |  `paunup` |  `fanapa` |
+|  150 |  `namapa` | `mamapa` | `kamapa` | `tamapa` |  `pamapa` |  `famapa` |
+|  156 |  `nakapa` | `makapa` | `kakapa` |  `tigab` |  `pakapa` |   `figab` |
+|  162 |  `natapa` | `matapa` | `katapa` | `tatapa` |  `patapa` |  `fatapa` |
+|  168 |  `napapa` | `mapapa` | `kapapa` | `dapapa` |  `papapa` |  `vapapa` |
+|  174 |  `nafapa` | `mafapa` | `kavapa` | `tafapa` |  `pafapa` |  `vafapa` |
+|  180 |  `ninuif` | `minuif` | `kanafa` | `tanafa` |  `panafa` |  `vanafa` |
+|  186 |  `neimuf` | `mamafa` |  `kimif` | `tamafa` |  `pamafa` |  `feimuf` |
+|  192 |  `nakafa` | `maukuf` | `gakafa` | `takafa` |  `pakafa` |   `fikuf` |
+|  198 |  `natafa` | `matafa` | `katafa` | `tautuf` |  `patafa` |  `fatafa` |
+|  204 |  `napafa` | `mapafa` |  `gapif` |  `dupuf` |   `papuf` |  `faipif` |
+|  210 |  `nuivuf` |  `mufif` |  `kuvuf` |  `tivuf` |   `pifif` |   `favuf` |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Address Words</summary><pre><code>
+// Every address word spells its own number: its consonants are the number's base-six digits, little-endian.
+for (const [base, row] of addressWords['Base']) for (let d = 0; d < 6; d++) {
+  const word = row['+' + d];
+  const digits = [...baseLetters(word)].filter(l => !vowelChars.has(l)).map(primalNum);
+  const value = digits.reduce((sum, x, i) => sum + x * 6 ** i, 0);
+  if (digits.length !== 3 || value !== +base + d) throw new Error(`${word} spells ${value}, not ${+base + d}`);
+}
+
+// Each word is glossed by its first noun sense in the dictionary, or its meaning if it's a name.
+// Placeholder names that aren't defined yet are allowed, and are gathered into a single warning.
+// Because compounds are defined further down the page, we wait to add glosses until after the page loads.
+addEventListener('DOMContentLoaded', () => {
+  const undefinedNames = [];
+  for (const code of document.querySelectorAll('#address-words td code')) {
+    const word = code.textContent, key = baseLetters(word);
+    const core = coreWords[key], name = names[key];
+    let sense;
+    if (core) sense = [core.nounMeaning, core.verbMeaning?.replace(/^to /, '')].find(s => s && s !== '-');
+    else if (name) sense = name.meaning;
+    else if (['name', 'pronoun'].includes(wordType(wordIdxs(word)))) { undefinedNames.push(word); continue; }
+    else { reportSpecError('Address Words', `${word} isn't in the dictionary`); continue; }
+    if (sense) code.after(` ${firstFew(sense, 1)}`);
+  }
+  const n = undefinedNames.length;
+  if (n) reportSpecWarning('Address Words', `${n} placeholder name${n === 1 ? " isn't" : "s aren't"} defined yet: ${undefinedNames.join(', ')}`);
+});
+  </code></pre></details>
+
+  <p>TODO Directions</p>
 
   <h3>Credence, Speculation, and Theory</h3>
   
@@ -3557,8 +3629,39 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 | `pauneim` | `paun`, `neim` | to express feeling about, to emote, to show how one feels | emotional expression, affect, tone, body language | expressive, emotive, demonstrative | expressively | The outward sign of an inner state, through whatever channel a speaker has — face, voice, posture, color, exhaust plume. Carries no claim of sincerity: a `pauneim` can be performed, mistaken, or read wrongly. |
 | `nikud` | `nik`, `kud` | to motivate, to drive toward a goal, to spur | motivation, drive, incentive, reason for acting | motivated, driven, motivating | - | The push toward a `nik`, from inside or out: appetite, duty, a paycheck and a threat are all `nikud`. Where `kud` is bare force, `nikud` is force with a direction. |
 | `tigab` | `tik`, `gab` | to net, to catch in a net, to ensnare deliberately | net, mesh, web, snare | netted, meshed, woven | - | `gab` covers webs and traps of every origin; `tigab` is the made kind, a `tik` built to entangle. The mesh sense extends readily to networks and grids, where what gets caught is traffic rather than fish. |
+| `gapif` | `gap`, `pif` | to bait, to lure, to entice | bait, lure, honeypot | enticing, tempting | enticingly, temptingly | |
+| `feimuf` | `feim`, `muf` | to whip, to froth, to aerate, to fluff | froth, foam, whipped cream | whipped, frothy, aerated | frothily | |
+| `bikan` | `bik`, `kan` | to supplement, to be fortified by | vitamin, supplement, fortified food, micronutrient, superfood | fortifying, enriched | - | Food that contains extra nutrients that go above and beyond normal food. |
+| `dupaun` | `dup`, `paun` | to alarm, to alert, to warn of danger | alarm, crier, alert, siren | alarmed, on alert, alarming | alarmingly | Something or someone who cries out in the face of danger to protect people. |
+| `mukait` | `muk`, `hait` | - | microbe, microorganism, cell, bacteria, virus, protozoa | microbial, cellular, miroscopic | - | In contrast with `coum`, this has no connotation of disease or parasitism. |
+| `futik` | `fut`, `tik` | to pack, to stow, to contain tools | pouch, toolbox, pocket, pack, bag, backpack, satchel, sheath, quiver, holster, purse | pocketable, portable | - | A container for tools and useful artifacts. |
+| `tikfut` | `tik`, `fut` | to clamp, to grip, to clasp | clamp, vise, tongs, pliers, tweezers, forceps, clip, chopsticks, clothespin | gripping, clamping, grasping | graspingly | A tool whose job is to grab and hold things. |
+| `dupuf` | `dup`, `huf` | to pad, to cushion, to buffer | padding, cushion, packing, wadding | padded, cushioned | - | |
+| `minuif` | `min`, `nuif` | to be satisfied by, to be content with, to have enough | enough | sufficient, adequate, satisfactory, good enough | sufficiently | The edge-kind-of-desire is something that is wanted, but only up to a point. Can also be used to talk about diminishing returns. |
+| `figab` | `fik`, `gab` | to dye, to tattoo, to mark permanently | stain, dye, tattoo, ink | dyed, stained | - | Color that has been caught and won't come out. |
+| `papuf` | `pap`, `huf` | to hug, to nuzzle, to snuggle, to cuddle, to huddle with, to gather close, to nestle among | huddle, cuddle pile, hug, embrace | cozy, snug, homey, hygge, close-knit | snugly, cozily | More about the social act of being soft and welcoming than any particular action or physical configuration. Penguins packed together in a storm. A baby squirrel in a nest. Grandparents offering a cup of cocoa after a long journey. |
+| `faipif` | `faip`, `pif` | to season, to spice, to flavor, to dose, to lace | seasoning, spice, condiment, flavoring, additive, dopant, admixture | seasoned, spiced, flavored, laced | - | |
+| `nuivuf` | `nuif`, `vuf` | to border | borderland, frontier, march | bordering | - | |
+| `tikan` | `tik`, `kan` | to upgrade, to retrofit, to improve (a tool), to modify | upgrade, improvement, attachment, mod, prosthetic | upgraded | - | Denotes a machine that improves things, including software patches and cybernetics. |
+| `mufif` | `muf`, `fif` | to copy, to imitate, to adopt, to pick up, to emulate | mimic, imitator, copier, adopter, memetic recipient | mimetic, imitative, derivative, memetic | imitatively | Covers deliberate mimicry as well as things like evolved mimics, unconscious memetic influence, photocopiers, and computer commands. |
+| `kuvuf` | `kuh`, `vuf` | to migrate, to relocate, to emigrate, to immigrate, to roam | migrant, immigrant, emigrant, nomad | migratory, nomadic, itinerant | cross-country | Describes someone who is changing the land they call home. |
+| `pimum` | `pim`, `mum` | to suckle, to breastfeed, to be nursed by | nursemaid, mother, wet nurse | lactating, nursing | - | Babies recieve `mumpim` from `pimum`. |
+| `mumpim` | `mum`, `pim` | to lactate, to be milk for | milk, dairy | milky, dairy | - | While the subject in a sentence with this as the verb can be a person, this word carries a connotation of being the physical stuff or the source of that stuff, rather than the person with milk. For that, see `pimum`. |
+| `mumuk` | `mum`, `muk` | to bleed | blood, hemolymph, sap, ichor | bloody, bleeding | - | |
+| `ninuif` | `niŋ`, `nuif` | to categorize, to classify, to distinguish | category, ontology, classification, schema, taxonomy, division, order | categorized, classified, ontological, taxinomical | ontologically, taxinomically | Where `fif` is about organization (presumably according to natural properties), this is about distinction according to a mental framework. |
+| `fikuf` | `fik`, `huf` | to tint softly, to soften (a color), to fade, to blush faintly | pastel, soft hue | desaturated, pastel, pale, faded, muted, soft, washed-out | softly, mutedly | |
+| `fikan` | `fik`, `kan` | to saturate, to flush, to highlight | saturated color, highligher | saturated, vivid | vividly | |
+| `kimif` | `kim`, `hif` | to maneuver, to steer, to swerve, to veer, to turn | maneuver, course correction | maneuverable, steerable, corrigible | maneuverably, corrigibly | Notably, the transitive object is the vehicle or thing which is being adjusted, not the target that is being steered towards. |
+| `nuifeim` | `nuif`, `feim` | to blur, to blend at the edges | blur, gradient, transition zone | blurry, fuzzy, vague | vaguely | |
+| `kukan` | `kuh`, `kan` | to accelerate, to speed up, to rush, to boost | speedster, accelerator, racer | accelerating, boosted, hurrying, hasty, rushed, quickening | hastily | |
+| `maukuf` | `mauk`, `huf` | to snuggle like a stuffed animal, to snuggle like a pet | stuffed animal, pet, fluffy animal, snuggle-buddy | fluffy, snuggable, stuffed, fuzzy | - | Often used by childen and parents to indicate "creatures" that are good for snuggling, whether alive or pretend. |
+| `feimum` | `feim`, `mum` | to dissolve, to stir in, to brew, to mix (a drink) | solution, cocktail, brew, potion, infusion, suspension | dissolved, soluble, blended | - | |
+| `mukan` | `muk`, `kan` | to thrive, to survive, to flourish, to adapt to, to recover, to grow in the face of adversity, to heal from, to evolve to handle | survivor, flourisher, adapter, evolutionary organism | flourishing, recovered, resilient, thriving, robust, tough, resilient, antifragile, evolved | thrivingly, evolutionarily | The English word "survivor" carries a connotation that one has faced adversity and held on. This is similar, but with an implication that the adversity led to growth that made the organism (or species) stronger. |
+| `tivuf` | `tif`, `vuf` | to live at (an address), to occupy | address, lot, grounds, property, homestead, compound, house, premises | residential, on-site | - | Where `tif` refers to a structure and `vuf` refers to a place, `tivuf` is an abstract middle-ground representing a building or set of buildings that are specifically at a place place, a.k.a. address. |
+| `pifif` | `pif`, `fif` | to present, to lay out, to deal | spread, display, arrangement, bouquet, place setting, allotment, dealt hand of cards | presented, arranged, laid out, set out, dealt | - | The gift of an orderly arrangement: placing things in a deliberate pattern for someone else to take or choose from. Covers a host setting out a meal, a dealer dealing cards, a merchant arranging wares, and a florist’s bouquet. Compare `fif`, which arranges without any recipient in mind. |
 | `neimnaun` | `neim`, `naun` | to enjoy, to love, to be happy | happiness, joy, love, tranquility, serenity, ecstasy | happy, exuberant, joyous | happily | |
-| `neimfut` | `neim`, `fut` | to be grateful for, to appreciate, to recognize | gratitude, appreciation, recognition | grateful, appreciative | gratefully, appreciatively | |
+| `neimuf` | `neim`, `muf` | to be grateful for (gift/aid), to appreciate, to recognize | indebtedness, gratitude, appreciation, recognition | grateful, appreciative | gratefully, appreciatively | Papsa has two words for gratitude. This is the one for the feeling of recieving something unearned, with a special emphasis on noticing the source of a gift. When someone does something kind for you, you're supposed to feel this. Compare `neimfut`, which is about recognizing the blessings of life. |
+| `neimfut` | `neim`, `fut` | to be grateful for (possession/support), to appreciate, to recognize | gratitude, appreciation, recognition | blessed, grateful, appreciative | gratefully, appreciatively | Papsa has two words for gratitude. This one is for the feeling of being blessed and supported by others and the world more broadly. Gratitude journals are about cultivating this feeling. Compare `neimuf` which is about the specific moment of recieving something, and carries a stronger connotation of being in debt to the giver. |
 | `neimfic` | `neim`, `fic` | to laugh at, to find something funny, to be amused by, to enjoy | humor, joke | funny, hilarious, amusing | hilariously, amusingly | |
 | `neimcun` | `neim`, `cun` | to be sad about, to feel bad about | sadness, anguish, misery, suffering | sad, miserable, pathetic, depressed | sadly, miserably | |
 | `neimcap` | `neim`, `cap` | to be angry about, to rage at, to fight with | anger, rage, fury | angry, infuriating | angrily, infuriatingly | |
@@ -3664,7 +3767,6 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 | `mamtik` | `mam`, `tik` | to compute | algorithm | algorithmic | algorithmically | |
 | `mamzuip` | `mam`, `zuip` | to be a function of | function | functional | functionally | In most mathematical contexts, plain `mam` is used. |
 | `mamas` | `mam`, `has` | to map | arrow, morphism | - | - | An arrow in category theory. |
-
 | `vufih` | `vuf`, `xih` | to be the outside of | outside, outdoors, open air | outdoor, outside, external | outdoors, outside | |
 | `vinzus` | `vin`, `zus` | to be the present moment of | now, the present, present moment | current, present, contemporary | now, currently, presently | Unlike `vin`, which can mean here or now, `vinzus` is only about time. |
 | `vufpip` | `vuf`, `pip` | to be the market of | market, marketplace, bazaar, exchange | commercial, mercantile | - | |
@@ -3725,7 +3827,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 | `tikdupdut` | `tikdup`, `dut` | to armor | armor | armored | - | |
 | `duptik` | `dup`, `tik` | to shield | shield | shielding | - | |
 
-More words!!
+TODO: More words!!
 Body Parts, Buildings, Towns, and Cities
   </pre>
   
@@ -3823,8 +3925,9 @@ function wrapTable(table, classes = '') {
   return block;
 }
 
-const specErrors  = [];  // errors thrown while executing spec code blocks
-const tableErrors = [];  // malformed rows and duplicate keys found while indexing tables
+const specErrors  = [];   // errors thrown while executing spec code blocks
+const specWarnings = [];  // problems spec code flags that aren't errors (reported as lint)
+const tableErrors = [];   // malformed rows and duplicate keys found while indexing tables
 let runningBlock = null;
 window.addEventListener('error', (e) => {
   if (runningBlock !== null) {
@@ -3839,6 +3942,10 @@ window.addEventListener('error', (e) => {
 let reportReady = false;
 function reportSpecError(where, reason) {
   specErrors.push({ where, reason: String(reason) });
+  if (reportReady) renderReport();
+}
+function reportSpecWarning(where, reason) {
+  specWarnings.push({ where, reason: String(reason) });
   if (reportReady) renderReport();
 }
   
@@ -3929,6 +4036,7 @@ document.querySelectorAll('pre').forEach(pre => {
       });
     });
 
+    if (pre.id) table.id = pre.id;
     pre.replaceWith(wrapTable(table, pre.className));
   } else if (pre.querySelector('code')) {
     // ── Execute code block at global scope ──────────────────────────────
@@ -4060,7 +4168,7 @@ document.querySelectorAll('[data-validate]').forEach(el => {
 // Draws the validation report. Later problems are added with reportSpecError, which redraws it.
 function renderReport() {
   const report = document.querySelector('#report');
-  const issues = failures.length + lintWarnings.length + specErrors.length + tableErrors.length;
+  const issues = failures.length + lintWarnings.length + specErrors.length + specWarnings.length + tableErrors.length;
   if (issues) {
     report.innerHTML = `<p><strong>${issues} issue${issues===1?'':'s'} found:</strong></p>`;
     const table = document.createElement('table');
@@ -4076,6 +4184,7 @@ function renderReport() {
       for (const x of xs) addRow(kind, `<code>${escapeHTML(x.where)}</code>`, x.reason);
     for (const [kind, xs] of [['failure', failures], ['lint', lintWarnings]])
       for (const x of xs) addRow(kind, `<code lang="art-x-papsa">${escapeHTML(x.text)}</code>`, x.reason);
+    for (const x of specWarnings) addRow('lint', `<code>${escapeHTML(x.where)}</code>`, x.reason);
     report.appendChild(wrapTable(table));
   } else {
     report.innerHTML = `<p>All ${passes} examples of Papsa text on this page were successfully validated!</p>`;
