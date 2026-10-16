@@ -399,28 +399,28 @@
   <a href="#orthography">the orthography appendix</a> for more details on the Papsa script.</p>
 
   <pre data-table="engConsonantRomanization">
-| Romanization | Papsa Letter | Sounds like the end of... |
-|--------------|--------------|---------------------------|
-|        n     |     `N`      | on                        |
-|        ŋ     |     `N`      | tong                      |
-|        m     |     `M`      | am                        |
-|        k     |     `K`      | ick                       |
-|        g     |     `K`      | wag                       |
-|        t     |     `T`      | it                        |
-|        d     |     `T`      | add                       |
-|        p     |     `P`      | app                       |
-|        b     |     `P`      | ab                        |
-|        f     |     `F`      | if                        |
-|        v     |     `F`      | of                        |
-|        θ     |     `F`      | with                      |
-|        h     |     `H`      | hah                       |
-|        x     |     `H`      | loch                      |
-|        c     |     `C`      | ash                       |
-|        j     |     `C`      | beige                     |
-|        s     |     `S`      | sass                      |
-|        z     |     `S`      | is                        |
-|        l     |     `L`      | all                       |
-|        r     |     `L`      | or                        |
+| Romanization | Papsa Letter | Sound (IPA) | Sounds like the end of... |
+|--------------|--------------|-------------|---------------------------|
+|        n     |     `N`      |      n      | on                        |
+|        ŋ     |     `N`      |      ŋ      | tong                      |
+|        m     |     `M`      |      m      | am                        |
+|        k     |     `K`      |      k      | ick                       |
+|        g     |     `K`      |      g      | wag                       |
+|        t     |     `T`      |      t      | it                        |
+|        d     |     `T`      |      d      | add                       |
+|        p     |     `P`      |      p      | app                       |
+|        b     |     `P`      |      b      | ab                        |
+|        f     |     `F`      |      f      | if                        |
+|        v     |     `F`      |      v      | of                        |
+|        θ     |     `F`      |      θ      | with                      |
+|        h     |     `H`      |      h      | hah                       |
+|        x     |     `H`      |      x      | loch                      |
+|        c     |     `C`      |      ʃ      | ash                       |
+|        j     |     `C`      |      ʒ      | beige                     |
+|        s     |     `S`      |      s      | sass                      |
+|        z     |     `S`      |      z      | is                        |
+|        l     |     `L`      |      l      | all                       |
+|        r     |     `L`      |      ɹ      | or                        |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Letter Identification</summary><pre><code>
@@ -435,6 +435,9 @@ const baseLetter = (ch) => {
   throw new Error(`Unknown Papsa character: ${ch}`);
 };
 const baseLetters = (wrd) => [...wrd].map(baseLetter).join('');
+for (const [rom, row] of engConsonantRomanization['Romanization'])
+  if ( ! alphabet['Letter'][row['Papsa Letter']]['Acceptable sounds (IPA)'].split(',').map(s => s.trim()).includes(row['Sound (IPA)']))
+    fail(`Romanized "${rom}" is pronounced ${row['Sound (IPA)']}, which isn't an acceptable sound of ${row['Papsa Letter']}.`);
 const letterIdx = (ch) => alphabet['Letter'][baseLetter(ch)].index;
 const primalNum = (ch) => {
   const idx = letterIdx(ch);
@@ -4080,45 +4083,36 @@ document.querySelectorAll('code').forEach(el => {
   
 // ── Decorate ────────────────────────────────────────────────────────────────────────────────────
 
-// TODO CLEAN UP THIS SECTION!
-  
-// ── Token decoration helpers ──
 const firstFew = (s, n=2) => (s||'').split(',').slice(0, n).map(x => x.trim()).filter(Boolean).join(', ');
 
-// Rough pronunciation guide — keeps the writer's chosen sound when it's valid for the letter.
-// TODO This should probably be more mechanistic and come from a database table.
-function pronounce(word) {
-  const out = [];
-  for (const ch of word) {
-    if (ch === '.' || ch === ',') { out.push('ǀ'); continue; }   // dental click
-    if (ch === 'j') { out.push('ʒ'); continue; }                  // romanized "j" is the sound in "beige"
-    let base; try { base = baseLetter(ch); } catch { out.push('?'); continue; }
-    if (base === '!') { out.push('ʔ'); continue; }               // glottal stop (')
-    const sounds = alphabet['Letter'][base]['Acceptable sounds (IPA)'].split(',').map(s => s.trim());
-    out.push(sounds.includes(ch) ? ch : sounds[0]);
-  }
-  return '/' + out.join('') + '/';
-}
+// Rough pronunciation guide. A romanized consonant has its sound from the romanization table, an IPA
+// character stands for itself, and anything else takes its letter's first acceptable sound.
+const clickSounds = { '.': 'ǀ', ',': 'ǀ', "'": 'ʔ' };  // Dental clicks between words, a glottal stop within one.
+const soundOf = (ch) => {
+  const rom = engConsonantRomanization['Romanization'][ch];
+  if (rom) return rom['Sound (IPA)'];
+  if (ch in clickSounds) return clickSounds[ch];
+  const sounds = alphabet['Letter'][baseLetter(ch)]['Acceptable sounds (IPA)'].split(',').map(s => s.trim());
+  return sounds.includes(ch) ? ch : sounds[0];
+};
+const pronounce = (word) => '/' + [...word].map(ch => { try { return soundOf(ch); } catch { return '?'; } }).join('') + '/';
 const safePronounce = (w) => { try { return pronounce(w); } catch { return ''; } };
 
-// TODO Streamline
+const tipGloss = (tok, w) => {
+  if (vowelChars.has(w.toUpperCase())) return 'vowel letter';
+  switch (tok.type) {
+    case 'grammar': return tok.meaning || 'grammar word';
+    case 'root': case 'compound':
+      return [['n.', tok.nounMeaning, 2], ['v.', tok.verbMeaning, 2], ['adj.', tok.adjectiveMeaning, 1]]
+        .filter(([, m]) => m).map(([pos, m, n]) => `${pos} ${firstFew(m, n)}`).join(' · ') || `${tok.type} word`;
+    case 'name': case 'pronoun': return tok.meaning ? `${tok.type} · ${tok.meaning}` : tok.type;
+    case 'number': return `number ${tok.value} · v. ${firstFew(tok.verbMeaning)}`;
+    default: return 'unrecognized / possibly foreign';
+  }
+};
 function tipText(tok) {
   const w = tok.word ?? tok.rawTok;  // Unknown words and unregistered names only carry rawTok.
-  let gloss;
-  if (vowelChars.has(w.toUpperCase())) gloss = 'vowel letter';
-  else if (tok.type === 'grammar')   gloss = tok.meaning || 'grammar word';
-  else if (tok.type === 'root' || tok.type === 'compound') {
-    const parts = [];
-    if (tok.nounMeaning)      parts.push('n. '  + firstFew(tok.nounMeaning));
-    if (tok.verbMeaning)      parts.push('v. '  + firstFew(tok.verbMeaning));
-    if (tok.adjectiveMeaning) parts.push('adj. '+ firstFew(tok.adjectiveMeaning, 1));
-    gloss = parts.join(' · ') || (tok.type + ' word');
-  }
-  else if (tok.type === 'name') gloss = tok.meaning ? `name · ${tok.meaning}` : 'name';
-  else if (tok.type === 'pronoun') gloss = tok.meaning ? `pronoun · ${tok.meaning}` : 'pronoun';
-  else if (tok.type === 'number') gloss = `number ${tok.value} · v. ${firstFew(tok.verbMeaning)}`;
-  else                               gloss = 'unrecognized / possibly foreign';
-  const ipa = safePronounce(w);
+  const gloss = tipGloss(tok, w), ipa = safePronounce(w);
   return ipa ? `${gloss}  ${ipa}` : gloss;
 }
 
@@ -4149,11 +4143,10 @@ document.querySelectorAll('[data-validate]').forEach(el => {
   decorate(el, tokens);    // color + tooltip for every snippet
 
   if (el.hasAttribute('data-skip-validation')) return;
+  // A grammar word or vowel letter (U, A, I) standing alone isn't an expression the parser accepts, so it
+  // gets a word-level check instead: it has to be a letter or a grammar word the lexicon defines.
   if (tokens.length === 1 && (tokens[0].type === 'grammar' || vowelChars.has(tokens[0].rawTok.toUpperCase()))) {
-    // TODO We need to handle single grammar words a little differently, since they're not
-    // valid according to the parser when they stand alone.
-    // U, A, I are also handled specially for the same reason. They're not valid grammar words,
-    // but we don't want them to flag as failures.
+    passes++;
     return;
   }
 
