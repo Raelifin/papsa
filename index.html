@@ -3035,8 +3035,8 @@ const glyphMarks = {
   glottal:  { anchor: onLetters('!'), strokes: [{ x: 0, y: 0, segs: [[360,0]] }] },
 };
 
-// The marks each lowercase romanized letter (or IPA vowel) is drawn with. Uppercase letters are drawn bare,
-// and so are the characters not listed (m, i, u, a, ...). TODO Fill this out more properly!
+// The marks each lowercase romanized letter (or IPA sound) is drawn with. Uppercase letters are drawn bare,
+// and so are the characters not listed (m, i, u, a, ...).
 const charMarks = {
   k: ['unvoiced'], g: ['voiced'], t: ['unvoiced'], d: ['voiced'], p: ['unvoiced'], b: ['voiced'],
   f: ['unvoiced', 'overbar'], v: ['voiced', 'overbar'], 'θ': ['underbar'], x: ['overbar'], h: ['underbar'],
@@ -3044,6 +3044,20 @@ const charMarks = {
   n: ['overbar'], 'ŋ': ['underbar'], l: ['lateral'], r: ['rhotic'], '.': ['dental'], ',': ['emphatic'], "'": ['glottal'],
   e: ['back'], o: ['back'], 'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'],
   'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
+  // The other IPA consonants of the alphabet table. Voicing is marked where the romanization marks it. A sound
+  // takes a bar when it's articulated nearer the lips or throat than its letter's romanized sounds, or at the
+  // same place as a barred one. Laterals and rhotics keep their own mark instead of a bar, which would collide.
+  'ɴ': ['underbar'], 'ɱ': ['underbar'],
+  q: ['unvoiced', 'underbar'], 'ɢ': ['voiced', 'underbar'], 'ɠ': ['voiced'], 'ʛ': ['voiced', 'underbar'],
+  'ʈ': ['unvoiced', 'underbar'], 'ɖ': ['voiced', 'underbar'], 'ɟ': ['voiced', 'underbar'],
+  'ɗ': ['voiced'], 'ᶑ': ['voiced', 'underbar'], 'ʄ': ['voiced', 'underbar'],
+  'ɓ': ['voiced'],
+  'ð': ['voiced', 'underbar'], 'ɸ': ['unvoiced', 'overbar'], 'β': ['voiced', 'overbar'],
+  'ɦ': ['voiced', 'underbar'], 'ɣ': ['voiced', 'overbar'], 'ʁ': ['voiced'], 'ʕ': ['voiced'], 'ʢ': ['voiced'],
+  'ʃ': ['unvoiced'], 'ʒ': ['voiced'], 'ç': ['unvoiced', 'underbar'], 'ʝ': ['voiced', 'underbar'],
+  'ʂ': ['unvoiced'], 'ʐ': ['voiced'], 'ɕ': ['unvoiced'], 'ʑ': ['voiced'], 'ɬ': ['unvoiced', 'overbar'], 'ɮ': ['voiced', 'overbar'],
+  'ɭ': ['lateral'], 'ʎ': ['lateral'], 'ʟ': ['lateral'], 'ɹ': ['rhotic'], 'ɻ': ['rhotic'], 'ʀ': ['rhotic'], 'ɾ': ['rhotic'], 'ɽ': ['rhotic'],
+  'ǀ': ['dental'], 'ʔ': ['glottal'],
 };
 
 // How far the script reaches above and below the baseline, sampled from the strokes themselves with half
