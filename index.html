@@ -2009,17 +2009,23 @@ for (const [base, row] of addressWords['Base']) for (let d = 0; d < 6; d++) {
   if (digits.length !== 3 || value !== +base + d) throw new Error(`${word} spells ${value}, not ${+base + d}`);
 }
 
-// Each word is glossed by its first noun sense in the dictionary, or its raw meaning if it's a name.
+// Each word is glossed by its first noun sense in the dictionary, or its meaning if it's a name.
+// Placeholder names that aren't defined yet are allowed, and are gathered into a single warning.
 // Because compounds are defined further down the page, we wait to add glosses until after the page loads.
 addEventListener('DOMContentLoaded', () => {
-  const consonants = w => [...baseLetters(w)].filter(l => !vowelChars.has(l) && l !== 'H');
+  const undefinedNames = [];
   for (const code of document.querySelectorAll('#address-words td code')) {
-    // TODO Handle names!
-    const entry = compoundMeanings['Word'][code.textContent];
-    if (!entry) { reportSpecError('Address Words', `${code.textContent} isn't in the dictionary`); continue; }
-    const sense = entry['Noun'] !== '-' ? entry['Noun'] : entry['Verb'].replace(/^to /, '');
-    code.after(` ${firstFew(sense, 1)}`);
+    const word = code.textContent, key = baseLetters(word);
+    const core = coreWords[key], name = names[key];
+    let sense;
+    if (core) sense = [core.nounMeaning, core.verbMeaning?.replace(/^to /, '')].find(s => s && s !== '-');
+    else if (name) sense = name.meaning;
+    else if (['name', 'pronoun'].includes(wordType(wordIdxs(word)))) { undefinedNames.push(word); continue; }
+    else { reportSpecError('Address Words', `${word} isn't in the dictionary`); continue; }
+    if (sense) code.after(` ${firstFew(sense, 1)}`);
   }
+  const n = undefinedNames.length;
+  if (n) reportSpecWarning('Address Words', `${n} placeholder name${n === 1 ? " isn't" : "s aren't"} defined yet: ${undefinedNames.join(', ')}`);
 });
   </code></pre></details>
 
@@ -3919,8 +3925,9 @@ function wrapTable(table, classes = '') {
   return block;
 }
 
-const specErrors  = [];  // errors thrown while executing spec code blocks
-const tableErrors = [];  // malformed rows and duplicate keys found while indexing tables
+const specErrors  = [];   // errors thrown while executing spec code blocks
+const specWarnings = [];  // problems spec code flags that aren't errors (reported as lint)
+const tableErrors = [];   // malformed rows and duplicate keys found while indexing tables
 let runningBlock = null;
 window.addEventListener('error', (e) => {
   if (runningBlock !== null) {
@@ -3935,6 +3942,10 @@ window.addEventListener('error', (e) => {
 let reportReady = false;
 function reportSpecError(where, reason) {
   specErrors.push({ where, reason: String(reason) });
+  if (reportReady) renderReport();
+}
+function reportSpecWarning(where, reason) {
+  specWarnings.push({ where, reason: String(reason) });
   if (reportReady) renderReport();
 }
   
@@ -4157,7 +4168,7 @@ document.querySelectorAll('[data-validate]').forEach(el => {
 // Draws the validation report. Later problems are added with reportSpecError, which redraws it.
 function renderReport() {
   const report = document.querySelector('#report');
-  const issues = failures.length + lintWarnings.length + specErrors.length + tableErrors.length;
+  const issues = failures.length + lintWarnings.length + specErrors.length + specWarnings.length + tableErrors.length;
   if (issues) {
     report.innerHTML = `<p><strong>${issues} issue${issues===1?'':'s'} found:</strong></p>`;
     const table = document.createElement('table');
@@ -4173,6 +4184,7 @@ function renderReport() {
       for (const x of xs) addRow(kind, `<code>${escapeHTML(x.where)}</code>`, x.reason);
     for (const [kind, xs] of [['failure', failures], ['lint', lintWarnings]])
       for (const x of xs) addRow(kind, `<code lang="art-x-papsa">${escapeHTML(x.text)}</code>`, x.reason);
+    for (const x of specWarnings) addRow('lint', `<code>${escapeHTML(x.where)}</code>`, x.reason);
     report.appendChild(wrapTable(table));
   } else {
     report.innerHTML = `<p>All ${passes} examples of Papsa text on this page were successfully validated!</p>`;
