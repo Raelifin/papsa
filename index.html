@@ -3015,14 +3015,16 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 // at all on a letter with no anchor for it). Voicing marks hang from a per-letter anchor in the
 // letter's empty space.
 const voiceAnchor = { K: [126,-108], T: [28,64], P: [126,54], F: [126,54], H: [126,108], C: [126,108], S: [126,54] };
-const onLetters = (...ltrs) => (l) => ltrs.length && ! ltrs.includes(l) ? undefined : [0, 0];
-// Vowel marks hang under the arch. The overbar sits a little higher on a vowel, clear of its crown.
+const onLetters = (...ltrs) => (l) => ltrs.includes(l) ? [0, 0] : undefined;
+// Vowel marks hang under the arch. The overbar sits a little higher on a vowel, clear of its crown. On the
+// flat `H` the bars move in toward the baseline, just clear of a voicing chevron.
 const vowelAnchor = (l) => vowelChars.has(l) ? [126, 108] : undefined;
+const barNudge = { H: 180 };
 const glyphMarks = {
   unvoiced: { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[0,-72, 108,-72, 108,0], [108,72, 0,72, 0,0]] }] },
   voiced:   { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[54,54], [108,0]] }] },
-  overbar:  { anchor: l => [0, vowelChars.has(l) ? -60 : 0], strokes: [{ x: 36, y: -396, segs: [[324,-396]] }] },
-  underbar: { anchor: onLetters(),    strokes: [{ x: 36, y: 396,  segs: [[324,396]] }] },
+  overbar:  { anchor: l => [0, vowelChars.has(l) ? -60 : barNudge[l] ?? 0], strokes: [{ x: 36, y: -396, segs: [[324,-396]] }] },
+  underbar: { anchor: l => [0, -(barNudge[l] ?? 0)], strokes: [{ x: 36, y: 396,  segs: [[324,396]] }] },
   lateral:  { anchor: onLetters('L'), strokes: [{ x: 180, y: 396, segs: [[180,-108]] }] },
   rhotic:   { anchor: onLetters('L'), strokes: [{ x: 64, y: 372, segs: [[254,280]] }, { x: 106, y: 280, segs: [[296,372]] }] },
   tense:    { anchor: vowelAnchor,    strokes: [{ x: 27, y: -54, segs: [[81,0], [27,54]] }] },
