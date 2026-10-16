@@ -707,7 +707,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 | `neim` | to feel, to sense, to experience, to touch, to perceive | sensation, emotion, feeling, experience, perception, texture | sensitive, emotional, sensory, intuitive, tactile | sensitively, emotionally, intuitively | There is a deliberate map-territory vagueness around `neim` and its derivatives (e.g. `neimnaun`). While the vowel pattern indicates that the noun form is that-which-is-felt, we often translate it as the feeling itself or even the one who is experiencing the feeling. Philosophically, this stems from a stance that the true object of `neim` is in the mind. Getting slapped with a cactus is not *objectively* painful (congenital analgesia is a thing, for example), and so we can attach the notion of painfulness to a wound, the experience of a wound, or one who is wounded. |
 | `nik` | to work towards, to steer towards, to aim at, to pursue, to seek, to optimize for | goal, target, ends, mission, objective, destination | targeted, optimum, desired, purposeful | purposefully, deliberately | |
 | `nis` | to confirm, to prove | truth, yes | true, accurate | truly, accurately | Also used as an affirmative response to yes/no questions |
-| `nais` | to measure, to weigh, to count, to assess, to evaluate, to judge, to analyze | measurement, measure, count, quantity, assessment, evaluation, judgment, analysis | measured, measurable, assessable, quantifiable, quantified, precise, rational | analytically, judgmentally, rationally, precisely, numerically | |
+| `nais` | to measure, to weigh, to count, to assess, to evaluate, to judge, to analyze | measurement, measure, count, quantity, assessment, evaluation, judgment, analysis | measured, measurable, assessable, quantifiable, quantified, precise, rational | analytically, judgmentally, rationally, precisely, numerically | The subject is the measurer or the measurement (both work, for the same reason `neim` is read flexibly), and the object is the thing being measured. When a number word is the verb, the subject is the thing being measured and the object is the dimension or unit. |
   </pre>
 
   <h4><code>`M`</code> — Water (Flow, Life, Instinct, Desire, Cycles, Curves, Origins)</h4>
@@ -1897,6 +1897,7 @@ aisin ei uizaiheimtif ei sat                        |  3 Miles per Visit (≈ 1.
 aisas ei uizaihbikuh ei suk                         |  2 Stretches per Breath (≈ 1 kph)
 aisas ei uizaihbikuh ei saum faftaz uaskuh ei saum  |  1 Stretch-per-Breath = 1 Go-Speed
 uaskuh ei siaz naiskuh li iuman kuh                 |  6 Go-Speeds is how fast humans go (at a slow stroll)
+iuman sukiaz uaskuh                                 |  Humans measure 12 in terms of go-speed (at a brisk walk)
   </pre>
   
   <p>TODO MASS, CHARGE, ETC.</p>
@@ -2305,14 +2306,19 @@ for (const [word, row] of compactNumbers['Papsa Word']) {
   if ( ! holds) fail(`The rule "${rule}" doesn't give ${n}.`);
 }
 
+// Intransitive, a number counts its subject. Transitive, it measures the subject in the object's dimension.
+const numberMeanings = (n) => ({
+  verbMeaning:      `to number ${n}, to exist ${n} times, to measure ${n} units in dimension, to have ${n} when counting`,
+  nounMeaning:      `${n}`,
+  adjectiveMeaning: `${n}`,
+  adverbMeaning:    `${n} times`,
+});
+
 const numberEntry = (n, compact) => ({
   word: numberWord(n, compact),
   value: n,
   baseSix: (n < 0 ? '-' : '') + numberDigits(Math.abs(n), 6).join(''),
-  verbMeaning:      `to be ${n} times, to do ${n} times`,
-  nounMeaning:      `${n}`,
-  adjectiveMeaning: `${n}`,
-  adverbMeaning:    `${n} times`,
+  ...numberMeanings(n),
 });
 
 // Papsa numbers written with digits. (Little-endian base six)
@@ -2400,12 +2406,7 @@ const groupsToQuantity = (groups, compact) => {
 
 const quantityEntry = (s, value, baseSix) => {
   if (typeof value === 'number') value = +value.toPrecision(10); // Imaginary values are strings, like "3i".
-  return { rawTok: s, type: 'number', word: s, value, baseSix,
-    verbMeaning:      `to be ${value} times, to do ${value} times`,
-    nounMeaning:      `${value}`,
-    adjectiveMeaning: `${value}`,
-    adverbMeaning:    `${value} times`,
-  };
+  return { rawTok: s, type: 'number', word: s, value, baseSix, ...numberMeanings(value) };
 };
 
 // Spliced in ahead of the whole-number parser (which rejects anything containing `aih` anyway).
@@ -4115,7 +4116,7 @@ function tipText(tok) {
   }
   else if (tok.type === 'name') gloss = tok.meaning ? `name · ${tok.meaning}` : 'name';
   else if (tok.type === 'pronoun') gloss = tok.meaning ? `pronoun · ${tok.meaning}` : 'pronoun';
-  else if (tok.type === 'number') gloss = 'number';
+  else if (tok.type === 'number') gloss = `number ${tok.value} · v. ${firstFew(tok.verbMeaning)}`;
   else                               gloss = 'unrecognized / possibly foreign';
   const ipa = safePronounce(w);
   return ipa ? `${gloss}  ${ipa}` : gloss;
@@ -4365,7 +4366,7 @@ function interlinear(tokens, parsed) {
 function definitionHTML(t) {
   const rows = [];
   if (t.value !== undefined)        rows.push(['number', `${t.value}  ·  base-6 ${t.baseSix}`]);
-  else if (t.type === 'grammar')    rows.push(['grammar', t.meaning || '\u2014']);
+  if (t.type === 'grammar')         rows.push(['grammar', t.meaning || '\u2014']);
   else {
     if (t.meaning)          rows.push([t.type, t.meaning]);
     if (t.verbMeaning)      rows.push(['verb', t.verbMeaning]);
