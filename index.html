@@ -2899,9 +2899,10 @@ const strokeSVG = (s,x,y,w) => s.segs.reduce((r,seg) => r+' '+segmentSVG(seg,x,y
   <p>Words are separated by a space. The click never touches the baseline, so writing it almost
   always means lifting the pen, which suits a letter that almost only appears as its own word.
   In the rare cases where a click shows up inside a word, such as the glottal stop in
-  <code>`a'apaun`</code>, the vertical bar usually gets a crossbar annotation that connects it with
-  the rest of the word, preserving the single stroke.</p>
-  
+  <code>`a'apaun`</code>, a line along the baseline joins it to the letters on either side,
+  preserving the single stroke. For the glottal stop, that line is simply its guttural bar extended
+  across the whole width.</p>
+
   <p class="script script-sample">A'APAUN</p>
   
   <p>Try reading the canonical Papsa pangram, <code>`neim kud. pif xarc sou`</code>:</p>
@@ -2957,38 +2958,201 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
   <p>In many cases, annotations are drawn with a thinner or fainter line than the letter itself
   (or in a different color), so the basic letter underneath stays legible.</p>
 
+  <p>Each annotation pins down one aspect of a sound and leaves the rest open. A letter with no
+  marks stands for any of its sounds, and each mark narrows that set, so a glyph means "whichever of
+  this letter's sounds match every mark." Writers can stop at whatever level of detail they need. A
+  <code>`K`</code> with a voiced mark could be g, ɢ, ɠ, or ʛ. Adding a uvular mark narrows it to ɢ or
+  ʛ, and swapping the voiced mark for the implosive one settles on ʛ. A missing mark never stands for
+  a particular value, only for "unspecified." Marks may also pin a value outside a letter's usual
+  range, which is how sounds without a home in the alphabet can still be written. An
+  <code>`L`</code> with labiodental place and the approximant mark is ʋ, for example.</p>
+
+  <p>Each aspect of a sound has its own zone on the letter, so marks combine without colliding:
+  phonation sits in the letter's empty space, place in bars above and below, channel at the center,
+  manner above an <code>`L`</code>, and coronal posture in a swoosh below.</p>
+
   <pre data-table="consonantAnnotations">
-| Mark                          | Meaning                               | Examples |
-|-------------------------------|---------------------------------------|----------|
-| Small circle                  | Voiceless                             | <span data-glyph="k" data-size="3.5"></span> <span data-glyph="p" data-size="3.5"></span> <span data-glyph="s" data-size="3.5"></span> |
-| Downward chevron              | Voiced                                | <span data-glyph="g" data-size="3.5"></span> <span data-glyph="b" data-size="3.5"></span> <span data-glyph="z" data-size="3.5"></span> |
-| Overbar                       | Articulated nearer the lips           | <span data-glyph="n" data-size="3.5"></span> <span data-glyph="f" data-size="3.5"></span> <span data-glyph="x" data-size="3.5"></span> |
-| Underbar                      | Articulated nearer the throat         | <span data-glyph="ŋ" data-size="3.5"></span> <span data-glyph="θ" data-size="3.5"></span> <span data-glyph="h" data-size="3.5"></span> |
-| Vertical line through hoop    | Lateral                               | <span data-glyph="l" data-size="3.5"></span> |
-| Cross inside hoop             | Rhotic                                | <span data-glyph="r" data-size="3.5"></span> |
-| Bars above and below          | Dental click                          | <span data-glyph="." data-size="3.5"></span> |
-| Diagonals off the ends        | Emphatic click (ending a quote)       | <span data-glyph="," data-size="3.5"></span> |
-| Crossbar                      | Glottal stop (inside a word)          | <span data-glyph="'" data-size="3.5"></span> |
-  TODO: more annotations
+| Mark                       | Meaning                                      | Examples |
+|----------------------------|----------------------------------------------|----------|
+| Small circle               | Voiceless                                    | <span data-glyph="K" data-marks="voiceless" data-size="3.5"></span> <span data-glyph="T" data-marks="voiceless" data-size="3.5"></span> <span data-glyph="H" data-marks="voiceless" data-size="3.5"></span> |
+| Chevron                    | Voiced                                       | <span data-glyph="K" data-marks="voiced" data-size="3.5"></span> <span data-glyph="T" data-marks="voiced" data-size="3.5"></span> <span data-glyph="H" data-marks="voiced" data-size="3.5"></span> |
+| Nested chevrons            | Implosive (and voiced, unless a circle is added) | <span data-glyph="K" data-marks="implosive" data-size="3.5"></span> <span data-glyph="T" data-marks="implosive" data-size="3.5"></span> <span data-glyph="P" data-marks="implosive" data-size="3.5"></span> |
+| Bars above or below        | Place group (see below)                      | <span data-glyph="M" data-marks="labial" data-size="3.5"></span> <span data-glyph="T" data-marks="coronal" data-size="3.5"></span> <span data-glyph="K" data-marks="dorsal" data-size="3.5"></span> <span data-glyph="H" data-marks="guttural" data-size="3.5"></span> |
+| Ticks across the bars      | Place within the group (see below)           | <span data-glyph="T" data-marks="dental" data-size="3.5"></span> <span data-glyph="T" data-marks="alveolar" data-size="3.5"></span> <span data-glyph="T" data-marks="postalveolar" data-size="3.5"></span> |
+| Curves around the middle   | Lateral                                      | <span data-glyph="L" data-marks="lateral" data-size="3.5"></span> <span data-glyph="C" data-marks="lateral" data-size="3.5"></span> <span data-glyph="!" data-marks="lateral" data-size="3.5"></span> |
+| Solid square in the middle | Central                                      | <span data-glyph="L" data-marks="central" data-size="3.5"></span> <span data-glyph="C" data-marks="central" data-size="3.5"></span> <span data-glyph="!" data-marks="central" data-size="3.5"></span> |
+| Open arc above             | Approximant                                  | <span data-glyph="L" data-marks="approximant" data-size="3.5"></span> |
+| Short stroke above         | Tap                                          | <span data-glyph="L" data-marks="tap" data-size="3.5"></span> |
+| Zigzag above               | Trill                                        | <span data-glyph="L" data-marks="trill" data-size="3.5"></span> |
+| Rising swoosh below        | Curled tongue (retroflex)                    | <span data-glyph="C" data-marks="curl" data-size="3.5"></span> <span data-glyph="T" data-marks="curl" data-size="3.5"></span> |
+| Arching swoosh below       | Domed tongue (alveolo-palatal)               | <span data-glyph="C" data-marks="domed" data-size="3.5"></span> |
+| Both swooshes              | Neutral tongue                               | <span data-glyph="C" data-marks="neutral" data-size="3.5"></span> |
+| Diagonals off the ends     | Emphatic click (ending a quote)              | <span data-glyph="," data-size="3.5"></span> |
+| Line along the baseline    | Joins a click inside a word to its neighbors | <span data-glyph="a'a" data-size="3.5"></span> |
   </pre>
 
-  <p>Annotations, like letters, are designed to be mildly synesthetic. Voiceless sounds are
-  smooth, so they get a round mark, while voiced sounds vibrate, so they get a pointed one.
-  (Put a hand on your throat while saying "sss" and then "zzz" to feel the difference.)
-  The voicing marks sit near the vertical middle of a letter, in whichever space the letter
-  leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
-  <code>`P`</code> (which rises above it). The place-of-articulation bars follow a pattern that
-  also runs through the letterforms themselves: toward the top means toward the lips, toward the
-  bottom means toward the throat. Annotations combine freely, so a "v" is an <code>`F`</code>
-  with both an overbar and a voiced chevron: <span data-glyph="v" data-size="3"></span></p>
+  <h4>Phonation</h4>
 
-  <p>Vowels are annotated with small chevrons and arrows beneath the letter, along with the same
-  overbar and underbar used for consonants. The chevron gives tenseness (pointing right for a tense
-  vowel, left for a lax one), the arrow gives backness, and the bars give height. In many contexts,
-  vowels don't get rendered with annotations, but here are the annotations for the most common
-  vowel sounds of English.</p>
+  <p>Voiceless sounds are smooth, so they get a round mark, while voiced sounds vibrate, so they get
+  a pointed one. (Put a hand on your throat while saying "sss" and then "zzz" to feel the
+  difference.) The voicing marks sit near the vertical middle of a letter, in whichever space the
+  letter leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
+  <code>`P`</code> (which rises above it). <code>`H`</code> carries its mark above the line, leaving
+  the space below for its place bars, and the click carries its mark below.</p>
 
-  <pre data-table="englishVowelAnnotations">
+  <p>Implosives get a second chevron nested against the voiced one. This is a deliberate exception
+  to every mark pinning down a single aspect: since implosives are almost always voiced, the nested
+  chevrons mean "implosive, and voiced unless a circle says otherwise." The voiced mark alone doesn't
+  rule out an implosive, but since implosives always carry their own mark, a plain voiced sound and
+  its implosive counterpart never share a glyph.</p>
+
+  <h4>Place of articulation</h4>
+
+  <p>Bars name the broad region of the mouth, following a pattern that also runs through the
+  letterforms themselves: toward the top means toward the lips, and toward the bottom means toward
+  the throat. A single bar marks one of the two ends (the lips or the larynx), and doubling a bar
+  steps one region inward, toward the middle of the mouth. A tick across the bars picks the place
+  within the region: left for the front place, right for the back one, and both for the place in
+  between. The bars alone are a perfectly good vague spelling.</p>
+
+  <pre data-table="placeGroups">
+| Group    | Bars | Side  | Places (front to back)          | Examples |
+|----------|------|-------|---------------------------------|----------|
+| labial   | 1    | above | bilabial, labiodental           | <span data-glyph="M" data-marks="labial" data-size="3"></span> <span data-glyph="M" data-marks="bilabial" data-size="3"></span> <span data-glyph="M" data-marks="labiodental" data-size="3"></span> |
+| coronal  | 2    | above | dental, alveolar, postalveolar  | <span data-glyph="T" data-marks="coronal" data-size="3"></span> <span data-glyph="T" data-marks="dental" data-size="3"></span> <span data-glyph="T" data-marks="alveolar" data-size="3"></span> <span data-glyph="T" data-marks="postalveolar" data-size="3"></span> |
+| dorsal   | 2    | below | palatal, velar, uvular          | <span data-glyph="K" data-marks="dorsal" data-size="3"></span> <span data-glyph="K" data-marks="palatal" data-size="3"></span> <span data-glyph="K" data-marks="velar" data-size="3"></span> <span data-glyph="K" data-marks="uvular" data-size="3"></span> |
+| guttural | 1    | below | pharyngeal, epiglottal, glottal | <span data-glyph="H" data-marks="guttural" data-size="3"></span> <span data-glyph="H" data-marks="pharyngeal" data-size="3"></span> <span data-glyph="H" data-marks="epiglottal" data-size="3"></span> <span data-glyph="H" data-marks="glottal" data-size="3"></span> |
+  </pre>
+
+  <p>Two letters shift their bars. <code>`H`</code> is only a line, so its bars move in toward the
+  baseline. The click's lower bars move all the way up, so its guttural bar runs straight through the
+  baseline, which keeps the glottal stop the crossbar it has always been. Its dorsal pair then sits
+  between its coronal and guttural bars, still ordered from lips to throat.</p>
+
+  <p><span data-glyph="H" data-marks="velar" data-size="2.4"></span> <span data-glyph="!" data-marks="palatal" data-size="2.4"></span> <span data-glyph="!" data-marks="glottal" data-size="2.4"></span></p>
+
+  <h4>Channel and manner</h4>
+
+  <p>Lateral sounds, where air escapes around the sides of the tongue, get a pair of curves around
+  the middle of the letter, like air flowing around both sides. Central sounds get a solid square in
+  the same spot. The click needs channel to tell ǃ from ǁ, and <code>`L`</code> and
+  <code>`C`</code> use it too.</p>
+
+  <p>The sounds of <code>`L`</code> also differ in manner, marked above the line: an open arc for an
+  approximant (no contact), a short stroke for a tap (one brief contact), and a zigzag for a trill
+  (repeated contact). The other letters already fix their manner, so these marks only appear on
+  <code>`L`</code>.</p>
+
+  <h4>Coronal posture</h4>
+
+  <p>Sounds made with the tip or blade of the tongue can differ in how the tongue is shaped, shown by
+  a swoosh below the letter. A curled (retroflex) tongue gets a swoosh that rises to the right, like
+  the tip curling up and back. A domed (alveolo-palatal) tongue gets its mirror image, arching like
+  the raised blade. A neutral tongue gets both at once. Posture implies a coronal place, and coronal
+  sounds never use the lower bars, so the space below is always free for it.</p>
+
+  <h4>The click</h4>
+
+  <p>Two marks on the click describe its role rather than its sound. A quote is closed with
+  diagonals off the ends of the bar, matching its more emphatic pronunciation. A click inside a word
+  joins its neighbors with a line along the baseline, which for the glottal stop simply extends its
+  guttural bar across the whole width. The sentence-dividing click, written "." in romanized text, is
+  left bare, since its pronunciation varies.</p>
+
+  <h4 id="consonant-features">Every consonant</h4>
+
+  <p>This table gives every consonant in the alphabet its phonation, place, channel, manner, and
+  posture, as far as they matter, and these features decide how it's drawn. Written with an IPA
+  character, a sound gets the fewest marks that tell it apart from the other sounds of its letter, as
+  shown. Romanized letters get fewer still: just enough to tell them apart from each other, which
+  covers the distinctions an English reader needs (<code>`k`</code> from <code>`g`</code>,
+  <code>`n`</code> from <code>`ŋ`</code>, and so on). Anything narrower is written with the combining
+  marks in the <a href="#script-font">Font</a> section.</p>
+
+  <pre class="tall" data-table="consonantFeatures">
+| Sound | Letter | Phonation | Place        | Channel | Manner      | Posture | Glyph |
+|:-----:|--------|-----------|--------------|---------|-------------|---------|-------|
+| n     | N      | voiced    | alveolar     |         |             |         | <span data-glyph="N" data-ipa="n" data-size="3.2"></span> |
+| ŋ     | N      | voiced    | velar        |         |             |         | <span data-glyph="N" data-ipa="ŋ" data-size="3.2"></span> |
+| ɲ     | N      | voiced    | palatal      |         |             |         | <span data-glyph="N" data-ipa="ɲ" data-size="3.2"></span> |
+| ɳ     | N      | voiced    | postalveolar |         |             | curl    | <span data-glyph="N" data-ipa="ɳ" data-size="3.2"></span> |
+| ɴ     | N      | voiced    | uvular       |         |             |         | <span data-glyph="N" data-ipa="ɴ" data-size="3.2"></span> |
+| m     | M      | voiced    | bilabial     |         |             |         | <span data-glyph="M" data-ipa="m" data-size="3.2"></span> |
+| ɱ     | M      | voiced    | labiodental  |         |             |         | <span data-glyph="M" data-ipa="ɱ" data-size="3.2"></span> |
+| k     | K      | voiceless | velar        |         |             |         | <span data-glyph="K" data-ipa="k" data-size="3.2"></span> |
+| g     | K      | voiced    | velar        |         |             |         | <span data-glyph="K" data-ipa="g" data-size="3.2"></span> |
+| q     | K      | voiceless | uvular       |         |             |         | <span data-glyph="K" data-ipa="q" data-size="3.2"></span> |
+| ɢ     | K      | voiced    | uvular       |         |             |         | <span data-glyph="K" data-ipa="ɢ" data-size="3.2"></span> |
+| ɠ     | K      | implosive | velar        |         |             |         | <span data-glyph="K" data-ipa="ɠ" data-size="3.2"></span> |
+| ʛ     | K      | implosive | uvular       |         |             |         | <span data-glyph="K" data-ipa="ʛ" data-size="3.2"></span> |
+| t     | T      | voiceless | alveolar     |         |             |         | <span data-glyph="T" data-ipa="t" data-size="3.2"></span> |
+| d     | T      | voiced    | alveolar     |         |             |         | <span data-glyph="T" data-ipa="d" data-size="3.2"></span> |
+| ʈ     | T      | voiceless | postalveolar |         |             | curl    | <span data-glyph="T" data-ipa="ʈ" data-size="3.2"></span> |
+| ɖ     | T      | voiced    | postalveolar |         |             | curl    | <span data-glyph="T" data-ipa="ɖ" data-size="3.2"></span> |
+| c     | T      | voiceless | palatal      |         |             |         | <span data-glyph="T" data-ipa="c" data-size="3.2"></span> |
+| ɟ     | T      | voiced    | palatal      |         |             |         | <span data-glyph="T" data-ipa="ɟ" data-size="3.2"></span> |
+| ɗ     | T      | implosive | alveolar     |         |             |         | <span data-glyph="T" data-ipa="ɗ" data-size="3.2"></span> |
+| ᶑ     | T      | implosive | postalveolar |         |             | curl    | <span data-glyph="T" data-ipa="ᶑ" data-size="3.2"></span> |
+| ʄ     | T      | implosive | palatal      |         |             |         | <span data-glyph="T" data-ipa="ʄ" data-size="3.2"></span> |
+| p     | P      | voiceless | bilabial     |         |             |         | <span data-glyph="P" data-ipa="p" data-size="3.2"></span> |
+| b     | P      | voiced    | bilabial     |         |             |         | <span data-glyph="P" data-ipa="b" data-size="3.2"></span> |
+| ɓ     | P      | implosive | bilabial     |         |             |         | <span data-glyph="P" data-ipa="ɓ" data-size="3.2"></span> |
+| f     | F      | voiceless | labiodental  |         |             |         | <span data-glyph="F" data-ipa="f" data-size="3.2"></span> |
+| v     | F      | voiced    | labiodental  |         |             |         | <span data-glyph="F" data-ipa="v" data-size="3.2"></span> |
+| θ     | F      | voiceless | dental       |         |             |         | <span data-glyph="F" data-ipa="θ" data-size="3.2"></span> |
+| ð     | F      | voiced    | dental       |         |             |         | <span data-glyph="F" data-ipa="ð" data-size="3.2"></span> |
+| ɸ     | F      | voiceless | bilabial     |         |             |         | <span data-glyph="F" data-ipa="ɸ" data-size="3.2"></span> |
+| β     | F      | voiced    | bilabial     |         |             |         | <span data-glyph="F" data-ipa="β" data-size="3.2"></span> |
+| h     | H      | voiceless | glottal      |         |             |         | <span data-glyph="H" data-ipa="h" data-size="3.2"></span> |
+| ɦ     | H      | voiced    | glottal      |         |             |         | <span data-glyph="H" data-ipa="ɦ" data-size="3.2"></span> |
+| x     | H      | voiceless | velar        |         |             |         | <span data-glyph="H" data-ipa="x" data-size="3.2"></span> |
+| ɣ     | H      | voiced    | velar        |         |             |         | <span data-glyph="H" data-ipa="ɣ" data-size="3.2"></span> |
+| χ     | H      | voiceless | uvular       |         |             |         | <span data-glyph="H" data-ipa="χ" data-size="3.2"></span> |
+| ʁ     | H      | voiced    | uvular       |         |             |         | <span data-glyph="H" data-ipa="ʁ" data-size="3.2"></span> |
+| ħ     | H      | voiceless | pharyngeal   |         |             |         | <span data-glyph="H" data-ipa="ħ" data-size="3.2"></span> |
+| ʕ     | H      | voiced    | pharyngeal   |         |             |         | <span data-glyph="H" data-ipa="ʕ" data-size="3.2"></span> |
+| ʜ     | H      | voiceless | epiglottal   |         |             |         | <span data-glyph="H" data-ipa="ʜ" data-size="3.2"></span> |
+| ʢ     | H      | voiced    | epiglottal   |         |             |         | <span data-glyph="H" data-ipa="ʢ" data-size="3.2"></span> |
+| ʃ     | C      | voiceless | postalveolar | central |             | neutral | <span data-glyph="C" data-ipa="ʃ" data-size="3.2"></span> |
+| ʒ     | C      | voiced    | postalveolar | central |             | neutral | <span data-glyph="C" data-ipa="ʒ" data-size="3.2"></span> |
+| ç     | C      | voiceless | palatal      | central |             |         | <span data-glyph="C" data-ipa="ç" data-size="3.2"></span> |
+| ʝ     | C      | voiced    | palatal      | central |             |         | <span data-glyph="C" data-ipa="ʝ" data-size="3.2"></span> |
+| ʂ     | C      | voiceless | postalveolar | central |             | curl    | <span data-glyph="C" data-ipa="ʂ" data-size="3.2"></span> |
+| ʐ     | C      | voiced    | postalveolar | central |             | curl    | <span data-glyph="C" data-ipa="ʐ" data-size="3.2"></span> |
+| ɕ     | C      | voiceless | postalveolar | central |             | domed   | <span data-glyph="C" data-ipa="ɕ" data-size="3.2"></span> |
+| ʑ     | C      | voiced    | postalveolar | central |             | domed   | <span data-glyph="C" data-ipa="ʑ" data-size="3.2"></span> |
+| ɬ     | C      | voiceless | alveolar     | lateral |             |         | <span data-glyph="C" data-ipa="ɬ" data-size="3.2"></span> |
+| ɮ     | C      | voiced    | alveolar     | lateral |             |         | <span data-glyph="C" data-ipa="ɮ" data-size="3.2"></span> |
+| s     | S      | voiceless | alveolar     |         |             |         | <span data-glyph="S" data-ipa="s" data-size="3.2"></span> |
+| z     | S      | voiced    | alveolar     |         |             |         | <span data-glyph="S" data-ipa="z" data-size="3.2"></span> |
+| l     | L      | voiced    | alveolar     | lateral | approximant |         | <span data-glyph="L" data-ipa="l" data-size="3.2"></span> |
+| ɭ     | L      | voiced    | postalveolar | lateral | approximant | curl    | <span data-glyph="L" data-ipa="ɭ" data-size="3.2"></span> |
+| ʎ     | L      | voiced    | palatal      | lateral | approximant |         | <span data-glyph="L" data-ipa="ʎ" data-size="3.2"></span> |
+| ʟ     | L      | voiced    | velar        | lateral | approximant |         | <span data-glyph="L" data-ipa="ʟ" data-size="3.2"></span> |
+| ɹ     | L      | voiced    | alveolar     | central | approximant |         | <span data-glyph="L" data-ipa="ɹ" data-size="3.2"></span> |
+| ɻ     | L      | voiced    | postalveolar | central | approximant | curl    | <span data-glyph="L" data-ipa="ɻ" data-size="3.2"></span> |
+| ɰ     | L      | voiced    | velar        | central | approximant |         | <span data-glyph="L" data-ipa="ɰ" data-size="3.2"></span> |
+| r     | L      | voiced    | alveolar     | central | trill       |         | <span data-glyph="L" data-ipa="r" data-size="3.2"></span> |
+| ʀ     | L      | voiced    | uvular       | central | trill       |         | <span data-glyph="L" data-ipa="ʀ" data-size="3.2"></span> |
+| ɾ     | L      | voiced    | alveolar     | central | tap         |         | <span data-glyph="L" data-ipa="ɾ" data-size="3.2"></span> |
+| ɽ     | L      | voiced    | postalveolar | central | tap         | curl    | <span data-glyph="L" data-ipa="ɽ" data-size="3.2"></span> |
+| ǀ     | !      | voiceless | dental       | central |             |         | <span data-glyph="!" data-ipa="ǀ" data-size="3.2"></span> |
+| ǃ     | !      | voiceless | alveolar     | central |             |         | <span data-glyph="!" data-ipa="ǃ" data-size="3.2"></span> |
+| ǁ     | !      | voiceless | alveolar     | lateral |             |         | <span data-glyph="!" data-ipa="ǁ" data-size="3.2"></span> |
+| ǂ     | !      | voiceless | palatal      | central |             |         | <span data-glyph="!" data-ipa="ǂ" data-size="3.2"></span> |
+| ʘ     | !      | voiceless | bilabial     |         |             |         | <span data-glyph="!" data-ipa="ʘ" data-size="3.2"></span> |
+| ʔ     | !      | voiceless | glottal      |         |             |         | <span data-glyph="!" data-ipa="ʔ" data-size="3.2"></span> |
+| ʡ     | !      | voiceless | epiglottal   |         |             |         | <span data-glyph="!" data-ipa="ʡ" data-size="3.2"></span> |
+  </pre>
+
+  <h4>Vowels</h4>
+
+  <p>TODO: Vowel annotations are still being redesigned to fit the system above. In the meantime,
+  vowels use an older scheme of small chevrons and arrows beneath the letter, along with bars above
+  and below. In many contexts vowels go unannotated, but here are the current annotations for the
+  most common vowel sounds of English.</p>
+
+<pre data-table="englishVowelAnnotations">
 | Sound (IPA) | As in...         | Letter   | Annotation | Glyph |
 |:-----------:|------------------|----------|------------|:-----:|
 | ɪ | "i" in "sit" | `I` | Left-pointing chevron beneath | <span data-glyph="ɪ" data-size="3"></span> |
@@ -2998,7 +3162,7 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 | æ | "a" in "cat" | `A` | Overbar, left-pointing chevron beneath | <span data-glyph="æ" data-size="3"></span> |
 | ʌ | "u" in "bun" | `A` | Underbar | <span data-glyph="ʌ" data-size="3"></span> |
 | ɑ | "a" in "palm" | `A` | Left-pointing arrow and underbar beneath | <span data-glyph="ɑ" data-size="3"></span> |
-| u | "ou" in "soup" | `U` | Right-pointing chevron beneath (ususally elided) | <span data-glyph="u" data-size="3"></span> |
+| u | "ou" in "soup" | `U` | Right-pointing chevron beneath (usually elided) | <span data-glyph="u" data-size="3"></span> |
 | ʊ | "oo" in "foot" | `U` | Left-pointing chevron beneath | <span data-glyph="ʊ" data-size="3"></span> |
 | aɪ | "ie" in "pie" | `A`, `I` | Right-pointing chevron beneath the second | <span data-glyph="ai" data-size="3"></span> |
 | eɪ | "ay" in "may" | `I`, `I` | Left-pointing arrow beneath the first, right-pointing chevron beneath the second | <span data-glyph="ei" data-size="3"></span> |
@@ -3012,39 +3176,184 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 
   <details class="spec-code"><summary class="code-title">Diacritic Drawing</summary><pre><code>
 // Annotation marks, each drawn relative to an anchor point on the letter it annotates (and not drawn
-// at all on a letter with no anchor for it). Voicing marks hang from a per-letter anchor in the
-// letter's empty space.
-const voiceAnchor = { K: [126,-108], T: [28,64], P: [126,54], F: [126,54], H: [126,108], C: [126,108], S: [126,54] };
+// at all on a letter with no anchor for it). Every consonant mark pins down one aspect of a sound; see
+// the Annotations section for the system.
+const isConsonantLetter = (l) => ! vowelChars.has(l);
 const onLetters = (...ltrs) => (l) => ltrs.length && ! ltrs.includes(l) ? undefined : [0, 0];
-// Vowel marks hang under the arch. The overbar sits a little higher on a vowel, clear of its crown.
-const vowelAnchor = (l) => vowelChars.has(l) ? [126, 108] : undefined;
+const onConsonants = (a) => (l) => isConsonantLetter(l) ? a : undefined;
+
+// Phonation hangs in each letter's empty space: above the line on H, and below it on the click.
+const voiceAnchor = { N: [234,-170], M: [262,210], K: [126,-108], T: [28,64], P: [126,54], F: [126,54],
+                      H: [126,-108], C: [126,108], S: [126,54], L: [126,-108], '!': [216,200] };
+const chevron = (dy) => ({ x: 0, y: dy, segs: [[54, 54 + dy], [108, dy]] });
+// The implosive's second chevron sits away from the letter body: above the first on K, below it elsewhere.
+const implosiveAnchor = (l) => voiceAnchor[l] && [voiceAnchor[l][0], voiceAnchor[l][1] + (l === 'K' ? 0 : 54)];
+
+// Place: bars name the group and ticks pick the place within it (see the placeGroups table). A single bar
+// sits at the letter's edge, and a double bar adds a second one 120 units further in.
+const placeEdge = 396, placeGap = 120, tickReach = 42, tickX = [72, 288];
+// H's bars sit closer to the baseline. The click's lower bars move up a full 396, so its guttural bar (and
+// with it the glottal stop) runs through the baseline.
+const placeShift = (l, side) => l === 'H' ? -side * 144 : l === '!' && side > 0 ? -396 : 0;
+const placeAnchor = (side) => (l) => isConsonantLetter(l) ? [0, placeShift(l, side)] : undefined;
+const placeGroupList = [...placeGroups['Group']].map(([name, row]) => ({
+  name, bars: +row['Bars'], side: row['Side'] === 'above' ? -1 : 1,
+  places: row['Places (front to back)'].split(',').map(p => p.trim()),
+}));
+const barDistances = (g) => g.bars === 1 ? [placeEdge] : [placeEdge, placeEdge - placeGap];  // Outer bar first.
+const barStrokes = (g) => barDistances(g).map(d => ({ x: 36, y: g.side * d, segs: [[324, g.side * d]] }));
+// A tick crosses every bar of its group, at the front (0) or back (1) end.
+const tickStroke = (g, end) => {
+  const ds = barDistances(g), x = tickX[end];
+  return { x, y: g.side * (ds[0] + tickReach), segs: [[x, g.side * (ds.at(-1) - tickReach)]] };
+};
+const ticksFor = (i) => [[0], [0, 1], [1]][i];  // Front, middle (both ticks), back.
+const defaultTickGroup = placeGroupList.find(g => g.side < 0 && g.bars === 2) ?? placeGroupList[0];
+
+// Central is a solid square, drawn as a tight zigzag so the round pen fills it in.
+const squareSegs = [];
+for (let k = 0; k <= 6; k++) {
+  const y = -60 + 20 * k;
+  if (k) squareSegs.push([k % 2 ? 240 : 120, y]);
+  squareSegs.push([k % 2 ? 120 : 240, y]);
+}
+
 const glyphMarks = {
-  unvoiced: { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[0,-72, 108,-72, 108,0], [108,72, 0,72, 0,0]] }] },
-  voiced:   { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[54,54], [108,0]] }] },
-  overbar:  { anchor: l => [0, vowelChars.has(l) ? -60 : 0], strokes: [{ x: 36, y: -396, segs: [[324,-396]] }] },
-  underbar: { anchor: onLetters(),    strokes: [{ x: 36, y: 396,  segs: [[324,396]] }] },
-  lateral:  { anchor: onLetters('L'), strokes: [{ x: 180, y: 396, segs: [[180,-108]] }] },
-  rhotic:   { anchor: onLetters('L'), strokes: [{ x: 64, y: 372, segs: [[254,280]] }, { x: 106, y: 280, segs: [[296,372]] }] },
-  tense:    { anchor: vowelAnchor,    strokes: [{ x: 27, y: -54, segs: [[81,0], [27,54]] }] },
-  lax:      { anchor: vowelAnchor,    strokes: [{ x: 81, y: -54, segs: [[27,0], [81,54]] }] },
-  back:     { anchor: vowelAnchor,    strokes: [{ x: 108, y: 0, segs: [[0,0]] }, { x: 36, y: -36, segs: [[0,0], [36,36]] }] },
-  dental:   { anchor: onLetters('!'), strokes: [{ x: 0, y: -396, segs: [[360,-396]] }, { x: 0, y: 396, segs: [[360,396]] }] },
-  emphatic: { anchor: onLetters('!'), strokes: [{ x: 72, y: -288, segs: [[180,-396]] }, { x: 72, y: 288, segs: [[180,396]] }] },
-  // Runs the full width, from the previous letter's exit to the next letter's entry, so a word with a
-  // glottal stop in it is still one unbroken stroke.
-  glottal:  { anchor: onLetters('!'), strokes: [{ x: 0, y: 0, segs: [[360,0]] }] },
+  voiceless:   { anchor: l => voiceAnchor[l], strokes: [{ x: 0, y: 0, segs: [[0,-72, 108,-72, 108,0], [108,72, 0,72, 0,0]] }] },
+  voiced:      { anchor: l => voiceAnchor[l], strokes: [chevron(0)] },
+  implosive:   { anchor: implosiveAnchor,     strokes: [chevron(0), chevron(-54)] },
+  // The tick characters on their own, drawn for a double bar above. The font redraws them to match the
+  // group bar they're typed with (see the Font Builder).
+  frontTick:   { anchor: placeAnchor(-1), strokes: [tickStroke(defaultTickGroup, 0)] },
+  backTick:    { anchor: placeAnchor(-1), strokes: [tickStroke(defaultTickGroup, 1)] },
+  // Channel, centered at (180,0).
+  lateral:     { anchor: onConsonants([0, 0]), strokes: [{ x: 126, y: -66, segs: [[90,-40, 90,40, 126,66]] },
+                                                         { x: 234, y: -66, segs: [[270,-40, 270,40, 234,66]] }] },
+  central:     { anchor: onConsonants([0, 0]), strokes: [{ x: 120, y: -60, segs: squareSegs }] },
+  // Manner, above the line on L.
+  approximant: { anchor: l => l === 'L' ? [180, -180] : undefined, strokes: [{ x: -114, y: -24, segs: [[-66,48, 66,48, 114,-24]] }] },
+  tap:         { anchor: l => l === 'L' ? [180, -180] : undefined, strokes: [{ x: 0, y: -48, segs: [[0,48]] }] },
+  trill:       { anchor: l => l === 'L' ? [180, -180] : undefined, strokes: [{ x: -120, y: 0, segs: [[-60,-36], [0,36], [60,-36], [120,0]] }] },
+  // Coronal posture, a swoosh below the letter. Neutral is curl and domed drawn together.
+  curl:        { anchor: onConsonants([0, 474]), strokes: [{ x: 36, y: 0, segs: [[120,54, 240,48, 324,-42]] }] },
+  domed:       { anchor: onConsonants([0, 474]), strokes: [{ x: 36, y: 0, segs: [[120,-54, 240,-48, 324,42]] }] },
+  // The click's roles: closing a quote, and joining its neighbors when it falls inside a word.
+  emphatic:    { anchor: onLetters('!'), strokes: [{ x: 72, y: -288, segs: [[180,-396]] }, { x: 72, y: 288, segs: [[180,396]] }] },
+  join:        { anchor: onLetters('!'), strokes: [{ x: 0, y: 0, segs: [[360,0]] }] },
+  // TODO Vowel marks, still to be redesigned. Vowel marks hang under the arch, and the overbar sits a little
+  // higher on a vowel, clear of its crown.
+  overbar:     { anchor: l => vowelChars.has(l) ? [0, -60] : undefined, strokes: [{ x: 36, y: -396, segs: [[324,-396]] }] },
+  underbar:    { anchor: l => vowelChars.has(l) ? [0, 0] : undefined,   strokes: [{ x: 36, y: 396,  segs: [[324,396]] }] },
+  tense:       { anchor: l => vowelChars.has(l) ? [126, 108] : undefined, strokes: [{ x: 27, y: -54, segs: [[81,0], [27,54]] }] },
+  lax:         { anchor: l => vowelChars.has(l) ? [126, 108] : undefined, strokes: [{ x: 81, y: -54, segs: [[27,0], [81,54]] }] },
+  back:        { anchor: l => vowelChars.has(l) ? [126, 108] : undefined, strokes: [{ x: 108, y: 0, segs: [[0,0]] }, { x: 36, y: -36, segs: [[0,0], [36,36]] }] },
+};
+glyphMarks.neutral = { anchor: glyphMarks.curl.anchor, strokes: [...glyphMarks.curl.strokes, ...glyphMarks.domed.strokes] };
+
+// Each group is a mark (its bars), and so is each place (the bars plus its ticks). A composite mark is typed
+// as the combining characters that make it up.
+const placeOf = {};       // place name -> { group, index }
+const markSpelling = { neutral: ['curl', 'domed'] };
+for (const g of placeGroupList) {
+  if (g.places.length > 3) reportSpecError('Diacritic Drawing', `The ${g.name} group has more places than ticks can tell apart.`);
+  glyphMarks[g.name] = { anchor: placeAnchor(g.side), strokes: barStrokes(g) };
+  g.places.forEach((p, i) => {
+    placeOf[p] = { group: g, index: i };
+    glyphMarks[p] = { anchor: placeAnchor(g.side), strokes: [...barStrokes(g), ...ticksFor(i).map(e => tickStroke(g, e))] };
+    markSpelling[p] = [g.name, ...ticksFor(i).map(e => ['frontTick', 'backTick'][e])];
+  });
+}
+
+// ── Sound features ──
+// Every consonant sound in the alphabet, described by the aspects the marks can pin down.
+const featureDims = ['Phonation', 'Place', 'Channel', 'Manner', 'Posture'];
+const featureValues = { Phonation: ['voiceless', 'voiced', 'implosive'], Place: Object.keys(placeOf),
+  Channel: ['lateral', 'central'], Manner: ['approximant', 'tap', 'trill'], Posture: ['curl', 'neutral', 'domed'] };
+const featureOf = {};     // IPA sound -> { sound, letter, Phonation, Place, ... }
+for (const [sound, row] of consonantFeatures['Sound']) {
+  const f = { sound, letter: row['Letter'] };
+  for (const d of featureDims) {
+    if (row[d] && ! featureValues[d].includes(row[d])) reportSpecError('Diacritic Drawing', `${sound} has "${row[d]}" for ${d.toLowerCase()}, which isn't one of its values.`);
+    f[d] = row[d] || undefined;
+  }
+  const listed = alphabet['Acceptable sounds (IPA)'][sound]?.['Letter'];
+  if (listed && listed !== f.letter) reportSpecError('Diacritic Drawing', `The alphabet puts ${sound} under ${listed}, not ${f.letter}.`);
+  featureOf[sound] = f;
+}
+for (const [ltr, row] of alphabet['Letter']) {
+  if (! isConsonantLetter(ltr)) continue;
+  for (const s of row['Acceptable sounds (IPA)'].split(',').map(x => x.trim()))
+    if (! featureOf[s]) reportSpecError('Diacritic Drawing', `${s} (${ltr}) has no row in the consonant table.`);
+}
+
+// The fewest marks that single a sound out of a pool, or undefined if none do. A full place costs two (bar and
+// tick), a group one, and anything else one each; ties go to the spelling that touches fewer aspects. Implosive
+// counts as its own phonation here: the voiced mark doesn't rule implosives out, but implosives always carry
+// their own mark. Place comes last in the list, so the font can match ticks to their bar (see Font Builder).
+const minimalMarks = (f, pool) => {
+  let best;
+  const visit = (i, spec) => {
+    if (i === featureDims.length) {
+      const hits = pool.filter(o => featureDims.every(d => ! spec[d] || (d !== 'Place' ? o[d] === f[d]
+        : spec[d] === 1 ? placeOf[o.Place]?.group === placeOf[f.Place].group : o.Place === f.Place)));
+      if (hits.length !== 1) return;
+      const cost = featureDims.reduce((c, d) => c + (spec[d] || 0), 0), dims = featureDims.filter(d => spec[d]).length;
+      if (! best || cost < best.cost || (cost === best.cost && dims < best.dims)) best = { spec: { ...spec }, cost, dims };
+      return;
+    }
+    const d = featureDims[i];
+    for (const v of d === 'Place' ? [0, 1, 2] : [0, 1]) {
+      if (v && ! f[d]) continue;
+      spec[d] = v;
+      visit(i + 1, spec);
+    }
+  };
+  visit(0, {});
+  if (! best) return;
+  const s = best.spec;
+  return [s.Phonation && f.Phonation, s.Channel && f.Channel, s.Manner && f.Manner, s.Posture && f.Posture,
+          s.Place === 1 ? placeOf[f.Place].group.name : s.Place === 2 ? f.Place : null].filter(Boolean);
 };
 
-// The marks each lowercase romanized letter (or IPA vowel) is drawn with. Uppercase letters are drawn bare,
-// and so are the characters not listed (m, i, u, a, ...). TODO Fill this out more properly!
+// IPA consonants take the fewest marks that tell them apart within their letter.
+const letterPools = {};
+for (const f of Object.values(featureOf)) (letterPools[f.letter] ??= []).push(f);
+const ipaMarks = {};
+for (const f of Object.values(featureOf)) {
+  ipaMarks[f.sound] = minimalMarks(f, letterPools[f.letter])
+    ?? (reportSpecError('Diacritic Drawing', `${f.sound} can't be told apart from the other sounds of ${f.letter}.`), []);
+}
+
+// The marks each lowercase character is drawn with. Uppercase letters are drawn bare, and so are the
+// characters not listed (m, i, u, a, ...).
 const charMarks = {
-  k: ['unvoiced'], g: ['voiced'], t: ['unvoiced'], d: ['voiced'], p: ['unvoiced'], b: ['voiced'],
-  f: ['unvoiced', 'overbar'], v: ['voiced', 'overbar'], 'θ': ['underbar'], x: ['overbar'], h: ['underbar'],
-  c: ['unvoiced'], j: ['voiced'], s: ['unvoiced'], z: ['voiced'],
-  n: ['overbar'], 'ŋ': ['underbar'], l: ['lateral'], r: ['rhotic'], '.': ['dental'], ',': ['emphatic'], "'": ['glottal'],
+  // TODO Vowels, still to be redesigned.
   e: ['back'], o: ['back'], 'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'],
   'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
+  // The click's grammatical forms. The sentence divider is left bare, since its pronunciation varies.
+  '.': [], ',': ['emphatic'], "'": ['glottal', 'join'],
 };
+// Romanized consonants take the fewest marks that tell them apart from the other romanized letters of their
+// Papsa letter, which are the distinctions an English reader needs.
+const romanPools = {};
+for (const [r, row] of engConsonantRomanization['Romanization']) {
+  const f = featureOf[row['Sound (IPA)']];
+  if (f) (romanPools[f.letter] ??= []).push([r, f]);
+  else reportSpecError('Diacritic Drawing', `The romanized ${r} stands for ${row['Sound (IPA)']}, which has no row in the consonant table.`);
+}
+for (const pool of Object.values(romanPools)) for (const [r, f] of pool) {
+  charMarks[r] = minimalMarks(f, pool.map(([, g]) => g))
+    ?? (reportSpecError('Diacritic Drawing', `The romanized ${r} can't be told apart from the other romanized letters.`), []);
+}
+// Every other IPA consonant uses its own minimal marks. (Where an IPA character doubles as a romanized
+// letter, such as r, the romanized reading wins.)
+for (const [sound, marks] of Object.entries(ipaMarks)) if (! (sound in charMarks)) charMarks[sound] = marks;
+
+// A mark with no anchor on its letter would silently vanish, so check them all.
+for (const [ch, marks] of Object.entries(charMarks)) for (const m of marks) {
+  if (! glyphMarks[m]) reportSpecError('Diacritic Drawing', `${ch} uses "${m}", which isn't a mark.`);
+  else if (! glyphMarks[m].anchor(baseLetter(ch))) reportSpecError('Diacritic Drawing', `"${m}" has no place on ${baseLetter(ch)}, so ${ch} would lose it.`);
+}
 
 // How far the script reaches above and below the baseline, sampled from the strokes themselves with half
 // the pen width added. Marks can reach past the letters' ±396 (a vowel's overbar does), so the drawings
@@ -3074,9 +3383,12 @@ const scriptExtent = (() => {
   return { top, bottom };
 })();
 
-// Draw every element with data-glyph="...". Add data-size for scale (in em).
+// Draw every element with data-glyph="...". Add data-size for scale (in em). Add data-marks to draw the listed
+// marks instead of the ones the characters carry, or data-ipa to draw the marks an IPA consonant carries.
 document.querySelectorAll('[data-glyph]').forEach(el => {
-  const { letterPath, diacriticPath, width } = textPathData(el.dataset.glyph, (ch) => (charMarks[ch] ?? []).map(m => glyphMarks[m]));
+  const listed = el.dataset.marks?.split(' ') ?? (el.dataset.ipa !== undefined ? ipaMarks[el.dataset.ipa] ?? [] : undefined);
+  const lookup = (ch) => (listed ?? charMarks[ch] ?? []).map(m => glyphMarks[m] ?? fail(`There's no mark named "${m}".`));
+  const { letterPath, diacriticPath, width } = textPathData(el.dataset.glyph, lookup);
   el.innerHTML = glyphSVG(el.dataset.glyph, letterPath, diacriticPath, width, +el.dataset.size || 2.4);
 });
 
@@ -3107,12 +3419,15 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 
   <p id="script-font">This page creates its own font, PapsaTasa, which renders ordinary text
   as Papsa script. Uppercase letters are never annotated, and can be used when basic letters are
-  preferred. Lowercase consonants are annotated by default, allowing readers to distinguish 
-  <code class="script">`k`</code> (<code>`k`</code>) from <code class="script">`g`</code> (<code>`g`</code>),
-  for example. Because Papsa vowels are regular and flexible, and to make them more readable when
+  preferred. Lowercase romanized consonants carry the few marks that tell them apart from each
+  other, so readers can distinguish <code class="script">`k`</code> (<code>`k`</code>) from
+  <code class="script">`g`</code> (<code>`g`</code>), for example. IPA characters carry the marks
+  that tell their sound apart from the rest of its letter (see
+  <a href="#consonant-features">Every consonant</a>), so the font can also set phonetic
+  transcription. Because Papsa vowels are regular and flexible, and to make them more readable when
   squeezed together, <code>`u`</code>, <code>`a`</code>, and <code>`i`</code> are not annotated by
-  default. (To support names and empower users, some other lowercase vowel characters are annotated
-  and there are an additional set of combining diacritic marks to facilitate annotating diphthongs.)
+  default. (To support names and empower users, some other lowercase vowel characters are annotated,
+  and a set of combining marks makes any further annotation possible.)
   <span class="font-download">Feel free to <a data-font-download download="PapsaTasa.ttf">Download PapsaTasa.ttf</a> to use for
   your own projects.</span></p>
 
@@ -3123,22 +3438,36 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   <p class="script script-sample" id="script-font-out"></p>
   <p id="script-svg-out"></p>
 
-  <p>To annotate a letter the font leaves bare, such as a squeezed vowel or a plain <code>`u`</code>,
-  <code>`i`</code>, or <code>`a`</code>, type one of these combining characters after it. Marks can be
-  stacked, and they shrink along with a squeezed vowel.</p>
+  <p>To annotate beyond the defaults (a squeezed vowel, a plain <code>`u`</code>, <code>`i`</code>,
+  or <code>`a`</code>, or a narrower consonant), type one of these combining characters after the
+  letter. Marks can be stacked, and they shrink along with a squeezed vowel. A full place is its
+  group's bar followed by one or both tick characters (both for a middle place). The font draws the
+  ticks to match the bar, so type them right after it. Neutral posture is both hooks together.</p>
 
   <pre data-table="combiningMarks">
-| Mark     | Character | Unicode name                         | Example |
-|:---------|:----------|--------------------------------------|---------|
-| unvoiced | U+0325    | Combining ring below                 | <span class="script" style="font-size:1.6em">T&#x325;</span> |
-| voiced   | U+032C    | Combining caron below                | <span class="script" style="font-size:1.6em">T&#x32C;</span> |
-| overbar  | U+0304    | Combining macron                     | <span class="script" style="font-size:1.6em">a&#x304;</span> |
-| underbar | U+0331    | Combining macron below               | <span class="script" style="font-size:1.6em">H&#x331;</span> |
-| lateral  | U+20D2    | Combining long vertical line overlay | <span class="script" style="font-size:1.6em">L&#x20D2;</span> |
-| rhotic   | U+0353    | Combining x below                    | <span class="script" style="font-size:1.6em">L&#x353;</span> |
-| tense    | U+0355    | Combining right arrowhead below      | <span class="script" style="font-size:1.6em">ai&#x355;</span> |
-| lax      | U+0354    | Combining left arrowhead below       | <span class="script" style="font-size:1.6em">u&#x354;</span> |
-| back     | U+20EE    | Combining left arrow below           | <span class="script" style="font-size:1.6em">i&#x20EE;i&#x355;</span> |
+| Mark        | Character | Unicode name                         | Example |
+|:------------|:----------|--------------------------------------|---------|
+| voiceless   | U+0325    | Combining ring below                 | <span class="script" style="font-size:1.6em">T&#x325;</span> |
+| voiced      | U+032C    | Combining caron below                | <span class="script" style="font-size:1.6em">T&#x32C;</span> |
+| implosive   | U+1DCD    | Combining double circumflex above    | <span class="script" style="font-size:1.6em">P&#x1DCD;</span> |
+| labial      | U+0305    | Combining overline                   | <span class="script" style="font-size:1.6em">M&#x305;</span> |
+| coronal     | U+033F    | Combining double overline            | <span class="script" style="font-size:1.6em">T&#x33F;</span> |
+| dorsal      | U+0333    | Combining double low line            | <span class="script" style="font-size:1.6em">K&#x333;</span> |
+| guttural    | U+0332    | Combining low line                   | <span class="script" style="font-size:1.6em">H&#x332;</span> |
+| frontTick   | U+0319    | Combining right tack below           | <span class="script" style="font-size:1.6em">T&#x33F;&#x319;</span> |
+| backTick    | U+0318    | Combining left tack below            | <span class="script" style="font-size:1.6em">K&#x333;&#x318;</span> |
+| lateral     | U+20DD    | Combining enclosing circle           | <span class="script" style="font-size:1.6em">L&#x20DD;</span> |
+| central     | U+20DE    | Combining enclosing square           | <span class="script" style="font-size:1.6em">L&#x20DE;</span> |
+| approximant | U+032E    | Combining breve below                | <span class="script" style="font-size:1.6em">L&#x32E;</span> |
+| tap         | U+030D    | Combining vertical line above        | <span class="script" style="font-size:1.6em">L&#x30D;</span> |
+| trill       | U+035B    | Combining zigzag above               | <span class="script" style="font-size:1.6em">L&#x35B;</span> |
+| curl        | U+0322    | Combining retroflex hook below       | <span class="script" style="font-size:1.6em">C&#x322;</span> |
+| domed       | U+0321    | Combining palatalized hook below     | <span class="script" style="font-size:1.6em">C&#x321;</span> |
+| overbar     | U+0304    | Combining macron (vowels only)       | <span class="script" style="font-size:1.6em">a&#x304;</span> |
+| underbar    | U+0331    | Combining macron below (vowels only) | <span class="script" style="font-size:1.6em">a&#x331;</span> |
+| tense       | U+0355    | Combining right arrowhead below      | <span class="script" style="font-size:1.6em">ai&#x355;</span> |
+| lax         | U+0354    | Combining left arrowhead below       | <span class="script" style="font-size:1.6em">u&#x354;</span> |
+| back        | U+20EE    | Combining left arrow below           | <span class="script" style="font-size:1.6em">i&#x20EE;i&#x355;</span> |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Font Builder</summary><pre><code>
@@ -3159,7 +3488,8 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 // Lowercase letters carry the marks `charMarks` gives them, and uppercase letters are bare. Vowels that
 // touch are squeezed to half width, as in the drawings. The combining characters in the table above
 // attach their marks to whatever letter they follow, squeezed or not, which is how a writer annotates
-// the plain vowels u, a, and i.
+// the plain vowels u, a, and i. The two tick characters are the exception: they take their drawn form
+// from the group bar typed with them (see Place ticks, below).
 {
   const W = 360, GAP = 180, REACH = 396, PEN = 36, MARK_PEN = 24;  // The glyph code's numbers (see Letter Strokes).
   // One em is the height of a letter. The script's baseline sits a quarter em above the Latin one, so a
@@ -3319,8 +3649,23 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
       const full = mark(1);
       glyphs[full].half = mark(0.5);
       map(char, () => full);
-      return { m, char };
+      return { m, char, gid: full };
     });
+
+    // ── Place ticks ──
+    // The front and back tick characters carry no group of their own, so each gets a drawn form per group:
+    // long enough to cross both bars of a coronal or dorsal pair, short for the single labial or guttural
+    // bar, and above or below to match. A tick's form attaches the same way its group's bar does.
+    const gidOf = (m) => combining.find(c => c.m === m)?.gid ?? fail(`The combining-mark table needs "${m}".`);
+    const tickIds = sorted(['frontTick', 'backTick'].map(gidOf));
+    const tickVariants = placeGroupList.map(g => {
+      const bar = gidOf(g.name), cls = glyphs[bar].cls;
+      const pairs = ['frontTick', 'backTick'].map((t, end) => [gidOf(t), make(['tick', g.name, t].join('|'), () => ({
+        mark: t, cls, s: 1, advance: 0, anchor: [-W, RAISE],
+        contours: outline(tickStroke(g, end), (px, py) => [px - W, RAISE - py], MARK_PEN) }))]);
+      return { bar, pairs: pairs.sort((a, b) => a[0] - b[0]) };
+    });
+    await breathe();
 
     // ── Layout ──
     const ids = (pred) => glyphs.flatMap((g, i) => pred(g) ? [i] : []);
@@ -3331,18 +3676,30 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
 
     // Lookup 0 swaps a glyph for its half-width twin, and the contextual lookups decide when. A vowel is
     // squeezed when the next or previous letter is a vowel (looking past combining marks), and a mark is
-    // squeezed when it follows a squeezed vowel or a squeezed mark. `chain` takes coverages for the
-    // backtrack, input, and lookahead, and applies lookup 0 to the input.
-    const chain = (...sets) => linked(o => bytes(w => {
+    // squeezed when it follows a squeezed vowel or a squeezed mark. `chain` takes the lookup to apply, then
+    // coverages for the backtrack, input, and lookahead.
+    const chain = (lookup, ...sets) => linked(o => bytes(w => {
       let k = 0;
       w.u16(3);
       for (const set of sets) w.u16(set.length, ...set.map(() => o[k++]));
-      w.u16(1, 0, 0);
+      w.u16(1, 0, lookup);
     }), sets.flat().map(coverage));
-    const GSUB = layout([['calt', [1, 2]], ['rclt', [1, 2]]], [
+    // Lookups 3 and up give the tick characters one group's drawn form each, and the last lookup decides
+    // which group applies: the bar (or tick) just before, or the bar just after. Text shaping sorts marks
+    // below ahead of marks above, so a tick can end up in front of a bar above.
+    const tickLookups = tickVariants.map(({ pairs }) =>
+      ({ type: 1, subtables: [linked(o => bytes(w => w.u16(2, o[0], pairs.length, ...pairs.map(p => p[1]))), [coverage(pairs.map(p => p[0]))])] }));
+    const pickTicks = 3 + tickLookups.length;
+    const GSUB = layout([['calt', [1, 2, pickTicks]], ['rclt', [1, 2, pickTicks]]], [
       { type: 1, subtables: [linked(o => bytes(w => w.u16(2, o[0], twins.length, ...twins.map(i => glyphs[i].half))), [coverage(twins)])] },
-      { type: 6, flag: 8 /* ignore marks */, subtables: [chain([], [fullVowels], [allVowels]), chain([allVowels], [fullVowels], [])] },
-      { type: 6, subtables: [chain([sorted([...halfVowels, ...halfMarks])], [fullMarks], [])] },
+      { type: 6, flag: 8 /* ignore marks */, subtables: [chain(0, [], [fullVowels], [allVowels]), chain(0, [allVowels], [fullVowels], [])] },
+      { type: 6, subtables: [chain(0, [sorted([...halfVowels, ...halfMarks])], [fullMarks], [])] },
+      ...tickLookups,
+      { type: 6, subtables: tickVariants.flatMap(({ bar, pairs }, k) => [
+        chain(3 + k, [sorted([bar, ...pairs.map(p => p[1])])], [tickIds], []),
+        chain(3 + k, [], [tickIds], [[bar]]),
+        chain(3 + k, [], [tickIds], [tickIds, [bar]]),
+      ]) },
     ]);
 
     // Each combining mark attaches where that mark sits on the letter, squeezed or not. Letters with no
@@ -3453,11 +3810,14 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   // by whole pixels) skip the check.
   const compareWithSVG = (combining) => {
     if ( ! ('textRendering' in (globalThis.CanvasRenderingContext2D?.prototype ?? {}))) return;
-    const sample = "neim kud. pif xarc sou mauk a'apaun θŋ lr vaiuz NIIM KUT! seiou ɪʊəɛæʌɑ hx";
+    const sample = "neim kud. pif xarc sou mauk a'apaun θŋ lr vaiuz NIIM KUT! seiou ɪʊəɛæʌɑ hx ɖɓʂɕʃ ʎɾʀɹ ɦɲqð ǁǂʔ";
     const charOf = new Map(combining.map(({ m, char }) => [m, char]));
+    // A composite mark (a full place, or neutral posture) is spelled with the combining marks that make it
+    // up. Click characters are left as they are, since the bare click ("!") would stand apart as a word.
+    const spell = (m) => (markSpelling[m] ?? [m]).map(x => charOf.get(x));
     const spelled = [...sample].map(ch => {
-      const marks = charMarks[ch] ?? [];
-      return marks.length && marks.every(m => charOf.has(m)) ? baseLetter(ch) + marks.map(m => charOf.get(m)).join('') : ch;
+      const chars = (charMarks[ch] ?? []).flatMap(spell);
+      return chars.length && chars.every(Boolean) && baseLetter(ch) !== '!' ? baseLetter(ch) + chars.join('') : ch;
     }).join('');
     const { letterPath, diacriticPath, width } = textPathData(sample + ' ' + sample, ch => (charMarks[ch] ?? []).map(m => glyphMarks[m]));
     const scale = 1 / 6, pad = 12, mid = pad + Math.ceil(-scriptExtent.top * scale);  // 1/6 keeps every advance a whole pixel.
