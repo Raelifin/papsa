@@ -2900,8 +2900,7 @@ const strokeSVG = (s,x,y,w) => s.segs.reduce((r,seg) => r+' '+segmentSVG(seg,x,y
   always means lifting the pen, which suits a letter that almost only appears as its own word.
   In the rare cases where a click shows up inside a word, such as the glottal stop in
   <code>`a'apaun`</code>, a line along the baseline joins it to the letters on either side,
-  preserving the single stroke. For the glottal stop, that line is simply its guttural bar extended
-  across the whole width.</p>
+  preserving the single stroke.</p>
 
   <p class="script script-sample">A'APAUN</p>
   
@@ -2955,65 +2954,52 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
   
   <h3>Annotations</h3>
 
-  <p>In many cases, annotations are drawn with a thinner or fainter line than the letter itself
-  (or in a different color), so the basic letter underneath stays legible.</p>
-
-  <p>Each annotation pins down one aspect of a sound and leaves the rest open. A letter with no
-  marks stands for any of its sounds, and each mark narrows that set, so a glyph means "whichever of
-  this letter's sounds match every mark." Writers can stop at whatever level of detail they need. A
-  <code>`K`</code> with a voiced mark could be g, ɢ, ɠ, or ʛ. Adding a uvular mark narrows it to ɢ or
-  ʛ, and swapping the voiced mark for the implosive one settles on ʛ. A missing mark never stands for
-  a particular value, only for "unspecified." Marks may also pin a value outside a letter's usual
-  range, which is how sounds without a home in the alphabet can still be written. An
-  <code>`L`</code> with labiodental place and the approximant mark is ʋ, for example.</p>
-
-  <p>Each aspect of a sound has its own zone on the letter, so marks combine without colliding:
-  phonation sits in the letter's empty space, place in bars above and below, channel at the center,
-  manner above an <code>`L`</code>, and coronal posture in a swoosh below.</p>
+  <p>Annotations are grouped by the aspects of sounds, such as voicing, place, channel, manner,
+  and tongue posture. When an aspect is unspecified by any annotation (such as when a letter
+  is totally unannotated), it's up to the reader to guess how that sound is pronounced from context
+  and/or decide for themselves, based on what's easiest to them. Annotations are often drawn with a
+  thinner or fainter line than the letter itself (or in a different color), so the basic letter
+  underneath stays legible.</p>
 
   <pre data-table="consonantAnnotations">
 | Mark                       | Meaning                                      | Examples |
 |----------------------------|----------------------------------------------|----------|
 | Small circle               | Voiceless                                    | <span data-glyph="K" data-marks="voiceless" data-size="3.5"></span> <span data-glyph="T" data-marks="voiceless" data-size="3.5"></span> <span data-glyph="H" data-marks="voiceless" data-size="3.5"></span> |
 | Chevron                    | Voiced                                       | <span data-glyph="K" data-marks="voiced" data-size="3.5"></span> <span data-glyph="T" data-marks="voiced" data-size="3.5"></span> <span data-glyph="H" data-marks="voiced" data-size="3.5"></span> |
-| Nested chevrons            | Implosive (and voiced, unless a circle is added) | <span data-glyph="K" data-marks="implosive" data-size="3.5"></span> <span data-glyph="T" data-marks="implosive" data-size="3.5"></span> <span data-glyph="P" data-marks="implosive" data-size="3.5"></span> |
-| Bars above or below        | Place group (see below)                      | <span data-glyph="M" data-marks="labial" data-size="3.5"></span> <span data-glyph="T" data-marks="coronal" data-size="3.5"></span> <span data-glyph="K" data-marks="dorsal" data-size="3.5"></span> <span data-glyph="H" data-marks="guttural" data-size="3.5"></span> |
-| Ticks across the bars      | Place within the group (see below)           | <span data-glyph="T" data-marks="dental" data-size="3.5"></span> <span data-glyph="T" data-marks="alveolar" data-size="3.5"></span> <span data-glyph="T" data-marks="postalveolar" data-size="3.5"></span> |
-| Curves around the middle   | Lateral                                      | <span data-glyph="L" data-marks="lateral" data-size="3.5"></span> <span data-glyph="C" data-marks="lateral" data-size="3.5"></span> <span data-glyph="!" data-marks="lateral" data-size="3.5"></span> |
-| Solid square in the middle | Central                                      | <span data-glyph="L" data-marks="central" data-size="3.5"></span> <span data-glyph="C" data-marks="central" data-size="3.5"></span> <span data-glyph="!" data-marks="central" data-size="3.5"></span> |
+| Nested chevrons            | Implosive (voiced, unless circled)           | <span data-glyph="K" data-marks="implosive" data-size="3.5"></span> <span data-glyph="T" data-marks="implosive" data-size="3.5"></span> <span data-glyph="P" data-marks="implosive" data-size="3.5"></span> |
+| Overbar                    | Labial articulation group                    | <span data-glyph="M" data-marks="labial" data-size="3.5"></span> <span data-glyph="F" data-marks="labial" data-size="3.5"></span> <span data-glyph="!" data-marks="labial" data-size="3.5"></span> |
+| Twe upper bars             | Coronal articulation group                   | <span data-glyph="N" data-marks="coronal" data-size="3.5"></span> <span data-glyph="T" data-marks="coronal" data-size="3.5"></span> <span data-glyph="L" data-marks="coronal" data-size="3.5"></span> |
+| Twe lower bars             | Dorsal articulation group                    | <span data-glyph="K" data-marks="dorsal" data-size="3.5"></span> <span data-glyph="T" data-marks="dorsal" data-size="3.5"></span> <span data-glyph="H" data-marks="dorsal" data-size="3.5"></span> |
+| Underbar                   | Gutteral articulation group                  | <span data-glyph="H" data-marks="guttural" data-size="3.5"></span> <span data-glyph="!" data-marks="guttural" data-size="3.5"></span> |
+| Vertical ticks on the bars | Articulation place within group (see below)  | <span data-glyph="H" data-marks="pharyngeal" data-size="3"></span> <span data-glyph="H" data-marks="epiglottal" data-size="3"></span> <span data-glyph="H" data-marks="glottal" data-size="3"> |
 | Open arc above             | Approximant                                  | <span data-glyph="L" data-marks="approximant" data-size="3.5"></span> |
 | Short stroke above         | Tap                                          | <span data-glyph="L" data-marks="tap" data-size="3.5"></span> |
 | Zigzag above               | Trill                                        | <span data-glyph="L" data-marks="trill" data-size="3.5"></span> |
+| Curves around the middle   | Lateral                                      | <span data-glyph="L" data-marks="lateral" data-size="3.5"></span> <span data-glyph="C" data-marks="lateral" data-size="3.5"></span> <span data-glyph="!" data-marks="lateral" data-size="3.5"></span> |
+| Solid square in the middle | Central                                      | <span data-glyph="L" data-marks="central" data-size="3.5"></span> <span data-glyph="C" data-marks="central" data-size="3.5"></span> <span data-glyph="!" data-marks="central" data-size="3.5"></span> |
 | Rising swoosh below        | Curled tongue (retroflex)                    | <span data-glyph="C" data-marks="curl" data-size="3.5"></span> <span data-glyph="T" data-marks="curl" data-size="3.5"></span> |
 | Arching swoosh below       | Domed tongue (alveolo-palatal)               | <span data-glyph="C" data-marks="domed" data-size="3.5"></span> |
 | Both swooshes              | Neutral tongue                               | <span data-glyph="C" data-marks="neutral" data-size="3.5"></span> |
-| Diagonals off the ends     | Emphatic click (ending a quote)              | <span data-glyph="," data-size="3.5"></span> |
-| Line along the baseline    | Joins a click inside a word to its neighbors | <span data-glyph="a'a" data-size="3.5"></span> |
   </pre>
 
-  <h4>Phonation</h4>
+  <p>Annotations, like letters, are designed to be mildly synesthetic. Voiceless sounds are
+  smooth, so they get a round mark, while voiced sounds vibrate, so they get a pointed one.
+  (Put a hand on your throat while saying "sss" and then "zzz" to feel the difference.)
+  The voicing marks sit near the vertical middle of a letter, in whichever space the letter
+  leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
+  <code>`P`</code> (which rises above it).> <code>`H`</code> carries its mark above the line,
+  leaving space below for its place bars.</p>
 
-  <p>Voiceless sounds are smooth, so they get a round mark, while voiced sounds vibrate, so they get
-  a pointed one. (Put a hand on your throat while saying "sss" and then "zzz" to feel the
-  difference.) The voicing marks sit near the vertical middle of a letter, in whichever space the
-  letter leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
-  <code>`P`</code> (which rises above it). <code>`H`</code> carries its mark above the line, leaving
-  the space below for its place bars, and the click carries its mark below.</p>
+  <p>Implosives, a linguistically rare sound, are indicated with a second chevron nested against
+  the voiced one. This is an exception to every mark pinning down a single aspect: since implosives
+  are almost always voiced, the nested chevrons mean "implosive, and voiced by default." (Add a
+  voiceless circle on top to make voiceless implosives.) The voiced mark alone doesn't rule out an
+  implosive, but since they're rare, it's normal to avoid them unless explicit.</p>
 
-  <p>Implosives get a second chevron nested against the voiced one. This is a deliberate exception
-  to every mark pinning down a single aspect: since implosives are almost always voiced, the nested
-  chevrons mean "implosive, and voiced unless a circle says otherwise." The voiced mark alone doesn't
-  rule out an implosive, but since implosives always carry their own mark, a plain voiced sound and
-  its implosive counterpart never share a glyph.</p>
-
-  <h4>Place of articulation</h4>
-
-  <p>Bars name the broad region of the mouth, following a pattern that also runs through the
-  letterforms themselves: toward the top means toward the lips, and toward the bottom means toward
-  the throat. A single bar marks one of the two ends (the lips or the larynx), and doubling a bar
-  steps one region inward, toward the middle of the mouth. A tick across the bars picks the place
-  within the region: left for the front place, right for the back one, and both for the place in
-  between. The bars alone are a perfectly good vague spelling.</p>
+  <p>Overbars/underbars indentify the broad region of the mouth where the sound is made, known as
+  the articulation group. To specify an even more precise place (rare), one or two vertical ticks
+  are added. A left tick indicates the front place, right indicates the back, and a left and right
+  tick together indicate the place in between.</p>
 
   <pre data-table="placeGroups">
 | Group    | Bars | Side  | Places (front to back)          | Examples |
@@ -3024,26 +3010,10 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 | guttural | 1    | below | pharyngeal, epiglottal, glottal | <span data-glyph="H" data-marks="guttural" data-size="3"></span> <span data-glyph="H" data-marks="pharyngeal" data-size="3"></span> <span data-glyph="H" data-marks="epiglottal" data-size="3"></span> <span data-glyph="H" data-marks="glottal" data-size="3"></span> |
   </pre>
 
-  <p>Two letters shift their bars. <code>`H`</code> is only a line, so its bars move in toward the
-  baseline. The click's lower bars move all the way up, so its guttural bar runs straight through the
-  baseline, which keeps the glottal stop the crossbar it has always been. Its dorsal pair then sits
-  between its coronal and guttural bars, still ordered from lips to throat.</p>
-
-  <p><span data-glyph="H" data-marks="velar" data-size="2.4"></span> <span data-glyph="!" data-marks="palatal" data-size="2.4"></span> <span data-glyph="!" data-marks="glottal" data-size="2.4"></span></p>
-
-  <h4>Channel and manner</h4>
-
-  <p>Lateral sounds, where air escapes around the sides of the tongue, get a pair of curves around
-  the middle of the letter, like air flowing around both sides. Central sounds get a solid square in
-  the same spot. The click needs channel to tell ǃ from ǁ, and <code>`L`</code> and
-  <code>`C`</code> use it too.</p>
-
-  <p>The sounds of <code>`L`</code> also differ in manner, marked above the line: an open arc for an
-  approximant (no contact), a short stroke for a tap (one brief contact), and a zigzag for a trill
-  (repeated contact). The other letters already fix their manner, so these marks only appear on
-  <code>`L`</code>.</p>
-
-  <h4>Coronal posture</h4>
+  <p>The sounds of <code>`L`</code> are the most diverse. Manner is marked above the line: an open
+  arc indicates an approximant (no contact), a short stroke for a tap (one brief contact), and a
+  zigzag for a trill (repeated contact). The other letters already fix their manner, so these marks
+  only appear on <code>`L`</code>.</p>
 
   <p>Sounds made with the tip or blade of the tongue can differ in how the tongue is shaped, shown by
   a swoosh below the letter. A curled (retroflex) tongue gets a swoosh that rises to the right, like
@@ -3051,23 +3021,45 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
   the raised blade. A neutral tongue gets both at once. Posture implies a coronal place, and coronal
   sounds never use the lower bars, so the space below is always free for it.</p>
 
-  <h4>The click</h4>
+  <p>TODO: Vowel annotations are still being designed. In the meantime, the tentative plan is to have
+  vowels annotated with small chevrons and arrows beneath the letter, along with a similar overbar or
+  underbar to the one used for consonants. The chevron gives tenseness (pointing right for a tense
+  vowel, left for a lax one), the arrow gives backness, and the bars give height. In many contexts,
+  vowels don't get rendered with annotations, but here are the annotations for the most common
+  vowel sounds of English.</p>
 
-  <p>Two marks on the click describe its role rather than its sound. A quote is closed with
-  diagonals off the ends of the bar, matching its more emphatic pronunciation. A click inside a word
-  joins its neighbors with a line along the baseline, which for the glottal stop simply extends its
-  guttural bar across the whole width. The sentence-dividing click, written "." in romanized text, is
-  left bare, since its pronunciation varies.</p>
+<pre data-table="englishVowelAnnotations">
+| Sound (IPA) | As in...         | Letter   | Annotation | Glyph |
+|:-----------:|------------------|----------|------------|:-----:|
+| ɪ | "i" in "sit" | `I` | Left-pointing chevron beneath | <span data-glyph="ɪ" data-size="3"></span> |
+| i | "ea" in "seat" | `I` | Right-pointing chevron beneath (usually elided) | <span data-glyph="i" data-size="3"></span> |
+| ə | "u" in "upon" | `A` | Right-pointing chevron beneath | <span data-glyph="ə" data-size="3"></span> |
+| ɛ | "e" in "dress" | `A` | Overbar | <span data-glyph="ɛ" data-size="3"></span> |
+| æ | "a" in "cat" | `A` | Overbar, left-pointing chevron beneath | <span data-glyph="æ" data-size="3"></span> |
+| ʌ | "u" in "bun" | `A` | Underbar | <span data-glyph="ʌ" data-size="3"></span> |
+| ɑ | "a" in "palm" | `A` | Left-pointing arrow and underbar beneath | <span data-glyph="ɑ" data-size="3"></span> |
+| u | "ou" in "soup" | `U` | Right-pointing chevron beneath (usually elided) | <span data-glyph="u" data-size="3"></span> |
+| ʊ | "oo" in "foot" | `U` | Left-pointing chevron beneath | <span data-glyph="ʊ" data-size="3"></span> |
+| aɪ | "ie" in "pie" | `A`, `I` | Right-pointing chevron beneath the second | <span data-glyph="ai" data-size="3"></span> |
+| eɪ | "ay" in "may" | `I`, `I` | Left-pointing arrow beneath the first, right-pointing chevron beneath the second | <span data-glyph="ei" data-size="3"></span> |
+| oʊ | "oa" in "goat" | `U`, `U` | Left-pointing arrow beneath the first, right-pointing chevron beneath the second | <span data-glyph="ou" data-size="3"></span> |
+| aʊ | "ow" in "how" | `A`, `U` | Right-pointing chevron beneath the second | <span data-glyph="au" data-size="3"></span> |
+  </pre>
 
-  <h4 id="consonant-features">Every consonant</h4>
+  <p>Glides like the ones at the start of "yes" and "west" and affricates like the ones in "jump"
+  and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
+  in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
 
-  <p>This table gives every consonant in the alphabet its phonation, place, channel, manner, and
-  posture, as far as they matter, and these features decide how it's drawn. Written with an IPA
-  character, a sound gets the fewest marks that tell it apart from the other sounds of its letter, as
-  shown. Romanized letters get fewer still: just enough to tell them apart from each other, which
-  covers the distinctions an English reader needs (<code>`k`</code> from <code>`g`</code>,
+  <h4>Minimal Markings</h4>
+
+  <p>Computers don't have Papsa keyboards (yet!), so we need an encoding scheme to map familiar
+  symbols to Papsa symbols. We'll discuss this more in the Font subsection, below. But regardless
+  of the specific method, it's typical to relate letters to the least-annotated Papsa glyph available.
+  Specific IPA characters, for example, use the fewest marks that tell it apart from the other sounds
+  of its Papsa letter. Romanized letters get fewer still: just enough to tell them apart from each other,
+  which covers the distinctions an English reader needs (<code>`k`</code> from <code>`g`</code>,
   <code>`n`</code> from <code>`ŋ`</code>, and so on). Anything narrower is written with the combining
-  marks in the <a href="#script-font">Font</a> section.</p>
+  marks defined in the <a href="#script-font">Font</a> section.</p>
 
   <pre class="tall" data-table="consonantFeatures">
 | Sound | Letter | Phonation | Place        | Channel | Manner      | Posture | Glyph |
@@ -3144,35 +3136,6 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 | ʔ     | !      | voiceless | glottal      |         |             |         | <span data-glyph="!" data-ipa="ʔ" data-size="3.2"></span> |
 | ʡ     | !      | voiceless | epiglottal   |         |             |         | <span data-glyph="!" data-ipa="ʡ" data-size="3.2"></span> |
   </pre>
-
-  <h4>Vowels</h4>
-
-  <p>TODO: Vowel annotations are still being redesigned to fit the system above. In the meantime,
-  vowels use an older scheme of small chevrons and arrows beneath the letter, along with bars above
-  and below. In many contexts vowels go unannotated, but here are the current annotations for the
-  most common vowel sounds of English.</p>
-
-<pre data-table="englishVowelAnnotations">
-| Sound (IPA) | As in...         | Letter   | Annotation | Glyph |
-|:-----------:|------------------|----------|------------|:-----:|
-| ɪ | "i" in "sit" | `I` | Left-pointing chevron beneath | <span data-glyph="ɪ" data-size="3"></span> |
-| i | "ea" in "seat" | `I` | Right-pointing chevron beneath (usually elided) | <span data-glyph="i" data-size="3"></span> |
-| ə | "u" in "upon" | `A` | Right-pointing chevron beneath | <span data-glyph="ə" data-size="3"></span> |
-| ɛ | "e" in "dress" | `A` | Overbar | <span data-glyph="ɛ" data-size="3"></span> |
-| æ | "a" in "cat" | `A` | Overbar, left-pointing chevron beneath | <span data-glyph="æ" data-size="3"></span> |
-| ʌ | "u" in "bun" | `A` | Underbar | <span data-glyph="ʌ" data-size="3"></span> |
-| ɑ | "a" in "palm" | `A` | Left-pointing arrow and underbar beneath | <span data-glyph="ɑ" data-size="3"></span> |
-| u | "ou" in "soup" | `U` | Right-pointing chevron beneath (usually elided) | <span data-glyph="u" data-size="3"></span> |
-| ʊ | "oo" in "foot" | `U` | Left-pointing chevron beneath | <span data-glyph="ʊ" data-size="3"></span> |
-| aɪ | "ie" in "pie" | `A`, `I` | Right-pointing chevron beneath the second | <span data-glyph="ai" data-size="3"></span> |
-| eɪ | "ay" in "may" | `I`, `I` | Left-pointing arrow beneath the first, right-pointing chevron beneath the second | <span data-glyph="ei" data-size="3"></span> |
-| oʊ | "oa" in "goat" | `U`, `U` | Left-pointing arrow beneath the first, right-pointing chevron beneath the second | <span data-glyph="ou" data-size="3"></span> |
-| aʊ | "ow" in "how" | `A`, `U` | Right-pointing chevron beneath the second | <span data-glyph="au" data-size="3"></span> |
-  </pre>
-
-  <p>Glides like the ones at the start of "yes" and "west" and affricates like the ones in "jump"
-  and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
-  in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
 
   <details class="spec-code"><summary class="code-title">Diacritic Drawing</summary><pre><code>
 // Annotation marks, each drawn relative to an anchor point on the letter it annotates (and not drawn
