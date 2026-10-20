@@ -2877,6 +2877,30 @@ const basicStrokes = {
 };
 const letterStrokes = (ltr) => ltr === '!' ? {x:180, y:-396, segs:[[180,396]]} : {x:0, y:0, segs:basicStrokes[ltr]};
 
+// A squeezed `U` has its big loop filled in (see below). The loop is where the path of the given curves
+// (starting at the origin) crosses itself, and it's traced finely enough that the pen hides its corners.
+const loopFill = (curves) => {
+  const pts = [[0, 0]];
+  for (const c of curves) {
+    const p = pts.at(-1);
+    for (let i = 1; i <= 64; i++) {
+      const t = i / 64, u = 1 - t, k = [u*u*u, 3*u*u*t, 3*u*t*t, t*t*t];
+      pts.push([0, 1].map(j => k[0]*p[j] + k[1]*c[j] + k[2]*c[2+j] + k[3]*c[4+j]));
+    }
+  }
+  const cross = (a, b) => a[0]*b[1] - a[1]*b[0], sub = (a, b) => [a[0]-b[0], a[1]-b[1]];
+  for (let j = 2; j < pts.length - 1; j++) for (let i = 0; i < j - 1; i++) {
+    const ab = sub(pts[i+1], pts[i]), cd = sub(pts[j+1], pts[j]), ac = sub(pts[j], pts[i]), den = cross(ab, cd);
+    const s = cross(ac, cd) / den, t = cross(ac, ab) / den;
+    if (s >= 0 && s < 1 && t >= 0 && t < 1) {
+      const [x, y] = [pts[i][0] + s*ab[0], pts[i][1] + s*ab[1]];
+      return { x, y, segs: [...pts.slice(i+1, j+1), [x, y]] };
+    }
+  }
+  fail("These curves don't form a loop.");
+};
+const squeezedFills = { U: loopFill([basicStrokes.U[0], basicStrokes.U[3]]) };
+
 const segSVGCmd = (s) => s.length === 2 ? 'L' : s.length === 6 ? 'C' : fail("Unrecognized SVG Command: "+s);
 // The w parameter is a scaling factor for the x-coordinate {0.5, 1}, that enables half-width vowels.
 const segmentSVG = (s,x,y,w) => s.reduce((r,p,i) => r+' '+(i % 2 === 0 ? p*w + x : p + y), segSVGCmd(s));
@@ -2913,7 +2937,7 @@ const strokeSVG = (s,x,y,w) => s.segs.reduce((r,seg) => r+' '+segmentSVG(seg,x,y
 const letterWidth = (ltr,i,wrd) => isV(ltr) && (isV(wrd[i+1]) || isV(wrd[i-1])) ? 180 : 360;
 
 const textPathData = (txt, diacriticLookup) => {
-  let letterPath = '', diacriticPath = '', x = 0;
+  let letterPath = '', diacriticPath = '', fillPath = '', x = 0;
   // Clicks written as ".", ",", or "!" stand apart like independent words.
   for (const wrd of txt.match(/[.,!]|[^\s.,!]+/g) ?? []) {
     if (x > 0) x += 180; // Word gap
@@ -2923,6 +2947,7 @@ const textPathData = (txt, diacriticLookup) => {
       const baseLtr = baseLetter(ch);
       const w = letterWidth(idxs[i], i, idxs);
       letterPath += strokeSVG(letterStrokes(baseLtr),x,0,w/360);
+      if (w < 360 && squeezedFills[baseLtr]) fillPath += strokeSVG(squeezedFills[baseLtr],x,0,w/360) + ' Z';
       for (const d of diacriticLookup(ch)) {
         const a = d.anchor(baseLtr);
         if (a) for (const s of d.strokes) diacriticPath += strokeSVG(s,x+a[0]*w/360,a[1],w/360);
@@ -2930,14 +2955,14 @@ const textPathData = (txt, diacriticLookup) => {
       x += w;
     });
   }
-  return { letterPath, diacriticPath, width: x };
+  return { letterPath, diacriticPath, fillPath, width: x };
 };
 
 // Stroke weight is 36 units, with annotations being only 24. The vertical box is scriptExtent (worked
 // out from the strokes in the Diacritic Drawing block), so every drawing shares it and baselines line up.
 // (In this page's source, the tags below are written with &amp;lt; so the HTML parser leaves them as code.
 // Unescaped, they became real elements and the script received the template with its markup missing.)
-const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
+const glyphSVG = (txt, { letterPath, diacriticPath, fillPath, width }, size) => {
   const pad = 18, { top, bottom } = scriptExtent;
   const w = width + 2*pad, h = bottom - top;
   const label = txt.replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`); // Escape XML
@@ -2947,6 +2972,7 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
       fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
     &lt;title>${label}&lt;/title>
     &lt;path d="${letterPath}" stroke-width="36"/>
+    ${fillPath && `&lt;path d="${fillPath}" fill="currentColor" stroke="none"/>`}
     ${diacriticPath && `&lt;path d="${diacriticPath}" stroke-width="24" opacity="0.5"/>`}
   &lt;/svg>`;
 };
@@ -3434,8 +3460,7 @@ const scriptExtent = (() => {
 document.querySelectorAll('[data-glyph]').forEach(el => {
   const listed = el.dataset.marks?.split(' ') ?? (el.dataset.ipa !== undefined ? ipaMarks[el.dataset.ipa] ?? [] : undefined);
   const lookup = (ch) => (listed ?? charMarks[ch] ?? []).map(m => glyphMarks[m] ?? fail(`There's no mark named "${m}".`));
-  const { letterPath, diacriticPath, width } = textPathData(el.dataset.glyph, lookup);
-  el.innerHTML = glyphSVG(el.dataset.glyph, letterPath, diacriticPath, width, +el.dataset.size || 2.4);
+  el.innerHTML = glyphSVG(el.dataset.glyph, textPathData(el.dataset.glyph, lookup), +el.dataset.size || 2.4);
 });
 
 // The SVG half of the script playground (see the Font section). It lives here rather than in the Font
@@ -3445,8 +3470,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   const input = document.getElementById('script-input'), svgOut = document.getElementById('script-svg-out');
   const draw = () => {
     try {
-      const { letterPath, diacriticPath, width } = textPathData(input.value, (ch) => (charMarks[ch] ?? []).map(m => glyphMarks[m]));
-      svgOut.innerHTML = glyphSVG(input.value, letterPath, diacriticPath, width, 3.5);
+      svgOut.innerHTML = glyphSVG(input.value, textPathData(input.value, (ch) => (charMarks[ch] ?? []).map(m => glyphMarks[m])), 3.5);
     } catch (e) {
       svgOut.textContent = e.message;
     }
@@ -3488,7 +3512,8 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   or <code>`a`</code>, or a narrower consonant), type one of these combining characters after the
   letter. Marks can be stacked, and they shrink along with a squeezed vowel. A full place is its
   group's bar followed by one or both tick characters (both for a middle place). The font draws the
-  ticks to match the bar, so type them right after it. Neutral posture is both hooks together, and a vowel takes the bar and tick characters for its height and backness.</p>
+  ticks to match the bar, so type them right after it. Neutral posture is both hooks together, and a vowel takes the bar and tick characters for its height and backness.
+  A squeezed <code>`u`</code> is filled in, unless it's followed by variation selector 1 (U+FE00), which keeps it hollow.</p>
 
   <pre data-table="combiningMarks">
 | Mark        | Character | Unicode name                         | Example |
@@ -3662,14 +3687,22 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     };
     make('.notdef', () => ({ advance: W }));
     const space = make('space', () => ({ advance: GAP }));
-    // A letter drawn w units wide after a gap, with its marks, placed just as textPathData places it.
-    const letter = (ltr, marks = [], gap = 0, w = W) => make(['letter', ltr, marks, gap, w].join('|'), () => {
+    // A letter drawn w units wide after a gap, with its marks, placed just as textPathData places it. A
+    // squeezed letter is filled in unless it's hollow.
+    const letter = (ltr, marks = [], gap = 0, w = W, hollow = false) => make(['letter', ltr, marks, gap, w, hollow].join('|'), () => {
       const s = w / W, at = ([ax, ay]) => (px, py) => [gap + (ax + px) * s, RAISE - ay - py];
       const markContours = marks.flatMap(m => {
         const a = glyphMarks[m].anchor(ltr);
         return a ? glyphMarks[m].strokes.flatMap(st => outline(st, at(a), MARK_PEN)) : [];
       });
-      return { letter: ltr, marks, x0: gap, s, advance: gap + w, contours: [...outline(letterStrokes(ltr), at([0, 0]), PEN), ...markContours] };
+      const fill = w < W && ! hollow && squeezedFills[ltr], fillContours = [];
+      if (fill) {
+        const pts = [[fill.x, fill.y], ...fill.segs].map(p => [...at([0, 0])(...p), true]);
+        const area = pts.reduce((a, [x, y], k) => a + x * pts[(k + 1) % pts.length][1] - y * pts[(k + 1) % pts.length][0], 0);
+        fillContours.push(area > 0 ? pts.reverse() : pts);  // Clockwise, like every other contour.
+      }
+      return { letter: ltr, marks, x0: gap, s, advance: gap + w,
+               contours: [...outline(letterStrokes(ltr), at([0, 0]), PEN), ...fillContours, ...markContours] };
     });
     const glyphOf = (ch, marks = charMarks[ch] ?? []) => WORD_CLICKS.has(ch) ? letter('!', marks, GAP) : letter(baseLetter(ch), marks);
 
@@ -3683,6 +3716,17 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     for (const ch of chars) { for (const c of [ch.toUpperCase(), ch.toLowerCase()]) map(c, () => glyphOf(ch, [])); await breathe(); }
 
     for (const g of [...glyphs]) if (vowelChars.has(g.letter)) { g.half = letter(g.letter, g.marks, 0, W / 2); await breathe(); }
+
+    // Variation selector 1 after a letter that fills in when squeezed keeps it hollow. Each such character
+    // maps to a copy of its glyph whose half-width twin is hollow.
+    const HOLLOW = 0xFE00, hollows = [];
+    for (const [cp, gid] of cmap) {
+      const { letter: ltr, marks, half } = glyphs[gid];
+      if ( ! half || ! squeezedFills[ltr]) continue;
+      const twin = letter(ltr, marks, 0, W, true);
+      glyphs[twin].half = letter(ltr, marks, 0, W / 2, true);
+      hollows.push([cp, twin]);
+    }
 
     // Combining marks. Each is drawn about its anchor, offset one letter to the left, so that a mark with
     // no letter to attach to still sits over the letter before it.
@@ -3828,9 +3872,15 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     }
     segs.push({ start: 0xFFFF, end: 0xFFFF, delta: 1 });
     const n = segs.length, range = 2 << Math.floor(Math.log2(n));
-    const cmapTable = bytes(w => w.u16(0, 2, 0, 3).u32(20).u16(3, 1).u32(20)
-      .u16(4, 16 + 8 * n, 0, 2 * n, range, Math.log2(range / 2), 2 * n - range)
+    const format4 = bytes(w => w.u16(4, 16 + 8 * n, 0, 2 * n, range, Math.log2(range / 2), 2 * n - range)
       .u16(...segs.map(s => s.end), 0, ...segs.map(s => s.start), ...segs.map(s => s.delta), ...segs.map(() => 0)));
+    // The variation sequences (see Glyphs), with code points as three bytes.
+    const u24 = (v) => [v >> 16, v >> 8, v];
+    const format14 = bytes(w => {
+      w.u16(14).u32(25 + 5 * hollows.length, 1).u8(...u24(HOLLOW)).u32(0, 21, hollows.length);
+      for (const [cp, gid] of hollows.sort((a, b) => a[0] - b[0])) w.u8(...u24(cp)).u16(gid);
+    });
+    const cmapTable = concat([bytes(w => w.u16(0, 3, 0, 3).u32(28).u16(0, 5).u32(28 + format4.length).u16(3, 1).u32(28)), format4, format14]);
 
     // ── The file ──
     // The table directory, then the tables, each padded to four bytes and checksummed.
@@ -3868,7 +3918,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
       const chars = (charMarks[ch] ?? []).flatMap(spell);
       return chars.length && chars.every(Boolean) && baseLetter(ch) !== '!' ? baseLetter(ch) + chars.join('') : ch;
     }).join('');
-    const { letterPath, diacriticPath, width } = textPathData(sample + ' ' + sample, ch => (charMarks[ch] ?? []).map(m => glyphMarks[m]));
+    const { letterPath, diacriticPath, fillPath, width } = textPathData(sample + ' ' + sample, ch => (charMarks[ch] ?? []).map(m => glyphMarks[m]));
     const scale = 1 / 6, pad = 12, mid = pad + Math.ceil(-scriptExtent.top * scale);  // 1/6 keeps every advance a whole pixel.
     const w = Math.ceil(width * scale) + 2 * pad, h = mid + Math.ceil(scriptExtent.bottom * scale) + pad;
     const ink = (draw) => {
@@ -3884,6 +3934,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
       ctx.setTransform(scale, 0, 0, scale, pad, mid);
       ctx.lineCap = ctx.lineJoin = 'round';
       for (const [d, lineWidth] of [[letterPath, PEN], [diacriticPath, MARK_PEN]]) { ctx.lineWidth = lineWidth; ctx.stroke(new Path2D(d)); }
+      ctx.fill(new Path2D(fillPath));
     });
     let differ = 0, inked = 0;
     for (let i = 3; i < viaFont.length; i += 4) {
