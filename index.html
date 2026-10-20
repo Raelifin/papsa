@@ -2970,8 +2970,8 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 | Overbar                    | Labial articulation group                    | <span data-glyph="M" data-marks="labial" data-size="3.5"></span> <span data-glyph="F" data-marks="labial" data-size="3.5"></span> <span data-glyph="!" data-marks="labial" data-size="3.5"></span> |
 | Two upper bars             | Coronal articulation group                   | <span data-glyph="N" data-marks="coronal" data-size="3.5"></span> <span data-glyph="T" data-marks="coronal" data-size="3.5"></span> <span data-glyph="L" data-marks="coronal" data-size="3.5"></span> |
 | Two lower bars             | Dorsal articulation group                    | <span data-glyph="K" data-marks="dorsal" data-size="3.5"></span> <span data-glyph="T" data-marks="dorsal" data-size="3.5"></span> <span data-glyph="H" data-marks="dorsal" data-size="3.5"></span> |
-| Underbar                   | Gutteral articulation group                  | <span data-glyph="H" data-marks="guttural" data-size="3.5"></span> <span data-glyph="!" data-marks="guttural" data-size="3.5"></span> |
-| Vertical ticks on the bars | Articulation place within group (see below)  | <span data-glyph="H" data-marks="pharyngeal" data-size="3"></span> <span data-glyph="H" data-marks="epiglottal" data-size="3"></span> <span data-glyph="H" data-marks="glottal" data-size="3"> |
+| Underbar                   | Guttural articulation group                  | <span data-glyph="H" data-marks="guttural" data-size="3.5"></span> <span data-glyph="!" data-marks="guttural" data-size="3.5"></span> |
+| Vertical ticks on the bars | Articulation place within group (see below)  | <span data-glyph="H" data-marks="pharyngeal" data-size="3"></span> <span data-glyph="H" data-marks="epiglottal" data-size="3"></span> <span data-glyph="H" data-marks="glottal" data-size="3"></span> |
 | Open arc above             | Approximant                                  | <span data-glyph="L" data-marks="approximant" data-size="3.5"></span> |
 | Short stroke above         | Tap                                          | <span data-glyph="L" data-marks="tap" data-size="3.5"></span> |
 | Zigzag above               | Trill                                        | <span data-glyph="L" data-marks="trill" data-size="3.5"></span> |
@@ -2987,7 +2987,7 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
   (Put a hand on your throat while saying "sss" and then "zzz" to feel the difference.)
   The voicing marks sit near the vertical middle of a letter, in whichever space the letter
   leaves empty, so they hang above <code>`K`</code> (which dips below the baseline) and below
-  <code>`P`</code> (which rises above it).> <code>`H`</code> carries its mark above the line,
+  <code>`P`</code> (which rises above it). <code>`H`</code> carries its mark above the line,
   leaving space below for its place bars.</p>
 
   <p>Implosives, a linguistically rare sound, are indicated with a second chevron nested against
@@ -2996,7 +2996,7 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
   voiceless circle on top to make voiceless implosives.) The voiced mark alone doesn't rule out an
   implosive, but since they're rare, it's normal to avoid them unless explicit.</p>
 
-  <p>Overbars/underbars indentify the broad region of the mouth where the sound is made, known as
+  <p>Overbars/underbars identify the broad region of the mouth where the sound is made, known as
   the articulation group. To specify an even more precise place (rare), one or two vertical ticks
   are added. A left tick indicates the front place, right indicates the back, and a left and right
   tick together indicate the place in between.</p>
@@ -3050,7 +3050,7 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
   and "chew" don't get letters of their own. They're built from existing letters (as with the "dj"
   in <a href="#phonology">Phonology</a>), and annotated if a collision needs clearing up.</p>
 
-  <h4>Minimal Markings</h4>
+  <h4 id="minimal-markings">Minimal Markings</h4>
 
   <p>Computers don't have Papsa keyboards (yet!), so we need an encoding scheme to map familiar
   symbols to Papsa symbols. We'll discuss this more in the Font subsection, below. But regardless
@@ -3142,7 +3142,6 @@ const glyphSVG = (txt, letterPath, diacriticPath, width, size) => {
 // at all on a letter with no anchor for it). Every consonant mark pins down one aspect of a sound; see
 // the Annotations section for the system.
 const isConsonantLetter = (l) => ! vowelChars.has(l);
-const onLetters = (...ltrs) => (l) => ltrs.length && ! ltrs.includes(l) ? undefined : [0, 0];
 const onConsonants = (a) => (l) => isConsonantLetter(l) ? a : undefined;
 
 // Phonation hangs in each letter's empty space: above the line on H, and below it on the click.
@@ -3155,15 +3154,16 @@ const implosiveAnchor = (l) => voiceAnchor[l] && [voiceAnchor[l][0], voiceAnchor
 // Place: bars name the group and ticks pick the place within it (see the placeGroups table). A single bar
 // sits at the letter's edge, and a double bar adds a second one 120 units further in.
 const placeEdge = 396, placeGap = 120, tickReach = 42, tickX = [72, 288];
-// H's bars sit closer to the baseline. The click's lower bars move up a full 396, so its guttural bar (and
-// with it the glottal stop) runs through the baseline.
-const placeShift = (l, side) => l === 'H' ? -side * 144 : l === '!' && side > 0 ? -396 : 0;
-const placeAnchor = (side) => (l) => isConsonantLetter(l) ? [0, placeShift(l, side)] : undefined;
 const placeGroupList = [...placeGroups['Group']].map(([name, row]) => ({
   name, bars: +row['Bars'], side: row['Side'] === 'above' ? -1 : 1,
   places: row['Places (front to back)'].split(',').map(p => p.trim()),
 }));
 const barDistances = (g) => g.bars === 1 ? [placeEdge] : [placeEdge, placeEdge - placeGap];  // Outer bar first.
+// H's bars sit closer to the baseline. The click's lower bars are centered on the baseline, so its guttural
+// bar (and with it the glottal stop) runs along it.
+const placeShift = (l, g) => l === 'H' ? -g.side * 144
+  : l === '!' && g.side > 0 ? -barDistances(g).reduce((a, b) => a + b) / g.bars : 0;
+const placeAnchor = (g) => (l) => isConsonantLetter(l) ? [0, placeShift(l, g)] : undefined;
 const barStrokes = (g) => barDistances(g).map(d => ({ x: 36, y: g.side * d, segs: [[324, g.side * d]] }));
 // A tick crosses every bar of its group, at the front (0) or back (1) end.
 const tickStroke = (g, end) => {
@@ -3187,8 +3187,8 @@ const glyphMarks = {
   implosive:   { anchor: implosiveAnchor,     strokes: [chevron(0), chevron(-54)] },
   // The tick characters on their own, drawn for a double bar above. The font redraws them to match the
   // group bar they're typed with (see the Font Builder).
-  frontTick:   { anchor: placeAnchor(-1), strokes: [tickStroke(defaultTickGroup, 0)] },
-  backTick:    { anchor: placeAnchor(-1), strokes: [tickStroke(defaultTickGroup, 1)] },
+  frontTick:   { anchor: placeAnchor(defaultTickGroup), strokes: [tickStroke(defaultTickGroup, 0)] },
+  backTick:    { anchor: placeAnchor(defaultTickGroup), strokes: [tickStroke(defaultTickGroup, 1)] },
   // Channel, centered at (180,0).
   lateral:     { anchor: onConsonants([0, 0]), strokes: [{ x: 126, y: -66, segs: [[90,-40, 90,40, 126,66]] },
                                                          { x: 234, y: -66, segs: [[270,-40, 270,40, 234,66]] }] },
@@ -3200,9 +3200,6 @@ const glyphMarks = {
   // Coronal posture, a swoosh below the letter. Neutral is curl and domed drawn together.
   curl:        { anchor: onConsonants([0, 474]), strokes: [{ x: 36, y: 0, segs: [[120,54, 240,48, 324,-42]] }] },
   domed:       { anchor: onConsonants([0, 474]), strokes: [{ x: 36, y: 0, segs: [[120,-54, 240,-48, 324,42]] }] },
-  // The click's roles: closing a quote, and joining its neighbors when it falls inside a word.
-  emphatic:    { anchor: onLetters('!'), strokes: [{ x: 72, y: -288, segs: [[180,-396]] }, { x: 72, y: 288, segs: [[180,396]] }] },
-  join:        { anchor: onLetters('!'), strokes: [{ x: 0, y: 0, segs: [[360,0]] }] },
   // TODO Vowel marks, still to be redesigned. Vowel marks hang under the arch, and the overbar sits a little
   // higher on a vowel, clear of its crown.
   overbar:     { anchor: l => vowelChars.has(l) ? [0, -60] : undefined, strokes: [{ x: 36, y: -396, segs: [[324,-396]] }] },
@@ -3219,10 +3216,10 @@ const placeOf = {};       // place name -> { group, index }
 const markSpelling = { neutral: ['curl', 'domed'] };
 for (const g of placeGroupList) {
   if (g.places.length > 3) reportSpecError('Diacritic Drawing', `The ${g.name} group has more places than ticks can tell apart.`);
-  glyphMarks[g.name] = { anchor: placeAnchor(g.side), strokes: barStrokes(g) };
+  glyphMarks[g.name] = { anchor: placeAnchor(g), strokes: barStrokes(g) };
   g.places.forEach((p, i) => {
     placeOf[p] = { group: g, index: i };
-    glyphMarks[p] = { anchor: placeAnchor(g.side), strokes: [...barStrokes(g), ...ticksFor(i).map(e => tickStroke(g, e))] };
+    glyphMarks[p] = { anchor: placeAnchor(g), strokes: [...barStrokes(g), ...ticksFor(i).map(e => tickStroke(g, e))] };
     markSpelling[p] = [g.name, ...ticksFor(i).map(e => ['frontTick', 'backTick'][e])];
   });
 }
@@ -3293,8 +3290,9 @@ const charMarks = {
   // TODO Vowels, still to be redesigned.
   e: ['back'], o: ['back'], 'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'],
   'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
-  // The click's grammatical forms. The sentence divider is left bare, since its pronunciation varies.
-  '.': [], ',': ['emphatic'], "'": ['glottal', 'join'],
+  // The click's grammatical forms. The sentence divider and quote closer are left bare, since their
+  // pronunciation varies, and the click inside a word takes the guttural bar that joins it to its neighbors.
+  '.': [], ',': [], "'": ['guttural'],
 };
 // Romanized consonants take the fewest marks that tell them apart from the other romanized letters of their
 // Papsa letter, which are the distinctions an English reader needs.
@@ -3386,7 +3384,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   other, so readers can distinguish <code class="script">`k`</code> (<code>`k`</code>) from
   <code class="script">`g`</code> (<code>`g`</code>), for example. IPA characters carry the marks
   that tell their sound apart from the rest of its letter (see
-  <a href="#consonant-features">Every consonant</a>), so the font can also set phonetic
+  <a href="#minimal-markings">Minimal Markings</a>), so the font can also set phonetic
   transcription. Because Papsa vowels are regular and flexible, and to make them more readable when
   squeezed together, <code>`u`</code>, <code>`a`</code>, and <code>`i`</code> are not annotated by
   default. (To support names and empower users, some other lowercase vowel characters are annotated,
