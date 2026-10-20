@@ -1017,7 +1017,7 @@ mainContentParsers.push((ctx, inp, out) => {
 mainContentParsers.push((_ctx, inp, out) => {
   if (inp[0]?.word === 'uip' || inp[0]?.word === 'uin') {
     const base = out.pop() ?? fail(inp[0].word+" needs preceding content");
-    return out.push({ ...inp.shift(), slot: base.slot, phraseContent: [base] }); // TODO Annotate more?
+    return out.push({ ...inp.shift(), slot: base.slot, phraseContent: [base] });
   }
 });
 </code></pre></details>
