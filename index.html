@@ -3268,8 +3268,8 @@ const glyphMarks = {
   // the baseline, and tenseness lower, centered where a pair of underbars would flank it.
   rounded:     { anchor: onVowels([126, 96]), strokes: [ring] },
   unrounded:   { anchor: onVowels([126, 69]), strokes: [chevron(0)] },
-  tense:       { anchor: onVowels([180, (placeEdge * 2 - placeGap) / 2]), strokes: [{ x: -24, y: -30, segs: [[24,0], [-24,30]] }] },
-  lax:         { anchor: onVowels([180, (placeEdge * 2 - placeGap) / 2]), strokes: [{ x: 24, y: -30, segs: [[-24,0], [24,30]] }] },
+  tense:       { anchor: onVowels([180, (placeEdge * 2 - placeGap) / 2]), strokes: [{ x: -96, y: -45, segs: [[96,0], [-96,45]] }] },
+  lax:         { anchor: onVowels([180, (placeEdge * 2 - placeGap) / 2]), strokes: [{ x: 96, y: -45, segs: [[-96,0], [96,45]] }] },
 };
 glyphMarks.neutral = { anchor: glyphMarks.curl.anchor, strokes: [...glyphMarks.curl.strokes, ...glyphMarks.domed.strokes] };
 
