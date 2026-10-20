@@ -224,6 +224,21 @@
     .ilg-open { border-right: none; border-radius: 3px 0 0 3px; }
     .ilg-close { border-left: none; border-radius: 0 3px 3px 0; }
     .ilg-status { font-size: 0.78rem; color: #b83d00; margin-top: 0.5rem; }
+
+    /* A single word in the translator: its definition, or what an English lookup found */
+    .def, .lookup-note, .lookup-none { font-family: system-ui, sans-serif; }
+    .def { font-size: 0.95rem; color: #222; }
+    .def-head { font-family: 'Courier New', monospace; font-size: 1.2rem; color: #1a5faa; }
+    .def-ipa { color: #999; font-size: 0.85rem; }
+    .def-type { color: #aaa; font-size: 0.72rem; }
+    .def-row { margin: 0.15rem 0; }
+    .def-key { display: inline-block; width: 4rem; color: #767676; font-size: 0.8rem; }
+    .lookup-note { font-size: 0.85rem; color: #555; margin-bottom: 0.3rem; }
+    .lookup-note.well-formed { font-size: 0.82rem; color: #2a7a2a; margin-bottom: 0.4rem; }
+    .lookup-hit { margin: 0.1rem 0; }
+    .lookup-hit a { font-family: 'Courier New', monospace; color: #1a5faa; }
+    .lookup-gloss { color: #777; font-size: 0.85rem; }
+    .lookup-none { color: #777; }
     #translate-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: currentColor; }
 
     hr { border: none; border-top: 1px solid #ddd; margin: 2.5rem 0; }
@@ -4717,7 +4732,6 @@ addEventListener('scroll', onTipScroll, { passive: true, capture: true });
 addEventListener('resize', onTipScroll);
 
 // ── Interactive Translator ──────────────────────────────────────────────────────────────────────
-// TODO a bunch of this code is hacky and should be refactored
 
 const inp  = document.getElementById('translate-input');
 const out = document.getElementById('translate-output');
@@ -4826,11 +4840,11 @@ function definitionHTML(t) {
     if (t.notes)            rows.push(['note', t.notes]);
   }
   const body = rows.map(([k, v]) =>
-    `<div style="margin:.15rem 0"><span style="display:inline-block;width:4rem;color:#767676;font-size:.8rem">${k}</span>${escapeHTML(v)}</div>`).join('');
-  return `<div style="font-family:system-ui,sans-serif;font-size:.95rem;color:#222">
-    <div style="font-family:'Courier New',monospace;font-size:1.2rem;color:#1a5faa">${scriptSpan(t.word, 'ilg-script').outerHTML} ${escapeHTML(t.word)}
-      <span style="color:#999;font-size:.85rem">${safePronounce(t.word)}</span>
-      <span style="color:#aaa;font-size:.72rem">\u00B7 ${t.type}</span></div>${body}</div>`;
+    `<div class="def-row"><span class="def-key">${k}</span>${escapeHTML(v)}</div>`).join('');
+  return `<div class="def">
+    <div class="def-head">${scriptSpan(t.word, 'ilg-script').outerHTML} ${escapeHTML(t.word)}
+      <span class="def-ipa">${safePronounce(t.word)}</span>
+      <span class="def-type">\u00B7 ${t.type}</span></div>${body}</div>`;
 }
 
 function reverseSearch(query) {
@@ -4859,12 +4873,12 @@ function translate(text) {
     // Unknown single word: an English query and/or a well-formed (undefined) name.
     let html = '';
     if (tok.type === 'name' || tok.type === 'pronoun')
-      html += `<div style="font-family:system-ui,sans-serif;font-size:.82rem;color:#2a7a2a;margin-bottom:.4rem">\u2018${escapeHTML(t)}\u2019 is a well-formed Papsa ${tok.type}.</div>`;
+      html += `<div class="lookup-note well-formed">\u2018${escapeHTML(t)}\u2019 is a well-formed Papsa ${tok.type}.</div>`;
     const hits = reverseSearch(t).slice(0, 12);
     if (hits.length)
-      html += `<div style="font-family:system-ui,sans-serif;font-size:.85rem;color:#555;margin-bottom:.3rem">Papsa words meaning \u201C${escapeHTML(t)}\u201D:</div>` +
-        hits.map(h => `<div style="margin:.1rem 0"><a href="#translate" data-word="${escapeHTML(h.word)}" style="font-family:'Courier New',monospace;color:#1a5faa">${escapeHTML(h.word)}</a> <span style="color:#777;font-size:.85rem">\u2014 ${escapeHTML(firstFew(h.gloss, 3))}</span></div>`).join('');
-    out.innerHTML = html || `<div style="font-family:system-ui,sans-serif;color:#777">No dictionary match for \u201C${escapeHTML(t)}\u201D.</div>`;
+      html += `<div class="lookup-note">Papsa words meaning \u201C${escapeHTML(t)}\u201D:</div>` +
+        hits.map(h => `<div class="lookup-hit"><a href="#translate" data-word="${escapeHTML(h.word)}">${escapeHTML(h.word)}</a> <span class="lookup-gloss">\u2014 ${escapeHTML(firstFew(h.gloss, 3))}</span></div>`).join('');
+    out.innerHTML = html || `<div class="lookup-none">No dictionary match for \u201C${escapeHTML(t)}\u201D.</div>`;
     return;
   }
 
