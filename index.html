@@ -3290,9 +3290,10 @@ const charMarks = {
   // TODO Vowels, still to be redesigned.
   e: ['back'], o: ['back'], 'ɪ': ['lax'], 'ʊ': ['lax'], 'ə': ['tense'],
   'ɛ': ['overbar'], 'æ': ['overbar', 'lax'], 'ʌ': ['underbar'], 'ɑ': ['back', 'underbar'],
-  // The click's grammatical forms. The sentence divider and quote closer are left bare, since their
-  // pronunciation varies, and the click inside a word takes the guttural bar that joins it to its neighbors.
-  '.': [], ',': [], "'": ['guttural'],
+  // The click's grammatical forms. The sentence divider is left bare, since its pronunciation varies. The
+  // quote closer is drawn as a palatal click, and the click inside a word takes the guttural bar that joins it
+  // to its neighbors.
+  '.': [], ',': ipaMarks['ǂ'], "'": ['guttural'],
 };
 // Romanized consonants take the fewest marks that tell them apart from the other romanized letters of their
 // Papsa letter, which are the distinctions an English reader needs.
