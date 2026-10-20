@@ -3485,32 +3485,23 @@ const scriptExtent = (() => {
   
   <h3>Numerals and Symbols</h3>
 
-  <p>Papsa's number words are already compact and easy to write. Writing one-hundred-thirteen as 113
-  takes three strokes, while <code>`slifat`</code> takes one fluid stroke covering about twice the ground,
-  and where a number is expected, just <code>`ifat`</code> is about as compact. So that's usually how
-  people write numbers on a page or a whiteboard. But
-  numbers are everywhere, and they're read far more often than they're written, so Papsa also has
-  <strong>numerals</strong>, which give up some ease of writing to be even more compact. They suit computers
-  best, where they cost nothing to draw.</p>
+  <p>Papsa's number words are naturally compact and easy to write. Writing one-hundred-thirteen as 113
+  takes three strokes, while <code>`slifat`</code> takes one fluid stroke covering only about twice as
+  much horizontal space. In places where numbers are expected (equations, spreadsheets, etc.), one can
+  use <code>`ifat`</code> to be almost as compact. When writing numbers on a page or a whiteboard, that's
+  the norm. But numbers are everywhere, and it's still useful to have numerals that are optimized for
+  being readable and clear in situations where letters aren't as good, at the expense of being harder
+  to write (when not at a computer).</p>
 
-  <p>There's a numeral for each compact digit from 0 to 35, written little-endian like the words, so
-  the ones come first. Every numeral fits in an equilateral triangle, which makes them easy to read from
-  any angle (and handy on twenty-sided dice). The first digit points up, with the triangle's base on the
-  bottom, the next digit points down, and so on, so that each triangle nests between its neighbors and a
-  row of digits is one letter wider than it has digits.</p>
-
-  <p>Most digits are built from earlier ones by adding something. Zero is a circle that almost fills
-  the triangle, and one is a pip in its center. Two surrounds that pip with a small triangle pointing the
-  other way. Three puts a pip in each corner, six a pair of pips near each corner, and nine (six plus
-  three) a trio. Twelve outlines the corners of the triangle, and twenty-four outlines all of it, with a
-  line in from the middle of each side to a corner of two's triangle. Every other digit adds these
-  together, so seven is six and one, and thirty-five is twenty-four, nine, and two.</p>
+  <p>Each compact digit from 0 to 35 has a numeral that fits in an equilateral triangle. The first digit
+  in a number points up, the next digit points down, and so on, so that each triangle nests between its
+  neighbors and a row of digits is dense and readable as a single number.</p>
 
   <pre data-table="numerals">
-| Sixes | +0 | +1 | +2 | +3 | +4 | +5 |
+|       |   +0  |   +1  |   +2  |   +3  |   +4  |   +5  |
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| 0 | <span data-glyph="⓪" data-size="3.2"></span> | <span data-glyph="①" data-size="3.2"></span> | <span data-glyph="②" data-size="3.2"></span> | <span data-glyph="③" data-size="3.2"></span> | <span data-glyph="④" data-size="3.2"></span> | <span data-glyph="⑤" data-size="3.2"></span> |
-| 6 | <span data-glyph="⑥" data-size="3.2"></span> | <span data-glyph="⑦" data-size="3.2"></span> | <span data-glyph="⑧" data-size="3.2"></span> | <span data-glyph="⑨" data-size="3.2"></span> | <span data-glyph="⑩" data-size="3.2"></span> | <span data-glyph="⑪" data-size="3.2"></span> |
+|  0 | <span data-glyph="⓪" data-size="3.2"></span> | <span data-glyph="①" data-size="3.2"></span> | <span data-glyph="②" data-size="3.2"></span> | <span data-glyph="③" data-size="3.2"></span> | <span data-glyph="④" data-size="3.2"></span> | <span data-glyph="⑤" data-size="3.2"></span> |
+|  6 | <span data-glyph="⑥" data-size="3.2"></span> | <span data-glyph="⑦" data-size="3.2"></span> | <span data-glyph="⑧" data-size="3.2"></span> | <span data-glyph="⑨" data-size="3.2"></span> | <span data-glyph="⑩" data-size="3.2"></span> | <span data-glyph="⑪" data-size="3.2"></span> |
 | 12 | <span data-glyph="⑫" data-size="3.2"></span> | <span data-glyph="⑬" data-size="3.2"></span> | <span data-glyph="⑭" data-size="3.2"></span> | <span data-glyph="⑮" data-size="3.2"></span> | <span data-glyph="⑯" data-size="3.2"></span> | <span data-glyph="⑰" data-size="3.2"></span> |
 | 18 | <span data-glyph="⑱" data-size="3.2"></span> | <span data-glyph="⑲" data-size="3.2"></span> | <span data-glyph="⑳" data-size="3.2"></span> | <span data-glyph="㉑" data-size="3.2"></span> | <span data-glyph="㉒" data-size="3.2"></span> | <span data-glyph="㉓" data-size="3.2"></span> |
 | 24 | <span data-glyph="㉔" data-size="3.2"></span> | <span data-glyph="㉕" data-size="3.2"></span> | <span data-glyph="㉖" data-size="3.2"></span> | <span data-glyph="㉗" data-size="3.2"></span> | <span data-glyph="㉘" data-size="3.2"></span> | <span data-glyph="㉙" data-size="3.2"></span> |
@@ -3520,8 +3511,8 @@ const scriptExtent = (() => {
   <p>The <strong>radix mark</strong> ("-aih-") looks like an exclamation point that droops over to the
   right. The <strong>exponent mark</strong> ("-iaz-") is a hexagon split into six triangles, and a stem with
   a foot below it makes the negative exponent mark ("-iaj-"). Both marks start the digits' alternation
-  over, so the first digit after one points up, just as the ones digit does. A negative number starts with
-  a small circle beneath a small "T" that doesn't touch it.</p>
+  over, so the first following digit points upward. Negative numbers start with a small circle beneath a small
+  "T" (not touching).</p>
 
   <pre data-table="numeralExamples">
 | Papsa Word | Numerals | Value |
@@ -3533,12 +3524,6 @@ const scriptExtent = (() => {
 | `sleipaihaugixiajirk` | <span data-glyph="④/⑲㉟₋㉕" data-size="3.2"></span> | (4 + 19/36 + 35/36²) × 6⁻²⁵ ≈ 1.602 × 10⁻¹⁹ |
 | `craumiajat` | <span data-glyph="-①₋③" data-size="3.2"></span> | −1 × 6⁻³ = −1/216 |
   </pre>
-
-  <p>In digital text, the digits are 0 to 9 or the circled numbers ⓪ to ㉟ (which make it clear that
-  they aren't base ten). The radix mark is a slash (/), the exponent marks are a subscript six and a
-  subscript minus (₆ and ₋), and the negative sign is a hyphen (-). PapsaTasa draws all of these. Text
-  layout treats 0 to 9 differently from the circled numbers, though, so a number written with both may
-  not fit together.</p>
 
   <details class="spec-code"><summary class="code-title">Numeral Drawing</summary><pre><code>
 // Every numeral fits in an equilateral triangle (the frame, which is only drawn as part of some digits) two
