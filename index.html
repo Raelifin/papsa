@@ -1052,23 +1052,31 @@ babi pun li lu bik ul min  |  Bobby said that eating was desired.
   </ul>
 
   <details class="spec-code"><summary class="code-title">Nested Clauses</summary><pre><code>
+// A clause mark without a slot of its own (a parenthesis, see Numerals and Symbols) becomes the one for the slot it's in.
+const clauseMark = (tok, slot) => {
+  if (tok.slot) return tok;
+  const v = { S: 'u', V: 'a', O: 'i' }[slot];
+  return { ...tok, ...makeToken(tok.clause === 'open' ? 'l' + v : v + 'l'), rawTok: tok.rawTok };
+};
+
 // Forethought Clause
 mainContentParsers.push((ctx, inp, out) => {
   if (inp[0]?.clause === 'open') {
-    const w = inp.shift();
+    const w = clauseMark(inp.shift(), ctx.defaultSlot);
     const clauseContent = parseClause({...ctx, ignoreAftClause: w.slot}, inp);
     // We parse ignoring the matching closer, so now we need to consume it, if present.
-    const closer = inp[0]?.clause === 'close' && inp[0]?.slot === w.slot ? inp.shift() : undefined;
+    const closer = inp[0]?.clause === 'close' && (inp[0].slot ?? w.slot) === w.slot ? clauseMark(inp.shift(), w.slot) : undefined;
     return out.push({ ...w, clauseContent, ...(closer && { closer }) });
   }
 });
 
 // Afterthought Clause (opener elided)
 mainContentParsers.push((ctx, inp, out) => {
-  if (inp[0]?.clause === 'close' && inp[0].slot !== ctx.ignoreAftClause) {
+  const closesOpener = ctx.ignoreAftClause && (inp[0]?.slot ?? ctx.ignoreAftClause) === ctx.ignoreAftClause;
+  if (inp[0]?.clause === 'close' && ! closesOpener) {
     const clauseContent = out.splice(0);
     if (clauseContent.length < 1) fail("Afterthought clauses can't be empty.");
-    return out.push({ ...inp.shift(), clauseContent });
+    return out.push({ ...clauseMark(inp.shift(), clauseContent[0].slot), clauseContent });
   }
 });
   </code></pre></details>
@@ -1486,8 +1494,12 @@ const makeToken = (s) => {
   } catch {} // wordType can throw
   return { rawTok: s, type: 'unknown', probablyForeign: true };
 };
-// "!" is the click of the basic script, so it splits off like "." and ",".
-const tokenize = (text) => (text.match(/[.,!]|[^\s.,!]+/g) ?? []).map(makeToken);
+// "!" is the click of the basic script, so it splits off like "." and ",". So do the shorthand symbols (see
+// Numerals and Symbols), which can stand for several words, and so several tokens.
+const tokenize = (text) => {
+  const apart = ['.', ',', '!', ...Object.keys(mathSymbols['Character'])].map(c => '\\' + c).join('');
+  return (text.match(new RegExp(`[${apart}]|[^\\s${apart}]+`, 'g')) ?? []).flatMap(makeToken);
+};
 
 // Skips .foreign (deliberate non-Papsa); recurses .quote (which is Papsa).
 const lintExpr = (expr, found) => {
@@ -2334,13 +2346,6 @@ const numberEntry = (n, compact) => ({
   value: n,
   baseSix: (n < 0 ? '-' : '') + numberDigits(Math.abs(n), 6).join(''),
   ...numberMeanings(n),
-});
-
-// Papsa numbers written with numerals (see Numerals and Symbols), which are always compact.
-tokenParsers.push((s) => {
-  const digits = [...s].map(numeralValue);
-  if (digits.includes(undefined)) return;
-  return { rawTok: s, type: 'number', ...numberEntry(digitsToNum(digits, 36), true) };
 });
 
 // Papsa numbers written with letters.
@@ -3627,9 +3632,12 @@ const numberSymbol = (ch, down) => {
   it usually reads as <code>`isnu`</code> (or another pronoun that fits the context).</p>
 
   <pre data-table="symbolExamples">
-| Papsa                                          | Symbols                                                         |
-|------------------------------------------------|-----------------------------------------------------------------|
-| `oubup paun li isnu mam isnu ou suk ei isnu`   | <span data-glyph="oubup ≝ ( ~n ↦ ~n + ② * ~n" data-size="3"></span> |
+| Papsa                                          | Symbols                       | Script                                                            |
+|------------------------------------------------|-------------------------------|-------------------------------------------------------------------|
+| `oubup paun li isnu mam isnu ou suk ei isnu`   | `oubup ≝ (~n ↦ ~n + ② * ~n`   | <span data-glyph="oubup ≝ ( ~n ↦ ~n + ② * ~n" data-size="3"></span> |
+| `suk zousfaf ei jamz soun`                     | `② ≥ ⓪`                       | <span data-glyph="② ≥ ⓪" data-size="3"></span>                    |
+| `slataihifatakt zousis sleip`                  | `③;⑤③⑱ &lt; ④`                | <span data-glyph="③;⑤③⑱ &lt; ④" data-size="3"></span>             |
+| `craumiajat zousis soun`                       | `-①₋③ &lt; ⓪`                 | <span data-glyph="-①₋③ &lt; ⓪" data-size="3"></span>              |
   </pre>
 
   <details class="spec-code"><summary class="code-title">Symbol Drawing</summary><pre><code>
@@ -3697,6 +3705,44 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   input.addEventListener('input', draw);
   draw();
 }
+  </code></pre></details>
+
+  <details class="spec-code"><summary class="code-title">Symbol Parsing</summary><pre><code>
+// Numerals and number marks spell out a compact number word (see Numbers).
+const numberMarkWords = { ';': 'aih', '₆': 'iaz', '₋': 'iaj' };
+tokenParsers.push((s) => {
+  const [, minus, rest] = s.match(/^(-?)(.*)$/);
+  const parts = [...rest].map(ch => numeralValue(ch) === undefined ? numberMarkWords[ch] : digitSuff[numeralValue(ch)]);
+  if (numeralValue(rest[0]) === undefined || parts.includes(undefined)) return;
+  const tok = makeToken((minus ? 'cr' : 'sl') + parts.join(''));
+  return tok.type === 'number' ? { ...tok, rawTok: s } : undefined;
+});
+
+// A shorthand symbol reads as the words it stands for. Only the first token shows the symbol. Parentheses
+// are clause marks that get their slot from the parser (see Nested Clauses).
+tokenParsers.push((s) => {
+  const words = mathSymbols['Character'][s]?.['Papsa Word'];
+  if ( ! words) return;
+  if (s === '(' || s === ')') return { rawTok: s, type: 'grammar', clause: s === '(' ? 'open' : 'close', meaning: `${words}, by slot`, contextual: true };
+  return words.split(' ').map((w, i) => i ? { ...makeToken(w), partOf: s } : { ...makeToken(w), rawTok: s, standsFor: words });
+});
+
+// The variable mark makes a pronoun of the letter after it. How it's read depends on context.
+tokenParsers.push((s) => {
+  const ixs = s[0] === '~' ? wordIdxs(s.slice(1)) : [];
+  if (ixs.length === 1 && isC(ixs[0])) return { rawTok: s, type: 'pronoun', meaning: 'variable', contextual: true };
+});
+
+// Each example must parse just like its words. Numbers only need the same value, pronouns are all alike, and
+// the order of a token's fields doesn't matter.
+addEventListener('DOMContentLoaded', () => {
+  const shape = (s) => JSON.stringify(parseExpression(tokenize(s)), (k, v) =>
+    v?.type === 'number' ? { number: v.value, slot: v.slot } : v?.type === 'pronoun' ? { pronoun: v.slot } :
+    ['rawTok', 'standsFor', 'partOf', 'probablyForeign', 'contextual'].includes(k) ? undefined :
+    v?.constructor === Object ? Object.fromEntries(Object.entries(v).sort()) : v);
+  for (const [words, row] of symbolExamples['Papsa'])
+    if (shape(words) !== shape(row['Symbols'])) reportSpecError('Symbol Parsing', `"${row['Symbols']}" doesn't parse like "${words}".`);
+});
   </code></pre></details>
   
   <h3>Font</h3>
@@ -4813,7 +4859,11 @@ const tipGloss = (tok, w) => {
 };
 function tipText(tok) {
   const w = tok.word ?? tok.rawTok;  // Unknown words and unregistered names only carry rawTok.
-  const gloss = tipGloss(tok, w), ipa = safePronounce(w);
+  // A shorthand symbol says what it stands for. One that stands for several words leaves out the first one's
+  // gloss, which would mislead, and a word whose reading depends on context has no pronunciation.
+  const words = tok.standsFor?.split(' ') ?? [w];
+  const gloss = words.length > 1 ? `"${tok.standsFor}"` : (tok.standsFor ? `"${tok.standsFor}" · ` : '') + tipGloss(tok, w);
+  const ipa = tok.contextual ? '' : words.map(safePronounce).join(' ');
   return ipa ? `${gloss}  ${ipa}` : gloss;
 }
 
@@ -4828,7 +4878,8 @@ function tokSpan(tok) {
 function decorate(el, tokens) {
   el.textContent = '';
   tokens.forEach((tok, i) => {
-    const attached = i === 0 || tok.word === '.';  // no space before clicks
+    if (tok.partOf) return;  // The rest of the words a symbol stands for.
+    const attached = i === 0 || tok.word === '.' || tok.rawTok === ')' || tokens[i-1].rawTok === '(';  // no space before clicks, or inside parentheses
     if (!attached) el.appendChild(document.createTextNode(' '));
     el.appendChild(tokSpan(tok));
   });
