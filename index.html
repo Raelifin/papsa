@@ -345,7 +345,8 @@
   <h2>Try It</h2>
 
   <p>Type any Papsa sentence to see its structure and a rough English gloss. Enter a single Papsa word
-  for its full definition, or a single English word for the closest matches in the Papsa dictionary.</p>
+  for its full definition, or a single English word for the closest matches in the Papsa dictionary.
+  Enter a number, as Papsa words, Papsa numerals, or plain digits, to see every way to write it.</p>
 
   <!-- See loader code at the bottom of the page for interactive tool implementation. -->
   <input type="text" id="translate-input" aria-label="Papsa text or an English word" autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off">
@@ -2272,8 +2273,6 @@ slaktuzixat   | One-hundred-eighty-six-thousand, two-hundred-eighty-two
   and the final form is useful if you want to be even more terse.</p>
 
   <details class="spec-code"><summary class="code-title">Numbers</summary><pre><code>
-// TODO Make sure the translator widget can port between different representations, including digits interpreted in base six and base ten!
-
 const digitSuff = []; // After being populated below, holds 36 strings for the digit suffixes.
 const digitVowel = []; // Same, but only for the vowels.
 const bySuffix = {}; // Base-letter suffix -> corresponding numerical digit
@@ -2429,6 +2428,41 @@ const quantityEntry = (s, value, baseSix) => {
   if (typeof value === 'number') value = +value.toPrecision(10); // Imaginary values are strings, like "3i".
   return { rawTok: s, type: 'number', word: s, value, baseSix, ...numberMeanings(value) };
 };
+
+// The other way: a value -> its digits in a radix. That's the whole part (little-endian) and up to `places`
+// fractional digits, cut short (like the "…" rows above) unless they end. Values are only precise to about ten
+// digits, and each fractional digit multiplies that error by the radix, so a digit within the error rounds up,
+// and `places` should stay where the error is still small.
+const quantityDigits = (value, radix, places) => {
+  const v = Math.abs(value);
+  let err = 1e-10 * Math.max(1, v), whole = Math.floor(v + err), frac = Math.max(0, v - whole);
+  const ds = [];
+  while (ds.length < places && frac > err) {
+    frac *= radix; err *= radix;
+    const d = Math.min(radix - 1, Math.floor(frac + err));
+    ds.push(d); frac = Math.max(0, frac - d);
+  }
+  return { whole: numberDigits(whole, radix), frac: ds, exact: frac <= err };
+};
+
+// A value -> its basic or compact number word (there are no negative basic numbers), and whether it's exact.
+const quantityWord = (value, compact) => {
+  if (value < 0 && ! compact) return;
+  const { whole, frac, exact } = quantityDigits(value, compact ? 36 : 6, compact ? 5 : 10);
+  const spell = (ds) => ds.map(d => digitSuff[d]).join('');
+  const wholePart = frac.length && whole.join('') === '0' ? '' : spell(whole);  // A zero whole part is left out.
+  return { word: (value < 0 ? 'cr' : compact ? 'sl' : 's') + wholePart + (frac.length ? 'aih' + spell(frac) : ''), exact };
+};
+
+// Each common fraction must be spelled as its value is. A "…" row repeats forever, so it's cut short.
+for (const [fraction, row] of commonFractions['Fraction']) {
+  const [num, den] = fraction.split('/').map(Number);
+  for (const col of ['Basic', 'Compact']) {
+    const listed = row[col].replace('…', ''), { word, exact } = quantityWord(num / den, col === 'Compact');
+    if (row[col].endsWith('…') ? exact || ! word.startsWith(listed) : word !== listed)
+      fail(`The ${col.toLowerCase()} word for ${fraction} should be ${word}${exact ? '' : '…'}, not ${row[col]}.`);
+  }
+}
 
 // Spliced in ahead of the whole-number parser (which rejects anything containing `aih` anyway).
 tokenParsers.splice(1, 0, (s, base) => {
@@ -5107,20 +5141,58 @@ function interlinear(tokens, parsed) {
   return el;
 }
 
+// Every way to write a number: base ten, base six (in Papsa's order, ones first), its words, and its numerals.
+// Imaginary numbers (whose values are strings, like "3i") only get the first two.
+const numberRows = (t) => {
+  const rows = [['number', escapeHTML(String(t.value))], ['base 6', escapeHTML(t.baseSix)]];
+  if (typeof t.value !== 'number') return rows;
+  const words = [false, true].map(c => quantityWord(t.value, c)).filter(Boolean);
+  rows.push(['words', words.map(w => (w.exact ? '' : '≈ ') + escapeHTML(w.word)).join('  ·  ')]);
+  const { whole, frac, exact } = quantityDigits(t.value, 36, 5), spell = (ds) => ds.map(d => circledDigits[d]).join('');
+  const numerals = (t.value < 0 ? '-' : '') + spell(whole) + (frac.length ? ';' + spell(frac) : '');
+  rows.push(['numerals', `${exact ? '' : '≈ '}${scriptSpan(numerals, 'ilg-script').outerHTML} ${escapeHTML(numerals)}`]);
+  return rows;
+};
+
+// A token for a value that was written some other way, like base-ten digits.
+const numberToken = (v) => {
+  const { whole, frac, exact } = quantityDigits(v, 6, 10);
+  const baseSix = `${v < 0 ? '-' : ''}${whole.join('')}${frac.length ? '.' + frac.join('') : ''}${exact ? '' : '…'}`;
+  return quantityEntry(quantityWord(v, true).word, v, baseSix);
+};
+
+// Bare digits could be Papsa numerals, base ten, or base six (ones first, as Papsa says them), so each reading
+// gets a definition, and readings with the same value share one.
+function digitReadingsHTML(text, sign, whole, frac) {
+  const readings = [];
+  const add = (how, v) => {
+    const same = readings.find(r => r.v === v);
+    same ? same.hows.push(how) : readings.push({ hows: [how], v });
+  };
+  const papsa = frac === undefined && makeToken(text);
+  if (papsa?.type === 'number') add('Papsa numerals', papsa.value);
+  add('base ten', +text);
+  const sixes = (ds) => [...ds ?? ''].map(Number);
+  if ( ! /[6-9]/.test(whole + (frac ?? '')))
+    add('base six', sign * (digitsToNum(sixes(whole), 6) + sixes(frac).reduceRight((f, d) => (f + d) / 6, 0)));
+  return readings.map(r => `<div class="lookup-note">As ${r.hows.join(', or ')}:</div>` +
+    definitionHTML(r.v === papsa?.value ? papsa : numberToken(r.v))).join('');
+}
+
 function definitionHTML(t) {
   const rows = [];
-  if (t.value !== undefined)        rows.push(['number', `${t.value}  ·  base-6 ${t.baseSix}`]);
-  if (t.type === 'grammar')         rows.push(['grammar', t.meaning || '\u2014']);
+  if (t.value !== undefined)        rows.push(...numberRows(t));
+  if (t.type === 'grammar')         rows.push(['grammar', escapeHTML(t.meaning || '\u2014')]);
   else {
-    if (t.meaning)          rows.push([t.type, t.meaning]);
-    if (t.verbMeaning)      rows.push(['verb', t.verbMeaning]);
-    if (t.nounMeaning)      rows.push(['noun', t.nounMeaning]);
-    if (t.adjectiveMeaning) rows.push(['adj',  t.adjectiveMeaning]);
-    if (t.adverbMeaning)    rows.push(['adv',  t.adverbMeaning]);
-    if (t.notes)            rows.push(['note', t.notes]);
+    if (t.meaning)          rows.push([t.type, escapeHTML(t.meaning)]);
+    if (t.verbMeaning)      rows.push(['verb', escapeHTML(t.verbMeaning)]);
+    if (t.nounMeaning)      rows.push(['noun', escapeHTML(t.nounMeaning)]);
+    if (t.adjectiveMeaning) rows.push(['adj',  escapeHTML(t.adjectiveMeaning)]);
+    if (t.adverbMeaning)    rows.push(['adv',  escapeHTML(t.adverbMeaning)]);
+    if (t.notes)            rows.push(['note', escapeHTML(t.notes)]);
   }
-  const body = rows.map(([k, v]) =>
-    `<div class="def-row"><span class="def-key">${k}</span>${escapeHTML(v)}</div>`).join('');
+  const body = rows.map(([k, html]) =>
+    `<div class="def-row"><span class="def-key">${k}</span>${html}</div>`).join('');
   return `<div class="def">
     <div class="def-head">${scriptSpan(t.word, 'ilg-script').outerHTML} ${escapeHTML(t.word)}
       <span class="def-ipa">${safePronounce(t.word)}</span>
@@ -5145,6 +5217,8 @@ function reverseSearch(query) {
 function translate(text) {
   const t = text.trim();
   if (!t) { out.innerHTML = ''; return; }
+  const digits = t.match(/^(-?)(\d+)(?:\.(\d+))?$/);
+  if (digits) { out.innerHTML = digitReadingsHTML(t, digits[1] ? -1 : 1, digits[2], digits[3]); return; }
   const tokens = tokenize(t).map((tok, pos) => ({ ...tok, pos }));
 
   if (tokens.length === 1) {
