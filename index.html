@@ -3519,9 +3519,9 @@ const scriptExtent = (() => {
 |------------|----------|-------|
 | `slifat` | <span data-glyph="⑤③" data-size="3.2"></span> | 5 + 3×36 = one-hundred-thirteen |
 | `slaktuzixat` | <span data-glyph="⑱㉖㉟③" data-size="3.2"></span> | one-hundred-eighty-six-thousand, two-hundred-eighty-two |
-| `slataihifatakt` | <span data-glyph="③/⑤③⑱" data-size="3.2"></span> | 3 + 5/36 + 3/36² + 18/36³ ≈ 3.14159 (π, approximately) |
-| `slukaihuzukiazikt` | <span data-glyph="②/㉖②₆㉚" data-size="3.2"></span> | (2 + 26/36 + 2/36²) × 6³⁰ ≈ 6.022 × 10²³ |
-| `sleipaihaugixiajirk` | <span data-glyph="④/⑲㉟₋㉕" data-size="3.2"></span> | (4 + 19/36 + 35/36²) × 6⁻²⁵ ≈ 1.602 × 10⁻¹⁹ |
+| `slataihifatakt` | <span data-glyph="③;⑤③⑱" data-size="3.2"></span> | 3 + 5/36 + 3/36² + 18/36³ ≈ 3.14159 (π, approximately) |
+| `slukaihuzukiazikt` | <span data-glyph="②;㉖②₆㉚" data-size="3.2"></span> | (2 + 26/36 + 2/36²) × 6³⁰ ≈ 6.022 × 10²³ |
+| `sleipaihaugixiajirk` | <span data-glyph="④;⑲㉟₋㉕" data-size="3.2"></span> | (4 + 19/36 + 35/36²) × 6⁻²⁵ ≈ 1.602 × 10⁻¹⁹ |
 | `craumiajat` | <span data-glyph="-①₋③" data-size="3.2"></span> | −1 × 6⁻³ = −1/216 |
   </pre>
 
@@ -3579,7 +3579,7 @@ const spiral = ([cx, cy], r0, r1, quarters) => {  // Clockwise from the top, shr
   });
 };
 const numberMarkShapes = {
-  '/': { strokes: [{ x: 20, y: -160, segs: [[190, -160], ...spiral([190, 0], 160, 30, 7)] }], fills: [] },
+  ';': { strokes: [{ x: 20, y: -160, segs: [[190, -160], ...spiral([190, 0], 160, 30, 7)] }], fills: [] },
   '₆': { strokes: exponentMark, fills: [] },
   '₋': { strokes: [...exponentMark, ...belowZero(0)], fills: [] },
   '-': { strokes: [...belowZero(220), polyline([hexagon[1], hexagon[0]].map(([x, y]) => [x, y + 220]))], fills: [] },
@@ -4080,7 +4080,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     // Every digit appears pointing both ways, since the second run is shifted by one.
     const digits = circledDigits.join('');
     const sample = "neim kud. pif xarc sou mauk a'apaun θŋ lr vaiuz NIIM KUT! seiou ɪʊəɛæʌɑ hx ɖɓʂɕʃ ʎɾʀɹ ɦɲqð ǁǂʔ " +
-      `${digits} ⓪${digits} 113 -③/⑤③⑱₋㉕ ②₆㉚`;
+      `${digits} ⓪${digits} 113 -③;⑤③⑱₋㉕ ②₆㉚`;
     const charOf = new Map(combining.map(({ m, char }) => [m, char]));
     // A composite mark (a full place, or neutral posture) is spelled with the combining marks that make it
     // up. Click characters are left as they are, since the bare click ("!") would stand apart as a word.
