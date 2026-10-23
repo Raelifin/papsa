@@ -3644,8 +3644,9 @@ const mathSymbolShapes = (() => {
   const crossing = [armUp, armDown, mirror(armUp), mirror(armDown)];
   const lessThan = [curve([270, -100], [200, -100, 100, -40, 30, 0], [100, 40, 200, 100, 270, 100])];
   const proportional = [...crossing, mirror(roundEnd)];
-  // paun's left end is a fish's tail: the arms flare out and hook back.
-  const tail = curve([180, 0], [150, -60, 110, -120, 40, -150], [20, -158, 10, -140, 30, -120]);
+  // paun's left end is a crescent moon: the arms bow out and back to its horns, which an arc joins.
+  const horn = curve([180, 0], [120, -50, 70, -140, 140, -190]);
+  const crescent = [horn, curve([140, -190], [-10, -200, -10, 200, 140, 190]), flipStroke(horn)];
   const parenthesis = [curve([250, -330], [110, -220, 110, 220, 250, 330])];
   const shapes = Object.fromEntries(Object.entries({
     '=': [...crossing, roundEnd, mirror(roundEnd)],
@@ -3659,7 +3660,7 @@ const mathSymbolShapes = (() => {
                             [114, 150, 60, 83, 60, 0], [60, -90, 160, -140, 310, -190])],
     // ei: the U that a squeezed `ii` makes, without the strokes that join it to the baseline.
     '*': [curve([90, -396], [90, -396, 90, 0, 180, 0], [270, 0, 270, -396, 270, -396])],
-    '≝': [armUp, roundEnd, armDown, tail, flipStroke(tail)],
+    '≝': [armUp, roundEnd, armDown, ...crescent],
     '↦': [polyline([[60, 120], [300, -120]]), polyline([[180, -120], [300, -120], [300, 0]])],
     '(': parenthesis,
     ')': parenthesis.map(mirror),
