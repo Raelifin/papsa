@@ -3508,11 +3508,11 @@ const scriptExtent = (() => {
 | 30 | <span data-glyph="㉚" data-size="3.2"></span> | <span data-glyph="㉛" data-size="3.2"></span> | <span data-glyph="㉜" data-size="3.2"></span> | <span data-glyph="㉝" data-size="3.2"></span> | <span data-glyph="㉞" data-size="3.2"></span> | <span data-glyph="㉟" data-size="3.2"></span> |
   </pre>
 
-  <p>The <strong>radix mark</strong> ("-aih-") looks like an exclamation point that droops over to the
-  right. The <strong>exponent mark</strong> ("-iaz-") is a hexagon split into six triangles, and a stem with
-  a foot below it makes the negative exponent mark ("-iaj-"). Both marks start the digits' alternation
-  over, so the first following digit points upward. Negative numbers start with a small circle beneath a small
-  "T" (not touching).</p>
+  <p>The <strong>radix mark</strong> ("-aih-") is a clockwise spiral, coming in from the left along the
+  top. The <strong>exponent mark</strong> ("-iaz-") is a hexagon split into six triangles, and the negative
+  exponent mark ("-iaj-") adds "less than zero": a stem rising from its right side, and a zero beside the
+  stem. Both marks start the digits' alternation over, so the first following digit points upward.
+  Negative numbers start with just the "less than zero" part, a zero and a "&gt;" whose back edge is upright.</p>
 
   <pre data-table="numeralExamples">
 | Papsa Word | Numerals | Value |
@@ -3566,11 +3566,23 @@ const digitShape = (n) => {
 // The marks that go between and before digits are a letter wide.
 const hexagon = Array.from({ length: 7 }, (_, k) => [180 + FRAME_H/4 * Math.sin(k * Math.PI / 3), -FRAME_H/4 * Math.cos(k * Math.PI / 3)]);
 const exponentMark = [polyline(hexagon), ...[0, 1, 2].map(k => polyline([hexagon[k], hexagon[k + 3]]))];
+// "Less than zero": a circle, and a ">" made of a stem rising from the hexagon's right side and its top-right edge.
+const belowZero = (dy) => [circle([180, -283 + dy], 80), polyline([[hexagon[1][0], -250 + dy], [hexagon[1][0], hexagon[1][1] + dy]])];
+const spiral = ([cx, cy], r0, r1, quarters) => {  // Clockwise from the top, shrinking from r0 to r1, in Bézier quarter turns.
+  const at = (q) => {
+    const a = q * Math.PI / 2, r = r0 + (r1 - r0) * q / quarters, dr = (r1 - r0) / quarters * 2 / Math.PI;
+    return { p: [cx + r * Math.sin(a), cy - r * Math.cos(a)], d: [dr * Math.sin(a) + r * Math.cos(a), r * Math.sin(a) - dr * Math.cos(a)] };
+  };
+  return Array.from({ length: quarters }, (_, q) => {
+    const a = at(q), b = at(q + 1);
+    return [a.p[0] + 0.5523 * a.d[0], a.p[1] + 0.5523 * a.d[1], b.p[0] - 0.5523 * b.d[0], b.p[1] - 0.5523 * b.d[1], ...b.p];
+  });
+};
 const numberMarkShapes = {
-  '/': { strokes: [{ x: 120, y: 150, segs: [[120, -130], [120, -300, 300, -300, 300, -140]] }], fills: [pip([120, 250])] },
+  '/': { strokes: [{ x: 20, y: -160, segs: [[190, -160], ...spiral([190, 0], 160, 30, 7)] }], fills: [] },
   '₆': { strokes: exponentMark, fills: [] },
-  '₋': { strokes: [...exponentMark, polyline([hexagon[3], [180, FRAME_H/2]]), polyline([[130, FRAME_H/2], [230, FRAME_H/2]])], fills: [] },
-  '-': { strokes: [circle([180, 0], 44), polyline([[180, -84], [180, -230]]), polyline([[120, -230], [240, -230]])], fills: [] },
+  '₋': { strokes: [...exponentMark, ...belowZero(0)], fills: [] },
+  '-': { strokes: [...belowZero(220), polyline([hexagon[1], hexagon[0]].map(([x, y]) => [x, y + 220]))], fills: [] },
 };
 
 // Digits are encoded as 0 to 9, or as the circled numbers ⓪ to ㉟.
