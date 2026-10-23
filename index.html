@@ -2158,12 +2158,12 @@ for (const [name,row] of organismNames["Papsa Name"]) {
   <pre data-table="basicNumbers">
 | Papsa Word | Arabic Numeral | Papsa Numeral |
 |------------|----------------|---------------|
-| `soun`     | 0              | `0`           |
-| `saum`     | 1              | `1`           |
-| `suk`      | 2              | `2`           |
-| `sat`      | 3              | `3`           |
-| `seip`     | 4              | `4`           |
-| `sif`      | 5              | `5`           |
+| `soun`     | 0              | `⓪`           |
+| `saum`     | 1              | `①`           |
+| `suk`      | 2              | `②`           |
+| `sat`      | 3              | `③`           |
+| `seip`     | 4              | `④`           |
+| `sif`      | 5              | `⑤`           |
   </pre>
 
   <p>These root words can be combined in regular ways to express any natural number, using little-endian base-six.
@@ -2336,10 +2336,11 @@ const numberEntry = (n, compact) => ({
   ...numberMeanings(n),
 });
 
-// Papsa numbers written with digits. (Little-endian base six)
+// Papsa numbers written with numerals (see Numerals and Symbols), which are always compact.
 tokenParsers.push((s) => {
-  if (!/^[0-5]+$/.test(s)) return;
-  return { rawTok: s, type: 'number', ...numberEntry(digitsToNum([...s].map(Number), 6), false) };
+  const digits = [...s].map(numeralValue);
+  if (digits.includes(undefined)) return;
+  return { rawTok: s, type: 'number', ...numberEntry(digitsToNum(digits, 36), true) };
 });
 
 // Papsa numbers written with letters.
