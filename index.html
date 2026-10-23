@@ -2174,9 +2174,9 @@ for (const [name,row] of organismNames["Papsa Name"]) {
   always tell what digit they're on, even when the number is long.</p>
 
   <pre>
-sukif             | `25` = 2×6⁰ + 5×6¹ = thirty-two
-sifouneipaum      | `5041` = 5×6⁰ + 0×6¹ + 4×6² + 1×6³ = three-hundred-sixty-five
-sounatukeipififat | `0324553` = 0×6⁰ + 3×6¹ + 2×6² + 4×6³ + 5×6⁴ + 5×6⁵ + 3×6⁶ = one-hundred-eighty-six-thousand, two-hundred-eighty-two
+sukif             | 2×6⁰ + 5×6¹ = thirty-two
+sifouneipaum      | 5×6⁰ + 0×6¹ + 4×6² + 1×6³ = three-hundred-sixty-five
+sounatukeipififat | 0×6⁰ + 3×6¹ + 2×6² + 4×6³ + 5×6⁴ + 5×6⁵ + 3×6⁶ = one-hundred-eighty-six-thousand, two-hundred-eighty-two
   </pre>
 
   <p>This number system is more compact than spoken English, but because six is less than ten, it's slightly less
@@ -2957,8 +2957,20 @@ const textPathData = (txt, diacriticLookup) => {
   for (const wrd of txt.match(/[.,!]|[^\s.,!]+/g) ?? []) {
     if (x > 0) x += 180; // Word gap
     // One array of characters (by code point), so each character and its alphabet index stay in step.
-    const chars = [...wrd], idxs = chars.map(letterIdx);
+    const chars = [...wrd], idxs = chars.map(ch => numberSymbol(ch) ? undefined : letterIdx(ch));
+    let digits = 0;  // How many digits in a row came just before. Every other one points down.
     chars.forEach((ch, i) => {
+      const symbol = numberSymbol(ch, digits % 2 === 1);
+      if (symbol) {
+        for (const s of symbol.strokes) letterPath += strokeSVG(s,x,0,1);
+        for (const f of symbol.fills) fillPath += strokeSVG(f,x,0,1) + ' Z';
+        // A digit's triangle reaches into the next letter's space, which only the next digit can share.
+        const isDigit = numeralValue(ch) !== undefined;
+        digits = isDigit ? digits + 1 : 0;
+        x += isDigit && numeralValue(chars[i+1]) === undefined ? 720 : 360;
+        return;
+      }
+      digits = 0;
       const baseLtr = baseLetter(ch);
       const w = letterWidth(idxs[i], i, idxs);
       letterPath += strokeSVG(letterStrokes(baseLtr),x,0,w/360);
@@ -3469,9 +3481,125 @@ const scriptExtent = (() => {
   }
   return { top, bottom };
 })();
+  </code></pre></details>
+  
+  <h3>Numerals and Symbols</h3>
 
-// Draw every element with data-glyph="...". Add data-size for scale (in em). Add data-marks to draw the listed
-// marks instead of the ones the characters carry, or data-ipa to draw the marks an IPA character carries.
+  <p>Papsa's number words are naturally compact and easy to write. Writing one-hundred-thirteen as 113
+  takes three strokes, while <code>`slifat`</code> takes one fluid stroke covering only about twice as
+  much horizontal space. In places where numbers are expected (equations, spreadsheets, etc.), one can
+  use <code>`ifat`</code> to be almost as compact. When writing numbers on a page or a whiteboard, that's
+  the norm. But numbers are everywhere, and it's still useful to have numerals that are optimized for
+  being readable and clear in situations where letters aren't as good, at the expense of being harder
+  to write (when not at a computer).</p>
+
+  <p>Each compact digit from 0 to 35 has a numeral that fits in an equilateral triangle. The first digit
+  in a number points up, the next digit points down, and so on, so that each triangle nests between its
+  neighbors and a row of digits is dense and readable as a single number.</p>
+
+  <pre data-table="numerals">
+|       |   +0  |   +1  |   +2  |   +3  |   +4  |   +5  |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|  0 | <span data-glyph="⓪" data-size="3.2"></span> | <span data-glyph="①" data-size="3.2"></span> | <span data-glyph="②" data-size="3.2"></span> | <span data-glyph="③" data-size="3.2"></span> | <span data-glyph="④" data-size="3.2"></span> | <span data-glyph="⑤" data-size="3.2"></span> |
+|  6 | <span data-glyph="⑥" data-size="3.2"></span> | <span data-glyph="⑦" data-size="3.2"></span> | <span data-glyph="⑧" data-size="3.2"></span> | <span data-glyph="⑨" data-size="3.2"></span> | <span data-glyph="⑩" data-size="3.2"></span> | <span data-glyph="⑪" data-size="3.2"></span> |
+| 12 | <span data-glyph="⑫" data-size="3.2"></span> | <span data-glyph="⑬" data-size="3.2"></span> | <span data-glyph="⑭" data-size="3.2"></span> | <span data-glyph="⑮" data-size="3.2"></span> | <span data-glyph="⑯" data-size="3.2"></span> | <span data-glyph="⑰" data-size="3.2"></span> |
+| 18 | <span data-glyph="⑱" data-size="3.2"></span> | <span data-glyph="⑲" data-size="3.2"></span> | <span data-glyph="⑳" data-size="3.2"></span> | <span data-glyph="㉑" data-size="3.2"></span> | <span data-glyph="㉒" data-size="3.2"></span> | <span data-glyph="㉓" data-size="3.2"></span> |
+| 24 | <span data-glyph="㉔" data-size="3.2"></span> | <span data-glyph="㉕" data-size="3.2"></span> | <span data-glyph="㉖" data-size="3.2"></span> | <span data-glyph="㉗" data-size="3.2"></span> | <span data-glyph="㉘" data-size="3.2"></span> | <span data-glyph="㉙" data-size="3.2"></span> |
+| 30 | <span data-glyph="㉚" data-size="3.2"></span> | <span data-glyph="㉛" data-size="3.2"></span> | <span data-glyph="㉜" data-size="3.2"></span> | <span data-glyph="㉝" data-size="3.2"></span> | <span data-glyph="㉞" data-size="3.2"></span> | <span data-glyph="㉟" data-size="3.2"></span> |
+  </pre>
+
+  <p>We can symbolize the non-numeric parts of number words as well. The <strong>radix mark</strong> ("-aih-"),
+  for example, is drawn with a clockwise spiral and the <strong>exponent mark</strong> ("-iaz-") is a hexagon
+  that's split into six triangles. Marks like this reset things so the first following digit points upward.
+  Negative numbers start with a symbol indicating "less than zero", which the negative exponent mark inherits.</p>
+
+  <pre data-table="numeralExamples">
+| Papsa Word | Numerals | Value |
+|------------|----------|-------|
+| `slifat` | <span data-glyph="⑤③" data-size="3.2"></span> | 5 + 3×36 = one-hundred-thirteen |
+| `slaktuzixat` | <span data-glyph="⑱㉖㉟③" data-size="3.2"></span> | one-hundred-eighty-six-thousand, two-hundred-eighty-two |
+| `slataihifatakt` | <span data-glyph="③;⑤③⑱" data-size="3.2"></span> | 3 + 5/36 + 3/36² + 18/36³ ≈ 3.14159 (π, approximately) |
+| `slukaihuzukiazikt` | <span data-glyph="②;㉖②₆㉚" data-size="3.2"></span> | (2 + 26/36 + 2/36²) × 6³⁰ ≈ 6.022 × 10²³ |
+| `sleipaihaugixiajirk` | <span data-glyph="④;⑲㉟₋㉕" data-size="3.2"></span> | (4 + 19/36 + 35/36²) × 6⁻²⁵ ≈ 1.602 × 10⁻¹⁹ |
+| `craumiajat` | <span data-glyph="-①₋③" data-size="3.2"></span> | −1 × 6⁻³ = −1/216 |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Numeral Drawing</summary><pre><code>
+// Every numeral fits in an equilateral triangle (the frame, which is only drawn as part of some digits) two
+// letters wide and centered on the baseline. Digits are drawn here pointing up. Pointing down is the same
+// shape flipped over the baseline. A shape has strokes for the pen and filled areas (the pips), in the same
+// units as the letters.
+const FRAME_H = 360 * Math.sqrt(3);
+const frameCorners = [[360, -FRAME_H/2], [720, FRAME_H/2], [0, FRAME_H/2]];  // Top, then clockwise.
+const frameCenter = [360, FRAME_H/6];
+const towards = (p, q, t) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t];
+const polyline = (pts) => ({ x: pts[0][0], y: pts[0][1], segs: pts.slice(1) });
+const circle = ([cx, cy], r) => {  // Four Bézier arcs, for the pen.
+  const k = 0.5523 * r;
+  return { x: cx + r, y: cy, segs: [[cx+r, cy+k, cx+k, cy+r, cx, cy+r], [cx-k, cy+r, cx-r, cy+k, cx-r, cy],
+                                     [cx-r, cy-k, cx-k, cy-r, cx, cy-r], [cx+k, cy-r, cx+r, cy-k, cx+r, cy]] };
+};
+const pip = ([cx, cy]) => polyline(Array.from({ length: 32 }, (_, k) => [cx + 30 * Math.cos(k * Math.PI / 16), cy + 30 * Math.sin(k * Math.PI / 16)]));
+
+const digitShape = (n) => {
+  const c = frameCenter, strokes = [], fills = [];
+  const sides = frameCorners.map((v, i) => towards(frameCorners[(i+1) % 3], frameCorners[(i+2) % 3], 0.5));  // Across from each corner
+  const inner = sides.map(m => towards(c, m, 124 / Math.hypot(m[0] - c[0], m[1] - c[1])));  // Two's triangle points at the sides.
+  if (n === 0) strokes.push(circle(c, 168));
+  if (n >= 24) strokes.push(polyline([...frameCorners, frameCorners[0]]), ...sides.map((m, i) => polyline([m, inner[i]])));
+  else if (n >= 12) strokes.push(...frameCorners.map((v, i) =>
+    polyline([towards(v, frameCorners[(i+1) % 3], 0.3), v, towards(v, frameCorners[(i+2) % 3], 0.3)])));
+  const threes = Math.floor(n % 12 / 3), ones = n % 3;
+  for (const v of frameCorners) {
+    if (threes % 2) fills.push(pip(towards(c, v, 0.64)));  // Three: a pip in each corner
+    if (threes >= 2) {  // Six: a pair of pips near each corner
+      const p = towards(c, v, 0.4), s = 58 / Math.hypot(v[0] - c[0], v[1] - c[1]), d = [(c[1] - v[1]) * s, (v[0] - c[0]) * s];
+      fills.push(pip([p[0] + d[0], p[1] + d[1]]), pip([p[0] - d[0], p[1] - d[1]]));
+    }
+  }
+  if (ones) fills.push(pip(c));  // One
+  if (ones === 2) strokes.push(polyline([...inner, inner[0]]));  // Two
+  return { strokes, fills };
+};
+
+// The marks that go between and before digits are a letter wide.
+const hexagon = Array.from({ length: 7 }, (_, k) => [180 + FRAME_H/4 * Math.sin(k * Math.PI / 3), -FRAME_H/4 * Math.cos(k * Math.PI / 3)]);
+const exponentMark = [polyline(hexagon), ...[0, 1, 2].map(k => polyline([hexagon[k], hexagon[k + 3]]))];
+// "Less than zero": a circle, and a ">" made of a stem rising from the hexagon's right side and its top-right edge.
+const belowZero = (dy) => [circle([180, -283 + dy], 80), polyline([[hexagon[1][0], -250 + dy], [hexagon[1][0], hexagon[1][1] + dy]])];
+const spiral = ([cx, cy], r0, r1, quarters) => {  // Clockwise from the top, shrinking from r0 to r1, in Bézier quarter turns.
+  const at = (q) => {
+    const a = q * Math.PI / 2, r = r0 + (r1 - r0) * q / quarters, dr = (r1 - r0) / quarters * 2 / Math.PI;
+    return { p: [cx + r * Math.sin(a), cy - r * Math.cos(a)], d: [dr * Math.sin(a) + r * Math.cos(a), r * Math.sin(a) - dr * Math.cos(a)] };
+  };
+  return Array.from({ length: quarters }, (_, q) => {
+    const a = at(q), b = at(q + 1);
+    return [a.p[0] + 0.5523 * a.d[0], a.p[1] + 0.5523 * a.d[1], b.p[0] - 0.5523 * b.d[0], b.p[1] - 0.5523 * b.d[1], ...b.p];
+  });
+};
+const numberMarkShapes = {
+  ';': { strokes: [{ x: 20, y: -160, segs: [[190, -160], ...spiral([190, 0], 160, 30, 7)] }], fills: [] },
+  '₆': { strokes: exponentMark, fills: [] },
+  '₋': { strokes: [...exponentMark, ...belowZero(0)], fills: [] },
+  '-': { strokes: [...belowZero(220), polyline([hexagon[1], hexagon[0]].map(([x, y]) => [x, y + 220]))], fills: [] },
+};
+
+// Digits are encoded as 0 to 9, or as the circled numbers ⓪ to ㉟.
+const circledDigits = Array.from({ length: 36 }, (_, n) => String.fromCodePoint(n === 0 ? 0x24EA : n <= 20 ? 0x245F + n : 0x323C + n));
+const numeralValue = (ch) => circledDigits.includes(ch) ? circledDigits.indexOf(ch) : /^[0-9]$/.test(ch ?? '') ? +ch : undefined;
+const digitShapes = circledDigits.map((_, n) => digitShape(n));
+const flipStroke = (s) => ({ x: s.x, y: -s.y, segs: s.segs.map(seg => seg.map((v, i) => i % 2 ? -v : v)) });
+// A number mark's shape, or a digit's (pointing down if asked), or undefined for any other character.
+const numberSymbol = (ch, down) => {
+  const n = numeralValue(ch);
+  if (n === undefined) return numberMarkShapes[ch];
+  const shape = digitShapes[n];
+  return down ? { strokes: shape.strokes.map(flipStroke), fills: shape.fills.map(flipStroke) } : shape;
+};
+
+// Now that every shape is defined, draw every element with data-glyph="...". Add data-size for scale (in em).
+// Add data-marks to draw the listed marks instead of the ones the characters carry, or data-ipa to draw the
+// marks an IPA character carries.
 document.querySelectorAll('[data-glyph]').forEach(el => {
   const listed = el.dataset.marks?.split(' ') ?? (el.dataset.ipa !== undefined ? ipaMarks[el.dataset.ipa] ?? [] : undefined);
   const lookup = (ch) => (listed ?? charMarks[ch] ?? []).map(m => glyphMarks[m] ?? fail(`There's no mark named "${m}".`));
@@ -3494,11 +3622,9 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   draw();
 }
   </code></pre></details>
-  
-  <h3>Numerals and Symbols</h3>
 
-  <p>TODO Papsa has numeral-symbols from 0 to 35 as well as a set of shorthand symbols that allow common words,
-  especially in math (eg faf, paun, mam, ei), to be compressed.</p>
+  <p>TODO Papsa also has a set of shorthand symbols that allow common words, especially in math
+  (eg faf, paun, mam, ei), to be compressed.</p>
   
   <h3>Font</h3>
 
@@ -3558,7 +3684,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   <details class="spec-code"><summary class="code-title">Font Builder</summary><pre><code>
 // The PapsaTasa font is built here, from the same strokes as the drawings above, so the two can't
 // drift apart. It's a TrueType font in which every Papsa character (base letters, romanization, and
-// IPA) maps to its letter.
+// IPA) maps to its letter, and the digits and number marks map to numerals.
 //
 // How this block fits with the rest of the page (every spec block shares one global scope):
 //   - Assign the finished glyph table to `scriptGlyphs`, which the runner declares; don't redeclare it.
@@ -3642,6 +3768,13 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     return contours;
   };
 
+  // A filled area (a closed path of straight lines), placed by `at` -> a contour, wound clockwise like the rest.
+  const area = ({ x, y, segs }, at) => {
+    const pts = [[x, y], ...segs].map(p => [...at(...p), true]);
+    const signed = pts.reduce((a, [px, py], k) => a + px * pts[(k + 1) % pts.length][1] - py * pts[(k + 1) % pts.length][0], 0);
+    return signed > 0 ? pts.reverse() : pts;
+  };
+
   // ── Binary ──
   // `bytes(w => w.u16(...).tag(...))` writes big-endian data. (u16 also writes negative int16s.)
   const bytes = (fill) => {
@@ -3710,14 +3843,9 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
         const a = glyphMarks[m].anchor(ltr);
         return a ? glyphMarks[m].strokes.flatMap(st => outline(st, at(a), MARK_PEN)) : [];
       });
-      const fill = w < W && ! hollow && squeezedFills[ltr], fillContours = [];
-      if (fill) {
-        const pts = [[fill.x, fill.y], ...fill.segs].map(p => [...at([0, 0])(...p), true]);
-        const area = pts.reduce((a, [x, y], k) => a + x * pts[(k + 1) % pts.length][1] - y * pts[(k + 1) % pts.length][0], 0);
-        fillContours.push(area > 0 ? pts.reverse() : pts);  // Clockwise, like every other contour.
-      }
+      const fill = w < W && ! hollow && squeezedFills[ltr];
       return { letter: ltr, marks, x0: gap, s, advance: gap + w,
-               contours: [...outline(letterStrokes(ltr), at([0, 0]), PEN), ...fillContours, ...markContours] };
+               contours: [...outline(letterStrokes(ltr), at([0, 0]), PEN), ...(fill ? [area(fill, at([0, 0]))] : []), ...markContours] };
     });
     const glyphOf = (ch, marks = charMarks[ch] ?? []) => WORD_CLICKS.has(ch) ? letter('!', marks, GAP) : letter(baseLetter(ch), marks);
 
@@ -3742,6 +3870,20 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
       glyphs[twin].half = letter(ltr, marks, 0, W / 2, true);
       hollows.push([cp, twin]);
     }
+
+    // Numerals (see Numerals and Symbols). Each digit comes pointing up or down, and either two letters wide,
+    // as it is at the end of a row, or one letter wide, with its triangle reaching into the next digit's space.
+    const symbol = (ch, down, advance) => make(['symbol', ch, down, advance].join('|'), () => {
+      const { strokes, fills } = numberSymbol(ch, down), at = (px, py) => [px, RAISE - py];
+      return { advance, contours: [...strokes.flatMap(st => outline(st, at, PEN)), ...fills.map(f => area(f, at))] };
+    });
+    const digitForms = circledDigits.map((ch, n) => {
+      const forms = { up: symbol(ch, false, 2 * W), down: symbol(ch, true, 2 * W), upNarrow: symbol(ch, false, W), downNarrow: symbol(ch, true, W) };
+      map(ch, () => forms.up);
+      if (n < 10) map(String(n), () => forms.up);
+      return forms;
+    });
+    for (const ch of Object.keys(numberMarkShapes)) map(ch, () => symbol(ch, false, W));
 
     // Combining marks. Each is drawn about its anchor, offset one letter to the left, so that a mark with
     // no letter to attach to still sits over the letter before it.
@@ -3795,10 +3937,16 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     // Lookups 3 and up give the tick characters one group's drawn form each, and the last lookup decides
     // which group applies: the bar (or tick) just before, or the bar just after. Text shaping sorts marks
     // below ahead of marks above, so a tick can end up in front of a bar above.
-    const tickLookups = tickVariants.map(({ pairs }) =>
-      ({ type: 1, subtables: [linked(o => bytes(w => w.u16(2, o[0], pairs.length, ...pairs.map(p => p[1]))), [coverage(pairs.map(p => p[0]))])] }));
+    // `swap` takes [glyph, replacement] pairs sorted by glyph.
+    const swap = (pairs) => ({ type: 1, subtables: [linked(o => bytes(w => w.u16(2, o[0], pairs.length, ...pairs.map(p => p[1]))), [coverage(pairs.map(p => p[0]))])] });
+    const tickLookups = tickVariants.map(({ pairs }) => swap(pairs));
     const pickTicks = 3 + tickLookups.length;
-    const GSUB = layout([['calt', [1, 2, pickTicks]], ['rclt', [1, 2, pickTicks]]], [
+    // The last four lookups lay out digits. Every digit starts pointing up and two letters wide. Left to right,
+    // a digit right after one pointing up turns to point down, and any digit followed by another narrows.
+    const forms = (...keys) => sorted(digitForms.flatMap(f => keys.map(k => f[k])));
+    const pairsOf = (from, to) => digitForms.flatMap(f => from.map((k, i) => [f[k], f[to[i]]])).sort((a, b) => a[0] - b[0]);
+    const turn = pickTicks + 1, narrow = pickTicks + 2, digitLookups = [pickTicks + 3, pickTicks + 4];
+    const GSUB = layout([['calt', [1, 2, pickTicks, ...digitLookups]], ['rclt', [1, 2, pickTicks, ...digitLookups]]], [
       { type: 1, subtables: [linked(o => bytes(w => w.u16(2, o[0], twins.length, ...twins.map(i => glyphs[i].half))), [coverage(twins)])] },
       { type: 6, flag: 8 /* ignore marks */, subtables: [chain(0, [], [fullVowels], [allVowels]), chain(0, [allVowels], [fullVowels], [])] },
       { type: 6, subtables: [chain(0, [sorted([...halfVowels, ...halfMarks])], [fullMarks], [])] },
@@ -3808,6 +3956,10 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
         chain(3 + k, [], [tickIds], [sorted(bars)]),
         chain(3 + k, [], [tickIds], [tickIds, sorted(bars)]),
       ]) },
+      swap(pairsOf(['up', 'upNarrow'], ['down', 'downNarrow'])),
+      swap(pairsOf(['up', 'down'], ['upNarrow', 'downNarrow'])),
+      { type: 6, subtables: [chain(turn, [forms('up', 'upNarrow')], [forms('up')], [])] },
+      { type: 6, subtables: [chain(narrow, [], [forms('up', 'down')], [forms('up', 'down')])] },
     ]);
 
     // Each combining mark attaches where that mark sits on the letter, squeezed or not. Letters with no
@@ -3924,7 +4076,10 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   // by whole pixels) skip the check.
   const compareWithSVG = (combining) => {
     if ( ! ('textRendering' in (globalThis.CanvasRenderingContext2D?.prototype ?? {}))) return;
-    const sample = "neim kud. pif xarc sou mauk a'apaun θŋ lr vaiuz NIIM KUT! seiou ɪʊəɛæʌɑ hx ɖɓʂɕʃ ʎɾʀɹ ɦɲqð ǁǂʔ";
+    // Every digit appears pointing both ways, since the second run is shifted by one.
+    const digits = circledDigits.join('');
+    const sample = "neim kud. pif xarc sou mauk a'apaun θŋ lr vaiuz NIIM KUT! seiou ɪʊəɛæʌɑ hx ɖɓʂɕʃ ʎɾʀɹ ɦɲqð ǁǂʔ " +
+      `${digits} ⓪${digits} 113 -③;⑤③⑱₋㉕ ②₆㉚`;
     const charOf = new Map(combining.map(({ m, char }) => [m, char]));
     // A composite mark (a full place, or neutral posture) is spelled with the combining marks that make it
     // up. Click characters are left as they are, since the bare click ("!") would stand apart as a word.
