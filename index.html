@@ -2958,17 +2958,17 @@ const textPathData = (txt, diacriticLookup) => {
   for (const wrd of txt.match(/[.,!]|[^\s.,!]+/g) ?? []) {
     if (x > 0) x += 180; // Word gap
     // One array of characters (by code point), so each character and its alphabet index stay in step.
-    const chars = [...wrd], idxs = chars.map(ch => numberSymbol(ch) ? undefined : letterIdx(ch));
+    const chars = [...wrd], idxs = chars.map(ch => symbolShape(ch) ? undefined : letterIdx(ch));
     let digits = 0;  // How many digits in a row came just before. Every other one points down.
     chars.forEach((ch, i) => {
-      const symbol = numberSymbol(ch, digits % 2 === 1);
+      const symbol = symbolShape(ch, digits % 2 === 1);
       if (symbol) {
         for (const s of symbol.strokes) letterPath += strokeSVG(s,x,0,1);
         for (const f of symbol.fills) fillPath += strokeSVG(f,x,0,1) + ' Z';
         // A digit's triangle reaches into the next letter's space, which only the next digit can share.
         const isDigit = numeralValue(ch) !== undefined;
         digits = isDigit ? digits + 1 : 0;
-        x += isDigit && numeralValue(chars[i+1]) === undefined ? 720 : 360;
+        x += ! isDigit ? symbol.width ?? 360 : numeralValue(chars[i+1]) === undefined ? 720 : 360;
         return;
       }
       digits = 0;
@@ -3591,12 +3591,91 @@ const numeralValue = (ch) => circledDigits.includes(ch) ? circledDigits.indexOf(
 const digitShapes = circledDigits.map((_, n) => digitShape(n));
 const flipStroke = (s) => ({ x: s.x, y: -s.y, segs: s.segs.map(seg => seg.map((v, i) => i % 2 ? -v : v)) });
 // A number mark's shape, or a digit's (pointing down if asked), or undefined for any other character.
+// (Use symbolShape, below, which also knows the shorthand symbols.)
 const numberSymbol = (ch, down) => {
   const n = numeralValue(ch);
   if (n === undefined) return numberMarkShapes[ch];
   const shape = digitShapes[n];
   return down ? { strokes: shape.strokes.map(flipStroke), fills: shape.fills.map(flipStroke) } : shape;
 };
+  </code></pre></details>
+
+  <p>Papsa also has <strong>shorthand symbols</strong> for words that are especially common in math.
+  Unlike the numerals, they're meant to be easy to write by hand, and they can stand for their words
+  outside of math, too. The comparisons are all built from the symbol for <code>`faf`</code>, a figure
+  eight on its side. The symbol for <code>`fafjuc`</code> cuts off both ends, the one for
+  <code>`zousfaf`</code> cuts off the right end, and the one for <code>`zousis`</code> pinches the left
+  end to a point. Augmenting a comparison with <code>`jamz`</code> mirrors its symbol. Parentheses
+  stand for the clause marks, taking whichever slot is implied, and like the clause marks they
+  don't need to be balanced.</p>
+
+  <pre data-table="mathSymbols">
+| Papsa Word              | Character | Symbol                                          |
+|-------------------------|-----------|-------------------------------------------------|
+| `faf`                   | =         | <span data-glyph="=" data-size="3"></span>      |
+| `fafjuc`                | ≠         | <span data-glyph="≠" data-size="3"></span>      |
+| `zousis`                | &lt;      | <span data-glyph="&lt;" data-size="3"></span>   |
+| `zousfaf`               | ≤         | <span data-glyph="≤" data-size="3"></span>      |
+| `zousfaf ei jamz`       | ≥         | <span data-glyph="≥" data-size="3"></span>      |
+| `zousis ei jamz`        | &gt;      | <span data-glyph="&gt;" data-size="3"></span>   |
+| `ou`                    | +         | <span data-glyph="+" data-size="3"></span>      |
+| `ei`                    | *         | <span data-glyph="*" data-size="3"></span>      |
+| `paun`                  | ≝         | <span data-glyph="≝" data-size="3"></span>      |
+| `mam`                   | ↦         | <span data-glyph="↦" data-size="3"></span>      |
+| `lu`, `la`, `li`        | (         | <span data-glyph="(" data-size="3"></span>      |
+| `ul`, `al`, `il`        | )         | <span data-glyph=")" data-size="3"></span>      |
+  </pre>
+
+  <p>The <strong>variable mark</strong> (~) goes in front of a letter and changes how that letter
+  is read as a pronoun. Alone, <code>`N`</code> reads as <code>`ana`</code>, but with a variable mark,
+  it reads as <code>`isnu`</code> (or another pronoun that fits the context). Here's the definition of
+  <code>`oubup`</code> from <a href="#functions">Functions</a>, written with symbols:</p>
+
+  <pre data-table="symbolExamples">
+| Papsa                                          | Symbols                                                         |
+|------------------------------------------------|-----------------------------------------------------------------|
+| `oubup paun li isnu mam isnu ou suk ei isnu`   | <span data-glyph="oubup ≝ ( ~n ↦ ~n + ② * ~n" data-size="3"></span> |
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Symbol Drawing</summary><pre><code>
+// The shorthand symbols are each a letter wide (unless they give a width), and centered on the baseline.
+const mathSymbolShapes = (() => {
+  const mirror = (s) => ({ x: 360 - s.x, y: s.y, segs: s.segs.map(seg => seg.map((v, i) => i % 2 ? v : 360 - v)) });
+  const curve = (from, ...segs) => ({ x: from[0], y: from[1], segs });
+  // The right half of faf's figure eight: an arm up from the center, a round end, and an arm back down.
+  const armUp = curve([180, 0], [210, -60, 230, -100, 270, -100]);
+  const roundEnd = curve([270, -100], [310, -100, 340, -55, 340, 0], [340, 55, 310, 100, 270, 100]);
+  const armDown = curve([270, 100], [230, 100, 210, 60, 180, 0]);
+  const crossing = [armUp, armDown, mirror(armUp), mirror(armDown)];
+  const lessThan = [curve([270, -100], [200, -100, 100, -40, 30, 0], [100, 40, 200, 100, 270, 100])];
+  const proportional = [...crossing, mirror(roundEnd)];
+  // paun's left end is a fish's tail: the arms flare out and hook back.
+  const tail = curve([180, 0], [150, -60, 110, -120, 40, -150], [20, -158, 10, -140, 30, -120]);
+  const parenthesis = [curve([250, -330], [110, -220, 110, 220, 250, 330])];
+  const shapes = Object.fromEntries(Object.entries({
+    '=': [...crossing, roundEnd, mirror(roundEnd)],
+    '≠': crossing,
+    '<': lessThan,
+    '≤': proportional,
+    '≥': proportional.map(mirror),
+    '>': lessThan.map(mirror),
+    // ou: a vertically flipped `A`, with a rounder hoop centered on the baseline and short arms.
+    '+': [curve([50, -190], [200, -140, 300, -90, 300, 0], [300, 83, 246, 150, 180, 150],
+                            [114, 150, 60, 83, 60, 0], [60, -90, 160, -140, 310, -190])],
+    // ei: the U that a squeezed `ii` makes, without the strokes that join it to the baseline.
+    '*': [curve([90, -396], [90, -396, 90, 0, 180, 0], [270, 0, 270, -396, 270, -396])],
+    '≝': [armUp, roundEnd, armDown, tail, flipStroke(tail)],
+    '↦': [polyline([[60, 120], [300, -120]]), polyline([[180, -120], [300, -120], [300, 0]])],
+    '(': parenthesis,
+    ')': parenthesis.map(mirror),
+  }).map(([ch, strokes]) => [ch, { strokes, fills: [] }]));
+  // The variable mark: a tight circle that feeds into the baseline, ahead of the letter it marks.
+  shapes['~'] = { strokes: [circle([50, 0], 40), polyline([[90, 0], [180, 0]])], fills: [], width: 180 };
+  return shapes;
+})();
+
+// The shape of a numeral, number mark, or shorthand symbol (a digit pointing down if asked), or undefined.
+const symbolShape = (ch, down) => numberSymbol(ch, down) ?? mathSymbolShapes[ch];
 
 // Now that every shape is defined, draw every element with data-glyph="...". Add data-size for scale (in em).
 // Add data-marks to draw the listed marks instead of the ones the characters carry, or data-ipa to draw the
@@ -3623,9 +3702,6 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
   draw();
 }
   </code></pre></details>
-
-  <p>TODO Papsa also has a set of shorthand symbols that allow common words, especially in math
-  (eg faf, paun, mam, ei), to be compressed.</p>
   
   <h3>Font</h3>
 
@@ -3872,10 +3948,10 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
       hollows.push([cp, twin]);
     }
 
-    // Numerals (see Numerals and Symbols). Each digit comes pointing up or down, and either two letters wide,
+    // Numerals and symbols (see Numerals and Symbols). Each digit comes pointing up or down, and either two letters wide,
     // as it is at the end of a row, or one letter wide, with its triangle reaching into the next digit's space.
     const symbol = (ch, down, advance) => make(['symbol', ch, down, advance].join('|'), () => {
-      const { strokes, fills } = numberSymbol(ch, down), at = (px, py) => [px, RAISE - py];
+      const { strokes, fills } = symbolShape(ch, down), at = (px, py) => [px, RAISE - py];
       return { advance, contours: [...strokes.flatMap(st => outline(st, at, PEN)), ...fills.map(f => area(f, at))] };
     });
     const digitForms = circledDigits.map((ch, n) => {
@@ -3884,7 +3960,8 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
       if (n < 10) map(String(n), () => forms.up);
       return forms;
     });
-    for (const ch of Object.keys(numberMarkShapes)) map(ch, () => symbol(ch, false, W));
+    for (const ch of [...Object.keys(numberMarkShapes), ...Object.keys(mathSymbolShapes)])
+      map(ch, () => symbol(ch, false, symbolShape(ch).width ?? W));
 
     // Combining marks. Each is drawn about its anchor, offset one letter to the left, so that a mark with
     // no letter to attach to still sits over the letter before it.
@@ -4080,7 +4157,7 @@ document.querySelectorAll('[data-glyph]').forEach(el => {
     // Every digit appears pointing both ways, since the second run is shifted by one.
     const digits = circledDigits.join('');
     const sample = "neim kud. pif xarc sou mauk a'apaun θŋ lr vaiuz NIIM KUT! seiou ɪʊəɛæʌɑ hx ɖɓʂɕʃ ʎɾʀɹ ɦɲqð ǁǂʔ " +
-      `${digits} ⓪${digits} 113 -③;⑤③⑱₋㉕ ②₆㉚`;
+      `${digits} ⓪${digits} 113 -③;⑤③⑱₋㉕ ②₆㉚ = ≠ <≤≥> +* ≝ ( ~N ↦ ~n ) ②)`;
     const charOf = new Map(combining.map(({ m, char }) => [m, char]));
     // A composite mark (a full place, or neutral posture) is spelled with the combining marks that make it
     // up. Click characters are left as they are, since the bare click ("!") would stand apart as a word.
