@@ -443,9 +443,10 @@ const baseLetter = (ch) => {
   if (clickChars.has(ch)) return '!';
   const baseRow = alphabet['Letter'][ch];
   if (baseRow) return baseRow['Letter'];
-  const romRow = engConsonantRomanization['Romanization'][ch];
+  const lower = ch.toLowerCase();
+  const romRow = engConsonantRomanization['Romanization'][lower];
   if (romRow) return romRow['Papsa Letter'];
-  const ipaRow = alphabet['Acceptable sounds (IPA)'][ch];
+  const ipaRow = alphabet['Acceptable sounds (IPA)'][lower];
   if (ipaRow) return ipaRow['Letter'];
   throw new Error(`Unknown Papsa character: ${ch}`);
 };
