@@ -1576,8 +1576,8 @@ mum naun im fila tait. iur bikmauk naunais im kana hait  |  The big cat likes wa
 bikmauk naun kana. uas maukmum naunais fila            |  The dog likes meat, and the cat prefers fish.
 maukmum ui fila zouctait bikmauk ui kana               |  The cat's fish is bigger than the dog's meat.
 mauk ei suk neimnaun                                   |  Both animals are happy.
-humum ei am mazgu zouc ul zuip li fila am kuh soun tci fut  |  If it rains tomorrow, the cat will stay inside.
-am humum soun θu zus mazgu ei sat                      |  It hasn't rained for three days.
+xumum ei am mazgu zouc ul zuip li fila am kuh soun tci fut  |  If it rains tomorrow, the cat will stay inside.
+am xumum soun θu zus mazgu ei sat                      |  It hasn't rained for three days.
 kana pun li na min li bik. iur am muf soun bik         |  The dog said that it wanted to eat, but it couldn't find any food.
 ouei mazguimain zuip li na pif bik tci muf fila ouei   |  Please feed the cat every morning.
 ceiou cif li ak pif suk mazguih mum ceiou              |  Don't forget to give it water twice a day.
@@ -1601,21 +1601,24 @@ mauk kuxuh                                             |  The animal jumped.
 fila kuxuh                                             |  The cat jumped up.
 fila ei main kuxuh tautaz                              |  The kitten jumped onto the table.
 uk fila main hait uip vinjuc                           |  My little kitten walked away.
-na humum                                               |  It's raining.
-humum xujuc                                            |  The rain came down.
-fila ei main kimnaun tci humum                         |  The kitten is playing in the rain.
-humum ceim                                             |  The rain has stopped.
-humum ceim ei am zeif vin                              |  Soon the rain will stop.
-pun min li humum ceim ei am zeif vin                   |  I hope the rain stops soon.
+xumum                                                  |  It's raining.
+xumum xujuc                                            |  The rain came down.
+fila ei main kimnaun tci xumum                         |  The kitten is playing in the rain.
+xumum ceim                                             |  The rain has stopped.
+xumum ceim ei zeivin                                   |  Soon the rain will stop.
+pun min li xumum ceim ei zeivin                        |  I hope the rain stops soon.
 mauk ei mauk ak tif saum zous vin                      |  Once wild animals lived here.
 am neimguih cuk θu maz                                 |  Slowly she looked around.
-nuh vinjuc ouei                                        |  Go away!
+ukfu neimguih ei cuk                                   |  Slowly she looked around.
+vinjuc ouei                                            |  Go away!
 pun kuh ouei                                           |  Let's go!
+kuh ouei                                               |  Let's go!
 nuh kuh ul naun                                        |  You should go.
 pun kuh ul naun pun                                    |  I'll be happy to go.
+am vin zeivin                                          |  He will arrive soon.
+ukpi kuvin ei zeivin                                   |  He will arrive soon.
 
 TODO:
-He will arrive soon. -> HE (traveler-local fated-local)
 The baby's ball has rolled away. -> bent of person-new-new traveler-bent local-opposite
 The two boys are working together. -> [two person-new] (active-make plural)
 This mist will probably clear away. -> cloud-local dead> fated-split
@@ -2013,7 +2016,7 @@ tigab figuk olguin nikud pauneim | "Red Net", Olguin, "Crying Motive" (ie 19383 
 |   12 |   `nikan` |  `mukan` |  `kukan` |  `tikan` |   `bikan` |   `fikan` |
 |   18 |  `natana` | `matana` | `katana` | `tautun` |  `patana` |  `fatana` |
 |   24 |  `napana` | `mapana` | `kapana` | `dupaun` |  `papana` |  `fapana` |
-|   30 |  `nafana` | `mafana` | `kavana` | `tafana` |  `pafana` |  `fafana` |
+|   30 |  `nafana` | `mafana` |  `kuvin` | `tafana` |  `pafana` |  `fafana` |
 |   36 |  `nuneim` | `manama` | `kuneim` | `tanama` | `pauneim` |  `fanama` |
 |   42 |  `neimam` |  `mumum` |  `kimam` | `tamama` |   `pimum` |  `feimum` |
 |   48 |  `nakama` | `makama` | `kakama` | `takama` |  `pakama` |  `fakama` |
@@ -4391,6 +4394,7 @@ addEventListener('DOMContentLoaded', () => {
 | `tautun` | door, gate, portal, entrance, exit, opening, passage | to be a portal or door that allows access to | | `taut`, `hun` | doored, gated | to be a door | - |
 | `punmain` | greeter, introducer, newcomer-to-conversation | to greet, to hail | | `pun`, `main` | greeting, initiating | to greet, to say hello | initially |
 | `pundut` | ender-of-conversation | to say goodbye to, to wrap up with | | `pun`, `dut` | closing, final, concluding | to say goodbye, to end a conversation, to sign off, to hang up, to disconnect, to conclude | terminally |
+| `kuvin` | newcomer, arriver, incoming traveler, approacher | to come to, to approach, to head toward, to arrive at | Travel aimed at "here," toward the speaker or some obviously local spot. Where `vin` is reaching a place (or being there), `kuvin` puts the weight on the journey, so it can describe something still on its way. Contrast with `vinjuc`. | `kuh`, `vin` | incoming, approaching, arriving, oncoming | to come, to approach, to arrive, to come here | toward here, hither, inbound |
 | `figuk` | red | to be as red as | | `fik`, `guk` | red | to be red | - |
 | `figuih` | yellow | to be as yellow as | | `fik`, `guih` | yellow | to be yellow | - |
 | `fikbup` | green | to be as green as | | `fik`, `bup` | green | to be green | - |
@@ -4413,9 +4417,8 @@ addEventListener('DOMContentLoaded', () => {
 | `mazguijuc` | night, nighttime | to (in the night) conceal | | `mazguih`, `juc` | nocturnal, nightly | to be night | nightly |
 | `xufaf` | weather | to be weather affecting | | `xuh`, `faf` | - | to be weather | - |
 | `xuguih` | sunshine, sun | to be sunshine upon | | `xuh`, `guih` | sunny | to be sunny | sunnily |
-| `xumum` | rain, precipitation, snow, sleet, hail | to rain on, to snow on | | `xuh`, `mum` | rainy, stormy | to rain, to snow, to sleet, to hail, to precipitate | - |
-| `hufmum` | rain | to rain on | | `huf`, `mum` | rainy | to rain | - |
-| `hufcuk` | snow, sleet, hail | to snow on, to be snow on | | `huf`, `cuk` | snowy | to snow, to sleet, to hail | - |
+| `xumum` | rain, precipitation, snow, sleet, hail | to rain on, to snow on | While this means precipitation in general, it implies rain by default, since snow is often distinguished as `xucuk`. | `xuh`, `mum` | rainy, stormy | to rain, to snow, to sleet, to hail, to precipitate | - |
+| `xucuk` | snow, sleet, hail | to snow on, to be snow on | | `xuh`, `cuk` | snowy | to snow, to sleet, to hail | - |
 | `huvin` | fog | to (as fog) envelop | | `huf`, `vin` | foggy | to be foggy | - |
 | `xukim` | wind | to blow on | | `xuh`, `kim` | windy | to blow | - |
 | `xukimait` | breeze | to blow gently on | | `xukim`, `hait` | breezy | to blow gently | - |
@@ -4640,7 +4643,8 @@ addEventListener('DOMContentLoaded', () => {
 | `punik` | voice, vocalist, announcer, narrator, reader-aloud | to say aloud, to voice, to utter, to pronounce, to vocalize, to read aloud | Where `pun` covers expression through any channel (writing, gesture, art), `punik` is expression through sound. Words aren't required, so a whistled signal or a meaningful grunt counts. Where `hikneim` is sound made to be heard, `punik` is sound used to get something across. | `pun`, `hik` | vocal, spoken, oral, verbal | to speak aloud, to vocalize | aloud, out loud, orally, vocally |
 | `puniguk` | shouter, yeller, loudmouth, crier, barker, herald | to shout, to yell, to holler, to call out, to bellow | Speech turned up until it burns. It usually carries a message, as when shouting directions across a field, but the intensity implies anger or urgency. A shouting match is `puniguk` on both sides. Compare `higukpun`, where the noise comes first and words are optional. | `punik`, `guk` | loud, shouting, strident, vociferous, heated | to shout, to yell, to raise one's voice | loudly, vociferously, at the top of one's lungs |
 | `sipfic` | subset, portion, share, selection, contingent, faction | to take some of, to select from, to sample, to split off a share of | Part of a collection: more than one but less than the whole group, with no claim about how large a part. | `sip`, `fic` | some, several, partial, certain, select, a few | to split off, to sample from a group | partly, partially, in part, sometimes |
-    
+| `zeivin` | the imminent, what's coming, near future, the impending | to see coming, to expect any moment | A fate that has nearly arrived. Like `zeif`, it carries confidence that the thing really is coming; it just puts it close. As with `vin`, it can stretch to space, for a destination coming into view. | `zeif`, `vin` | imminent, impending, upcoming, forthcoming, near, close at hand | to be imminent, to loom, to draw near, to be about to happen | soon, shortly, momentarily, any moment now |
+
 TODO: More words!!
 Body Parts, Buildings, Towns, and Cities
   </pre>
