@@ -724,6 +724,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 | `nuh` | audience, reader, receiver, listener, auditor, you, y'all | to hear, to listen to, to read, to recognize, to perceive | | attentive, receptive, perceptive | to attend, to pay attention | attentively, receptively |
 | `naun` | treasure, wealth, resource, virtue, benefit, boon | to be good for, to have value to, to attract, to benefit | | good, moral, right, valuable, healthy, excellent, lovely, wonderful, great, glorious | to be good, to be valuable, to be beneficial | well, excellently |
 | `nuif` | edge, border, maximum, minimum, boundary, bound, limit, fringe, margin | to border, to bound, to limit, to be the limit of, to edge, to define, to demarcate | | extreme, maximal, minimal, edgy, borderline, marginal, limiting, limited, bounded, finite, defining | to be an edge, to be a limit | extremely, marginally, finitely |
+| `nat` | play, gaming, game, adventure, make-believe | to play with, to toy with, to explore, to go on an adventure to, to pretend that | | playful, adventurous, pretend, silly | to play, to pretend, to explore | playfully |
 | `niŋ` | thought, idea, concept, knowledge, understanding, awareness, insight, model, fact | to know, to be aware of, to comprehend | | knowledgeable, aware, insightful, cognizant, conscious, informed, learned, educated, sage | to understand, to be wise, to be sage | knowledgeably, insightfully |
 | `neim` | feeling, sensation, emotion, experience, perception, texture | to feel, to sense, to experience, to touch, to perceive | There is a deliberate map-territory vagueness around `neim` and its derivatives (e.g. `neimnaun`). While the vowel pattern indicates that the noun form is that-which-is-felt, we often translate it as the feeling itself or even the one who is experiencing the feeling. Philosophically, this stems from a stance that the true object of `neim` is in the mind. Getting slapped with a cactus is not *objectively* painful (congenital analgesia is a thing, for example), and so we can attach the notion of painfulness to a wound, the experience of a wound, or one who is wounded. | sensitive, emotional, sensory, intuitive, tactile | to feel, to be sensitive | sensitively, emotionally, intuitively |
 | `nik` | goal, target, ends, mission, objective, destination | to aim at, to work towards, to steer towards, to pursue, to seek, to optimize for | | targeted, optimum, desired, purposeful | to strive, to work towards a goal | purposefully, deliberately |
@@ -1133,8 +1134,8 @@ abi pun tci fut             |  Abi is speaking inside.
   repeat the preposition mark for each level of depth.</p>
 
   <pre>
-abi pun tci fut θu xuh maksi                                             |  Abi is speaking inside, over Max.
-mainup kimnaun tci vuf mumkuh θu θu xujuc vufdut θu θu θu fic vufmumtait |  The boy played near the river that descended from the mountains that split the continent.
+abi pun tci fut θu xuh maksi                                          |  Abi is speaking inside, over Max.
+mainup nat tci vuf mumkuh θu θu xujuc vufdut θu θu θu fic vufmumtait  |  The boy played near the river that descended from the mountains that split the continent.
   </pre>
 
   <details class="spec-code"><summary class="code-title">Prepositions</summary><pre><code>
@@ -1603,7 +1604,7 @@ fila ei main kuxuh tautaz                              |  The kitten jumped onto
 uk fila main hait uip vinjuc                           |  My little kitten walked away.
 xumum                                                  |  It's raining.
 xumum xujuc                                            |  The rain came down.
-fila ei main kimnaun tci xumum                         |  The kitten is playing in the rain.
+fila ei main nat tci xumum                             |  The kitten is playing in the rain.
 xumum ceim                                             |  The rain has stopped.
 xumum ceim ei zeivin                                   |  Soon the rain will stop.
 pun min li xumum ceim ei zeivin                        |  I hope the rain stops soon.
@@ -1617,9 +1618,9 @@ nuh kuh ul naun                                        |  You should go.
 pun kuh ul naun pun                                    |  I'll be happy to go.
 am vin zeivin                                          |  He will arrive soon.
 ukpi kuvin ei zeivin                                   |  He will arrive soon.
+natikmaz ui mainupmain kumaz vinjuc                    |  The baby's ball has rolled away.
 
 TODO:
-The baby's ball has rolled away. -> bent of person-new-new traveler-bent local-opposite
 The two boys are working together. -> [two person-new] (active-make plural)
 This mist will probably clear away. -> cloud-local dead> fated-split
 Lovely flowers are growing everywhere. -> [plant-glow boon] via-place all
@@ -2026,7 +2027,7 @@ tigab figuk olguin nikud pauneim | "Red Net", Olguin, "Crying Motive" (ie 19383 
 |   72 |  `nanaka` | `manaka` | `kanaka` | `tanaka` |   `punik` |  `fanaka` |
 |   78 |  `neimik` |  `mumuk` | `kamaka` | `tamaka` |  `pamaka` |  `famaka` |
 |   84 |  `nakaka` | `makaka` | `kakaka` | `takaka` |  `pakaka` |   `figuk` |
-|   90 |  `nataka` | `mataka` | `kataka` | `tataka` |  `pataka` |   `futik` |
+|   90 |   `natik` | `mataka` | `kataka` | `tataka` |  `pataka` |   `futik` |
 |   96 |  `napaka` | `mapaka` | `kapaka` | `tapaka` |  `papaka` |  `fapaka` |
 |  102 |  `nafaka` | `mafaka` | `kafaka` | `tafaka` |  `pafaka` |  `fafaka` |
 |  108 |  `nanata` | `manata` | `kanata` | `tanata` |  `panata` |  `vanata` |
@@ -4370,6 +4371,8 @@ addEventListener('DOMContentLoaded', () => {
   <pre class="tall oneline" data-table="compoundMeanings">
 | Word | Noun | Verb (Transitive) | Notes | Roots | Adjective | Verb (Intransitive) | Adverb |
 |------|------|-------------------|-------|-------|-----------|---------------------|--------|
+| `natik` | toy, game | to play a game with, to use a toy to pretend, to play toys with | | `nat`, `tik` | - | to play with a toy, to play a game | - |
+| `natikmaz` | ball, sport ball | to play a ball game with | | `natik`, `maz` | - | to play a ball game | - |
 | `mumum` | water, H2O, liquid water | to hydrate | | `mum`, `mum` | hydrated | to be water | - |
 | `mumvuf` | ocean, sea, great lake | to be the ocean near | | `mum`, `vuf` | tidal, oceanic, marine | to be an ocean | - |
 | `mazmum` | bubble | to bubble up through | | `maz`, `mum` | bubbling, bubbly | to bubble, to bubble up | bubblingly |
@@ -4540,7 +4543,7 @@ addEventListener('DOMContentLoaded', () => {
 | `papdup` | parent, guardian | to love as a parent | Also applies to step-parents, foster parents, et cetera. | `pap`, `dup` | parental | to love as a parent | - |
 | `papmain` | child, kid | to love as a child, to care for (a child) | The verb form also applies to teacher/student relationships and even peer relations between kids. Does *not* (usually) apply to grown people who are descended or were raised by someone. More affectionate than `mainup`. | `pap`, `main` | childish | to care for a child, to love a child | - |
 | `mainup` | child, kid, boy, girl, baby, toddler | - | Generic way to refer to a young person. Doesn't have as much loving connotation as `papmain`. | `main`, `nup` | childish | to be childish, to be innocent, to play, to be young in nature | childishly |
-| `kimnaun` | game, adventure, make-believe, play | to play with, to explore | | `kim`, `naun` | playful | to play, to explore | playfully |
+| `mainupmain` | baby, infant | - | | `mainup`, `main` | infantile | to be a baby | - |
 | `bikmum` | seafood, fish, shellfish | - | Technically also includes freshwater fare and seaweed. | `bik`, `mum` | - | to eat seafood | - |
 | `bikbup` | produce, vegetable, fruit | - | | `bik`, `bup` | - | to eat produce | - |
 | `bikmauk` | meat, flesh | - | | `bik`, `mauk` | carnivorous, meaty | to eat meat | - |
@@ -4644,9 +4647,9 @@ addEventListener('DOMContentLoaded', () => {
 | `puniguk` | shouter, yeller, loudmouth, crier, barker, herald | to shout, to yell, to holler, to call out, to bellow | Speech turned up until it burns. It usually carries a message, as when shouting directions across a field, but the intensity implies anger or urgency. A shouting match is `puniguk` on both sides. Compare `higukpun`, where the noise comes first and words are optional. | `punik`, `guk` | loud, shouting, strident, vociferous, heated | to shout, to yell, to raise one's voice | loudly, vociferously, at the top of one's lungs |
 | `sipfic` | subset, portion, share, selection, contingent, faction | to take some of, to select from, to sample, to split off a share of | Part of a collection: more than one but less than the whole group, with no claim about how large a part. | `sip`, `fic` | some, several, partial, certain, select, a few | to split off, to sample from a group | partly, partially, in part, sometimes |
 | `zeivin` | the imminent, what's coming, near future, the impending | to see coming, to expect any moment | A fate that has nearly arrived. Like `zeif`, it carries confidence that the thing really is coming; it just puts it close. As with `vin`, it can stretch to space, for a destination coming into view. | `zeif`, `vin` | imminent, impending, upcoming, forthcoming, near, close at hand | to be imminent, to loom, to draw near, to be about to happen | soon, shortly, momentarily, any moment now |
+| `kumaz` | roller, wheel, rolling stone, tumbleweed | to roll to, to roll toward | Travel by turning over and over, like a ball or a wheel. To roll something else, make it the object of a causal verb like `kud`. | `kuh`, `maz` | rolling, tumbling, wheeled, wheeling | to roll, to tumble, to trundle, to wheel | end over end, head over heels |
 
-TODO: More words!!
-Body Parts, Buildings, Towns, and Cities
+TODO: Body Parts, Buildings, Towns, and Cities
   </pre>
   
   <details class="spec-code"><summary class="code-title">Compound Word Lookup</summary><pre><code>
