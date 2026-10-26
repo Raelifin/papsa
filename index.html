@@ -443,7 +443,7 @@ const baseLetter = (ch) => {
   if (clickChars.has(ch)) return '!';
   const baseRow = alphabet['Letter'][ch];
   if (baseRow) return baseRow['Letter'];
-  const lower = ch.toLowerCase(); // Capitals don't matter: "Vuf" is "vuf".
+  const lower = ch.toLowerCase();
   const romRow = engConsonantRomanization['Romanization'][lower];
   if (romRow) return romRow['Papsa Letter'];
   const ipaRow = alphabet['Acceptable sounds (IPA)'][lower];
