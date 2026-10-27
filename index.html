@@ -1619,20 +1619,20 @@ pun kuh ul naun pun                                    |  I'll be happy to go.
 am vin zeivin                                          |  He will arrive soon.
 ukpi kuvin ei zeivin                                   |  He will arrive soon.
 natikmaz ui mainupmain kumaz vinjuc                    |  The baby's ball has rolled away.
+mainup ei suk kimtum ei sip                            |  The two boys are working together.
+huvin ceim il na zeific                                |  This mist will probably clear away.
+bupfik ei naun bup tci vuf zuip                        |  Lovely flowers are growing everywhere.
+punuh bik ei am cuk sis ul naun                        |  We should eat more slowly.
+nuh kuvin ei zouscun                                   |  You have come too soon.
+nuh kan li tumpaun ei fif il ul naun                   |  You must write more neatly.
+vuf ei naun am vuf taz juc                             |  Directly opposite stands a wonderful place.
+kana ui henri minif                                    |  Henry's dog is lost.
+fila uip fikcuc                                        |  My cat is black.
+na fic tiknup ui mainup                                |  The little girl's doll is broken.
+am fif faf li pun kimcuk ei taut                       |  I usually sleep soundly.
+mainup kukuh θu kuh djaki                              |  The children ran after Jack.
 
 TODO:
-The two boys are working together. -> [two person-new] (active-make plural)
-This mist will probably clear away. -> cloud-local dead> fated-split
-Lovely flowers are growing everywhere. -> [plant-glow boon] via-place all
-We should eat more slowly. -> you-me (edible cold)> boon
-You have come too soon. -> you (traveler past bad) local 
-You must write more neatly. -> you boost {make-sign>> boon
-Directly opposite stands a wonderful palace. -> [place boon] (place plane) opposite
-Henry's dog is lost. -> Dog of Henry want-oriented
-My cat is black. -> Cat mine vivid-opposite
-The little girl's doll is broken. -> (split) tool-person of person-new
-I usually sleep soundly. -> (shaped is) {me (active-cold base)>
-The children ran after Jack. -> person-new traveler-traveler to-traveler Jack
 I can play after school. -> me free {active-boon via-past-time time-mind-you>
 We went to the village for a visit. -> me traveler place-built via-want feel-built
 We arrived at the river. -> me traveler water-traveler
@@ -2016,7 +2016,7 @@ tigab figuk olguin nikud pauneim | "Red Net", Olguin, "Crying Motive" (ie 19383 
 |    6 |  `neimin` |  `mamin` | `kimain` | `tumain` |  `pimain` | `feimain` |
 |   12 |   `nikan` |  `mukan` |  `kukan` |  `tikan` |   `bikan` |   `fikan` |
 |   18 |  `natana` | `matana` | `katana` | `tautun` |  `patana` |  `fatana` |
-|   24 |  `napana` | `mapana` | `kapana` | `dupaun` |  `papana` |  `fapana` |
+|   24 |   `nupun` | `mapana` | `kapana` | `dupaun` |  `papana` |  `fapana` |
 |   30 |  `nafana` | `mafana` |  `kuvin` | `tafana` |  `pafana` |  `fafana` |
 |   36 |  `nuneim` | `manama` | `kuneim` | `tanama` | `pauneim` |  `fanama` |
 |   42 |  `neimam` |  `mumum` |  `kimam` | `tamama` |   `pimum` |  `feimum` |
@@ -4639,6 +4639,7 @@ addEventListener('DOMContentLoaded', () => {
 | `kudvin` | puller | to pull, to draw, to drag | | `kud`, `vin` | pulling | to pull, to draw, to drag | - |
 | `tikdup` | clothing, clothes, garment, outfit | to clothe, to dress | | `tik`, `dup` | clothed, dressed | to dress | - |
 | `tikdupdut` | armor | to armor | | `tikdup`, `dut` | armored | to armor | - |
+| `tiknup` | doll, puppet, action figure | to play with (a doll), to pose | | `tik`, `nup` | - | to play with dolls | - |
 | `duptik` | shield | to shield | | `dup`, `tik` | shielding | to shield | - |
 | `neimam` | adjustment, acclimation, habituation, change of heart | to get used to, to adjust to, to acclimate to, to grow accustomed to, to come around to, to warm to, to be moved by | Eyes adjusting to darkness, cold water that stops feeling cold, warming to a song you once disliked, or coming to feel that something that was once strange is now normal. | `neim`, `mam` | accustomed, acclimated, adjusted, habituated, moved, touched | to adjust, to acclimate | - |
 | `higuk` | din, racket, blare, screech, cacophony, noise pollution | to deafen, to grate on, to assault with noise | A sound that "burns", the way `neimguk` is a feeling that burns. The burn is in the hearing, not necessarily the volume: fingernails on a chalkboard are `higuk` at any loudness. | `hik`, `guk` | loud, deafening, shrill, piercing, grating, harsh, ear-splitting | to blare, to screech, to clang, to roar | deafeningly, shrilly |
@@ -4648,6 +4649,11 @@ addEventListener('DOMContentLoaded', () => {
 | `sipfic` | subset, portion, share, selection, contingent, faction | to take some of, to select from, to sample, to split off a share of | Part of a collection: more than one but less than the whole group, with no claim about how large a part. | `sip`, `fic` | some, several, partial, certain, select, a few | to split off, to sample from a group | partly, partially, in part, sometimes |
 | `zeivin` | the imminent, what's coming, near future, the impending | to see coming, to expect any moment | A fate that has nearly arrived. Like `zeif`, it carries confidence that the thing really is coming; it just puts it close. As with `vin`, it can stretch to space, for a destination coming into view. | `zeif`, `vin` | imminent, impending, upcoming, forthcoming, near, close at hand | to be imminent, to loom, to draw near, to be about to happen | soon, shortly, momentarily, any moment now |
 | `kumaz` | roller, wheel, rolling stone, tumbleweed | to roll to, to roll toward | Travel by turning over and over, like a ball or a wheel. To roll something else, make it the object of a causal verb like `kud`. | `kuh`, `maz` | rolling, tumbling, wheeled, wheeling | to roll, to tumble, to trundle, to wheel | end over end, head over heels |
+| `zeific` | odds, probability, likelihood, chance, likely outcome, best guess | to expect, to bet on, to deem likely, to be the odds of, to be the probability of | An outcome foreseen, but without the certainty of `zeif`. When used in many contexts, there's an implication of relative likelihood compared to other outcomes (though it might simply be the plurality rather than >50% probability). In more precise contexts, the subject can be the numeric odds or probability of the outcome. See "Credence, Speculation, and Theory" in the Philosophy appendix for more. | `zeif`, `fic` | probable, likely, plausible, expected | to be likely, to be probable, to seem likely | probably, likely, presumably |
+| `punuh` | we, us | to discuss, to talk about | Explicitly inclusive of both the speaker and the listener. When used as a verb it implies the subject is multiple people talking amongst themselves. | `pun`, `nuh` | - | to discuss, to talk | - |
+| `nupun` | artist, creative, poet, performer, auteur | to express oneself through, to make art in | A person who lives by expressing themselves. Usually implies profession/vocation, but can apply to very passionate amateurs. `pun` is more general -- anyone expressing anything. Compare `tumpaun`. | `nup`, `pun` | artistic, creative, expressive | to make art, to create, to be an artist | artistically, creatively |
+| `minif` | missing way, the way back | to look for the way to, to seek a route to | A dog that has wandered off is `minif`, while its owner has `cif` it. Extends readily to being lost in life or in conversation. | `min`, `hif` | lost, disoriented, astray, adrift, bewildered, stray | to be lost, to lose one's way, to wander, to stray | aimlessly, astray, blindly |
+| `zouscun` | - | to be too early for, to come too quickly | Can have sexual connotations. | `zous`, `cun` | premature | to be unfortunately early | prematurely |
 
 TODO: Body Parts, Buildings, Towns, and Cities
   </pre>
