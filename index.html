@@ -1867,11 +1867,23 @@ I met a little cottage girl; she was eight years old, she said.
 | `ifsuk`     | West              | `hifsuk`              | Down, on a Papsa map. |
 | `ifpun`     | South             | `hifpun`              | Right, on a Papsa map. |
 | `iftaz`     | North             | `hiftaz`              | Left, on a Papsa map. |
-TODO Make sure all the units are listed here:
 | `aisbib`    | fingertip unit    | `nais` + `bibih`      |       |
 | `aisas`     | stretch unit      | `nais` + `has`        |       |
 | `aisasuh`   | tower unit        | `nais` + `hasuh`      |       |
 | `aisin`     | Papsan Mile       | `nais` + i + n        |       |
+| `aiskufut`  | ride unit         | `nais` + `kufut`      |       |
+| `aisuif`    | border unit       | `nais` + `nuif`       |       |
+| `aisasat`   | thread unit       | `nais` + `hasait`     |       |
+| `aisasatfic` | fiber unit       | `aisasat` + `fic`     |       |
+| `aisiguk`   | red unit          | `nais` + `figuk`      |       |
+| `aistikmuk` | biomachine unit   | `nais` + `tikmuk`     |       |
+| `aisficat`  | molecule unit     | `nais` + `ficait`     |       |
+| `aisikiaz`  | x-ray unit        | `nais` + `ikiaz`      |       |
+| `uizinarc`  | blink unit        | "uiz-" + `cinarc`     |       |
+| `uizbikuh`  | breath unit       | "uiz-" + `bikuh`      |       |
+| `uizimcuk`  | rest unit         | "uiz-" + `kimcuk`     |       |
+| `uizeimtif` | visit unit        | "uiz-" + `neimtif`    |       |
+| `uaskuh`    | go-speed unit     | `kuh`                 |       |
 | `ikaih`     | radio/infrared    | `fik` + "-aih-"       |       |
 | `iksoun`    | red               | `fik` + `soun`        |       |
 | `iksaum`    | yellow            | `fik` + `saum`        |       |
@@ -4736,21 +4748,28 @@ TODO: Body Parts, Buildings, Towns, and Cities
   <details class="spec-code"><summary class="code-title">Compound Word Lookup</summary><pre><code>
 for (const [wrd,row] of compoundMeanings["Word"]) addCoreWord(wrd, row, 'compoundMeanings');
 
-// Link each compound with the words it's built from, both ways, so a lookup can show either. A root can
-// also be a number word, which has no dictionary entry, so the compounds of each root are kept here,
-// under the base letters of the word the root reads as.
-const compoundsOf = {};
+// Link each compound and named dictionary entry with the words it comes from, both ways, so a lookup can
+// show either. A source can also be a number word, which has no dictionary entry, so what comes from each
+// word is kept here, under the base letters of the word it reads as.
+const derivedFrom = { compounds: {}, names: {} };
+const linkSources = (entry, field, sources, kind, where) => {
+  entry[field] = sources;
+  for (const s of sources) {
+    const src = makeToken(s);
+    if (src.probablyForeign) { tableErrors.push({ where, reason: `${entry.word} comes from ${s}, which isn't a word` }); continue; }
+    const list = (derivedFrom[kind][baseLetters(src.word)] ??= []);
+    if (!list.includes(entry.word)) list.push(entry.word);
+  }
+};
 for (const [wrd,row] of compoundMeanings["Word"]) {
   const entry = coreWords[baseLetters(wrd)];
-  if (entry.word !== wrd) continue;   // a collision, already reported
-  entry.roots = row['Roots'].split(',').map(r => r.trim());
-  for (const r of entry.roots) {
-    const root = makeToken(r);
-    if (root.probablyForeign) tableErrors.push({ where: 'compoundMeanings', reason: `${wrd} is built from ${r}, which isn't a word` });
-    else if (!compoundsOf[baseLetters(root.word)]?.includes(wrd)) (compoundsOf[baseLetters(root.word)] ??= []).push(wrd);
-  }
+  if (entry.word === wrd) linkSources(entry, 'roots', row.code['Roots'], 'compounds', 'compoundMeanings');   // else a collision, already reported
 }
-Object.values(compoundsOf).forEach(ws => ws.sort());
+for (const [name,row] of papsaNames["Papsa Name"]) {
+  const entry = names[baseLetters(name)];
+  if (entry.word === name) linkSources(entry, 'etymology', row.code['Etymology'], 'names', 'papsaNames');
+}
+for (const ws of Object.values(derivedFrom).flatMap(Object.values)) ws.sort();
   </code></pre></details>
 </section>
 
@@ -4888,6 +4907,8 @@ document.querySelectorAll('pre').forEach(pre => {
     const rows    = lines.slice(2).map((line, i) => {
       const row = Object.fromEntries(headers.map((h, j) => [h, cells(line)[j] ?? '']));
       row.index = i;   // 0-based row index; doubles as primal number for alphabet table
+      row.code = Object.fromEntries(headers.map((h, j) =>   // the `quoted` words in each cell
+        [h, [...(splitCells(line)[j] ?? '').matchAll(/`([^`]+)`/g)].map(m => m[1])]));
       return row;
     });
     // Build per-column index supporting both obj[key] access and for..of [key, val].
@@ -5326,8 +5347,11 @@ function definitionHTML(t) {
     if (t.notes)            rows.push(['note', escapeHTML(t.notes)]);
     const links = (ws) => ws.map(w => `<a href="#translate" data-word="${escapeHTML(w)}">${escapeHTML(w)}</a>`).join(', ');
     if (t.roots)            rows.push(['roots', links(t.roots)]);
-    const compounds = compoundsOf[baseLetters(t.word)];
-    if (compounds)          rows.push(['compounds', links(compounds)]);
+    if (t.etymology)        rows.push(['etymology', links(t.etymology)]);
+    for (const kind in derivedFrom) {
+      const ws = derivedFrom[kind][baseLetters(t.word)];
+      if (ws)               rows.push([kind, links(ws)]);
+    }
   }
   const body = rows.map(([k, html]) =>
     `<div class="def-row"><span class="def-key">${k}</span>${html}</div>`).join('');
