@@ -819,6 +819,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 |------|------|-------------------|-------|-----------|---------------------|--------|
 | `xuh` | sky, air, atmosphere, breeze, wind, heights, void, gap, space, heaven | to be above, to fly over, to hover over | | high, aerial, lofty, skyward, airborne, up, above, over, atop | to fly, to soar, to rise, to float | aerially |
 | `hun` | key, opener | to open, to uncover, to reveal, to expose, to spread, to unseal, to unblock, to unlock, to free, to unfasten | | open, uncovered, revealed, exposed, accessible, free, approachable, available, receptive, welcoming | to be a key | openly, accessibly, receptively |
+| `hout` | top, peak, summit, head, crown, pinnacle | to be at the top of, to oversee, to be the upper edge of | Used both literally (mountain peaks) and metaphorically (monarchs). | top, highest, uppermost, paramount, crowning | to be at the top | primarily |
 | `huf` | fluff, cloud, wool, mist, haze, foam | to envelop, to hug, to smother, to snuggle, to cuddle, to wrap, to pad | | cloudy, fluffy, misty, hazy, obscure, enveloping, snuggly, soft, cozy | to snuggle, to cuddle | softly, cozily |
 | `has` | elongation, extension, length, line, stick, shaft, tube, pipe, rod, staff, tendril, ribbon, stripe | to extend, to elongate, to span, to draw out, to stretch, to reach | | elongated, extended, lengthy, linear, reaching, spanning, stretched, narrow, slim, slender, threadlike, continuous, connected | to stretch, to extend, to reach out | lengthily, continuously |
 | `xarc` | smoke, vapor, steam, gas, smog | to fade into, to disappear into, to evaporate into, to dissipate into | | fading, vanishing, ephemeral, transient, fleeting, temporary, ghostly, faint, transparent, dispersed, scattered, diluted | to vanish, to evaporate, to dissipate, to disperse, to thin out, to become transparent, to lose form, to diminish gradually, to sublimate, to atomize, to boil | faintly, gradually, fleetingly |
@@ -1657,11 +1658,10 @@ tami neimfic pifcin ui primata                         |  Tom laughed at the mon
 nupzous ui mau hasbup kuh tci vuf dutaut               |  An old man with a walking stick stood beside the fence.
 bubih ei xujuc cin tif ui skiuru                       |  The squirrel's nest was hidden by drooping boughs.
 um mainbup hait am kat cuk im ina guk ui mazuh tci xuh xucuk  |  The little seeds waited patiently under the snow for the warm spring sun.
-
-mainup ei suat ui um ??tiara?? bupfik na kimneim θu maz guktait  |  Many little girls with wreaths of flowers on their heads danced around the bonfire.
+mainup ei suat ui um houtikmaz bupfik na kimneim θu maz guktait  |  Many little girls with wreaths of flowers on their heads danced around the bonfire.
+houtik ui futbup xujuc taztaut                         |  The cover of the basket fell to the floor.
 
 TODO:
-The cover of the basket fell to the floor. -> plane-guard of hold-plant sky-opposite plane-base
 The first boy in the line stopped at the entrance. -> [person-new zero] of list block to-place base-key
 On the top of the hill in a little hut lived a wise old woman. -> [person-past know-boon] built [built-shrink shrink] via-place place-bent-sky
 During our residence in the country we often walked in the pastures. -> me (traveler-feel is) place-edible-beast> time {me built place-edible-place>
@@ -4381,7 +4381,7 @@ addEventListener('DOMContentLoaded', () => {
 | `mazmum` | bubble | to bubble up through | | `maz`, `mum` | bubbling, bubbly | to bubble, to bubble up | bubblingly |
 | `vufmum` | coastland, island, peninsula, beach, shore, swamp, wetland, marsh | - | | `vuf`, `mum` | - | - | - |
 | `vufmumtait` | continent | to be the continent containing | | `vufmum`, `tait` | continental | to be a continent | - |
-| `dutvuf` | mountain, peak, summit | to challenge a (perhaps metaphorical) mountain-climber, to loom over | | `dut`, `vuf` | mountainous | to be a mountain, to loom | - |
+| `dutvuf` | mountain, peak | to challenge a (perhaps metaphorical) mountain-climber, to loom over | | `dut`, `vuf` | mountainous | to be a mountain, to loom | - |
 | `vufdut` | mountain range, mountains | to be the mountainous region near | | `vuf`, `dut` | mountainous | to be mountainous | - |
 | `mumcuk` | ice, frost, snow | to freeze | | `mum`, `cuk` | icy, frosty, snowy | to freeze, to ice over | icily |
 | `mumcuktait` | glacier, iceberg | to encase (in ice) | | `mumcuk`, `tait` | glacial | to be a glacier | glacially |
@@ -4394,7 +4394,7 @@ addEventListener('DOMContentLoaded', () => {
 | `xujuc` | land, underworld, lowlands, ocean floor, gravity well | to be below, to be beneath | | `xuh`, `juc` | low, fallen, sunken, downward | to drop, to sink, to fall off, to descend | - |
 | `hascap` | blade, sword, saber | to slash, to hack | | `has`, `cap` | bladed | to slash, to hack, to fence | - |
 | `hastuah` | spear, lance, pike, javelin, skewer, stake | to spear, to impale, to skewer, to lance | | `has`, `tuah` | impaled, skewered | to thrust | - |
-| `hasuh` | peak, spire, pole, tower | to rise above, to tower over | | `has`, `xuh` | towering | to rise up, to point upwards, to tower | - |
+| `hasuh` | tower, spire, pole | to rise above, to tower over | | `has`, `xuh` | towering | to rise up, to point upwards, to tower | - |
 | `kuxuh` | launch-pad, spring, leg, rocket, wing | to climb, to jump onto | | `kuh`, `xuh` | rising, floating, springy, bouncy, ascending | to jump, to take off, to climb, to rise, to ascend, to lift off, to float up | ascendingly |
 | `tautaz` | table, counter, surface, desk, bench, platform, altar | to be a table that supports, to be a table that shows | | `taut`, `taz` | tabular | to be a table | - |
 | `tautun` | door, gate, portal, entrance, exit, opening, passage | to be a portal or door that allows access to | | `taut`, `hun` | doored, gated | to be a door | - |
@@ -4675,6 +4675,8 @@ addEventListener('DOMContentLoaded', () => {
 | `kumain` | - | to set out for, to start toward | | `kuh`, `main` | departing, outbound | to set out, to depart, to embark | - |
 | `pifcin` | trick, prank, illusion, stage magic, sleight of hand | to play the trick of, to perform the illusion of | A useful noun to contrast with the trickster of `mufcin`. When used as a transitive verb, the object is the trick, rather than the one who is tricked. Carries a slightly more playful/harmless tone than `mufcin`. | `pif`, `cin` | tricky, mischievous, illusory, magical | to play tricks, to clown around, to do stage magic | mischievously |
 | `nupzous` | elder, old person, senior | to be older than | | `nup`, `zous` | old, elderly, aged | to grow old, to age | - |
+| `houtik` | hat, lid, covering, cap, crown, top | to cover | | `hout`, `tik` | - | to be a hat | - |
+| `houtikmaz` | circlet, headband, crown, tiara, wreath | - | | `houtik`, `maz` | - | - | - |
     
 TODO: Body Parts, Buildings, Towns, and Cities
   </pre>
