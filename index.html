@@ -819,6 +819,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 |------|------|-------------------|-------|-----------|---------------------|--------|
 | `xuh` | sky, air, atmosphere, breeze, wind, heights, void, gap, space, heaven | to be above, to fly over, to hover over | | high, aerial, lofty, skyward, airborne, up, above, over, atop | to fly, to soar, to rise, to float | aerially |
 | `hun` | key, opener | to open, to uncover, to reveal, to expose, to spread, to unseal, to unblock, to unlock, to free, to unfasten | | open, uncovered, revealed, exposed, accessible, free, approachable, available, receptive, welcoming | to be a key | openly, accessibly, receptively |
+| `hout` | top, peak, summit, head, crown, pinnacle | to be at the top of, to oversee, to be the upper edge of | Used both literally (mountain peaks) and metaphorically (monarchs). | top, highest, uppermost, paramount, crowning | to be at the top | primarily |
 | `huf` | fluff, cloud, wool, mist, haze, foam | to envelop, to hug, to smother, to snuggle, to cuddle, to wrap, to pad | | cloudy, fluffy, misty, hazy, obscure, enveloping, snuggly, soft, cozy | to snuggle, to cuddle | softly, cozily |
 | `has` | elongation, extension, length, line, stick, shaft, tube, pipe, rod, staff, tendril, ribbon, stripe | to extend, to elongate, to span, to draw out, to stretch, to reach | | elongated, extended, lengthy, linear, reaching, spanning, stretched, narrow, slim, slender, threadlike, continuous, connected | to stretch, to extend, to reach out | lengthily, continuously |
 | `xarc` | smoke, vapor, steam, gas, smog | to fade into, to disappear into, to evaporate into, to dissipate into | | fading, vanishing, ephemeral, transient, fleeting, temporary, ghostly, faint, transparent, dispersed, scattered, diluted | to vanish, to evaporate, to dissipate, to disperse, to thin out, to become transparent, to lose form, to diminish gradually, to sublimate, to atomize, to boil | faintly, gradually, fleetingly |
@@ -1643,27 +1644,28 @@ na main nuh tci vuf vuftif ei vin sou                  |  Were you born in this 
 pabih uin am kimneim naun sou                          |  Can your brother dance well?
 nup vinjuc sou                                         |  Did the man leave?
 pabih uin kuvin θu min nuh sou                         |  Is your sister coming for you?
+nuh kuh ei am saum mazgu sou                           |  Are you going tomorrow?
+nuh kuh ei am saum mazgu sou                           |  Can you come tomorrow?
+nuh xih li kuh ei am saum mazgu sou                    |  Can you come tomorrow?
+nupvuf vinjuc θu zus mazcuk sou                        |  Have the neighbors gone away for the winter?
+aritaku hikneim tci xumum sou                          |  Does the robin sing in the rain?
+nuh kuh uip zusik sou                                  |  Are you going with us to the concert?
+nuh am kuh suin vufbupmuk sou                          |  Have you ever travelled in the jungle?
+pun kumum mumkuzeif θu nais aisin ei suat              |  We sailed down the river for several miles.
+nupzuip niŋ li minmauk                                 |  Everybody knows about hunting.
+pun kuhmain vufdut tci zus mazguimain ei xuguih θu zouc zusguidut  |  On a sunny morning after the solstice we started for the mountains.
+tami neimfic pifcin ui primata                         |  Tom laughed at the monkey's tricks.
+nupzous ui mau hasbup kuh tci vuf dutaut               |  An old man with a walking stick stood beside the fence.
+bubih ei xujuc cin tif ui skiuru                       |  The squirrel's nest was hidden by drooping boughs.
+um mainbup hait am kat cuk im ina guk ui mazuh tci xuh xucuk  |  The little seeds waited patiently under the snow for the warm spring sun.
+mainup ei suat ui um houtikmaz bupfik na kimneim θu maz guktait  |  Many little girls with wreaths of flowers on their heads danced around the bonfire.
+houtik ui futbup xujuc taztaut                         |  The cover of the basket fell to the floor.
 
 TODO:
-Can you come tomorrow? -> you (traveler (one Day))?
-Have the neighbors gone away for the winter? -> person-place traveler local-opposite> time Winter?
-Does the robin sing in the rain? -> Robin sonic-feel via-sky-water?
-Are you going with us to the concert? -> you and me traveler time-sonic-feel?
-Have you ever travelled in the jungle? -> you (traveler any) place-plant-life?
-We sailed down the river for several miles. -> me traveler-water water-traveler-fated via-measured Mile swarm
-Everybody knows about hunting. -> person-all know {want-beast>
-On a sunny morning after the solstice we started for the mountains. -> me new-traveler place-block via-time bent-glow-new sky-glow via-past-time Solstice
-Tom laughed at the monkey's tricks. -> Tom feel-boon-sonic give-veiled of Monkey
-An old man with a walking stick stood beside the fence. -> person-past of WalkingStick Stand to-place block-base
-The squirrel's nest was hidden by drooping boughs. -> [plant-branch sky-opposite] veiled built of Squirrel
-The little seeds waited patiently under the snow for the warm spring sun. -> [new-plant shrink] (await cold) {Sun fire} of Spring
-Many little girls with wreaths of flowers on their heads danced around the bonfire. -> [Girl swarm] of [Tiara plant-glow] active-feel to-bent fire-fill
-The cover of the basket fell to the floor. -> plane-guard of hold-plant sky-opposite plane-base
 The first boy in the line stopped at the entrance. -> [person-new zero] of list block to-place base-key
 On the top of the hill in a little hut lived a wise old woman. -> [person-past know-boon] built [built-shrink shrink] via-place place-bent-sky
 During our residence in the country we often walked in the pastures. -> me (traveler-feel is) place-edible-beast> time {me built place-edible-place>
 When will your guests from the city arrive? -> [person-built-oddity place-built-fill] your traveler-local> time _?
-
 Near the mouth of the river, its course turns sharply towards the East. -> water-traveler (turn sharp) East to-place rivermouth of RIVER
 
 Between the two lofty mountains lay a fertile valley.
@@ -1773,7 +1775,6 @@ They wore red caps, the symbol of liberty.
 With him as our protector, we fear no danger.
 All her finery, lace, ribbons, and feathers, was packed away in a trunk.
 Light he thought her, like a feather.
-
 Every spring and fall our cousins pay us a long visit.
 In our climate the grass remains green all winter.
 The boy who brought the book has gone.
@@ -2135,7 +2136,9 @@ knidaria maukmum        |  Cnidarians are sea-creatures.
   from how English speakers are used to reading Latin names. (For example, pronouncing the leading
   plosive in <code>`knidaria`</code>.) So <em>Canis</em> (accusative <em>canem</em>) becomes <code>`kana`</code>,
   <em>Fēlis</em> (<em>fēlem</em>) becomes <code>`fila`</code>, and <em>Lepidoptera</em> becomes
-  <code>`lapidaptara`</code>.</p>
+  <code>`lapidaptara`</code>. The Greek digraphs th, ph, ch, and rh were aspirated in classical Latin,
+  and since Papsa doesn’t distinguish aspiration, they simply lose their h (so Philodendron becomes
+  pilodandru).</p>
 
   <p>In some cases, the Latin word is too small to produce a Papsa name. Consider sheep, whose Latin
   name is <em>Ovis</em> (accusative <em>ovem</em>) and would get written in Papsa as "aua". In these
@@ -4378,20 +4381,20 @@ addEventListener('DOMContentLoaded', () => {
 | `mazmum` | bubble | to bubble up through | | `maz`, `mum` | bubbling, bubbly | to bubble, to bubble up | bubblingly |
 | `vufmum` | coastland, island, peninsula, beach, shore, swamp, wetland, marsh | - | | `vuf`, `mum` | - | - | - |
 | `vufmumtait` | continent | to be the continent containing | | `vufmum`, `tait` | continental | to be a continent | - |
-| `dutvuf` | mountain, peak, summit | to challenge a (perhaps metaphorical) mountain-climber, to loom over | | `dut`, `vuf` | mountainous | to be a mountain, to loom | - |
+| `dutvuf` | mountain, peak | to challenge a (perhaps metaphorical) mountain-climber, to loom over | | `dut`, `vuf` | mountainous | to be a mountain, to loom | - |
 | `vufdut` | mountain range, mountains | to be the mountainous region near | | `vuf`, `dut` | mountainous | to be mountainous | - |
 | `mumcuk` | ice, frost, snow | to freeze | | `mum`, `cuk` | icy, frosty, snowy | to freeze, to ice over | icily |
 | `mumcuktait` | glacier, iceberg | to encase (in ice) | | `mumcuk`, `tait` | glacial | to be a glacier | glacially |
 | `mumkuh` | river, stream, creek, brook, flood | to wash, to flood, to rinse | | `mum`, `kuh` | fluvial, riparian, riverine, flooded, washed-up, washed-away | to flow | - |
-| `maukuh` | bird, avian | - | | `mauk`, `xuh` | avian, birdlike, feathered | to behave like a bird | - |
-| `maukmum` | fish, shellfish, whale, dolphin, shark, plankton, jellyfish | - | | `mauk`, `mum` | aquatic, marine, fishy | to behave like a marine animal | - |
+| `maukuh` | bird, avian | to fly like a bird in response to | See also: `kuxuh` and `tikuxuh`. | `mauk`, `xuh` | avian, birdlike, feathered | to behave like a bird, to fly | - |
+| `maukmum` | fish, shellfish, whale, dolphin, shark, plankton, jellyfish, swimmer | to swim in | This is one of the few `mauk` compounds to be regularly used as a verb. When used transitively, the object is the body of water where the creature swims. Boats use `kumum` or other words. | `mauk`, `mum` | aquatic, marine, fishy | to behave like a marine animal, to swim | - |
 | `maukcoum` | insect, arthropod, arachnid, worm, bug | to swarm, to crawl over | | `mauk`, `coum` | insectile, swarming, skittering, crawling | to swarm, to squirm, to crawl | - |
 | `coumas` | caterpillar, worm, maggot, larva, grub | to inch along | A stage of life as much as a kind of creature, since many `coumas` grow up into something else. | `coum`, `has` | wormy, larval, wriggling | to wriggle, to inch along | - |
 | `xufik` | rainbow, spectrum | to (with many colors) hang above | | `xuh`, `fik` | spectral | to be a rainbow | - |
 | `xujuc` | land, underworld, lowlands, ocean floor, gravity well | to be below, to be beneath | | `xuh`, `juc` | low, fallen, sunken, downward | to drop, to sink, to fall off, to descend | - |
 | `hascap` | blade, sword, saber | to slash, to hack | | `has`, `cap` | bladed | to slash, to hack, to fence | - |
 | `hastuah` | spear, lance, pike, javelin, skewer, stake | to spear, to impale, to skewer, to lance | | `has`, `tuah` | impaled, skewered | to thrust | - |
-| `hasuh` | peak, spire, pole, tower | to rise above, to tower over | | `has`, `xuh` | towering | to rise up, to point upwards, to tower | - |
+| `hasuh` | tower, spire, pole | to rise above, to tower over | | `has`, `xuh` | towering | to rise up, to point upwards, to tower | - |
 | `kuxuh` | launch-pad, spring, leg, rocket, wing | to climb, to jump onto | | `kuh`, `xuh` | rising, floating, springy, bouncy, ascending | to jump, to take off, to climb, to rise, to ascend, to lift off, to float up | ascendingly |
 | `tautaz` | table, counter, surface, desk, bench, platform, altar | to be a table that supports, to be a table that shows | | `taut`, `taz` | tabular | to be a table | - |
 | `tautun` | door, gate, portal, entrance, exit, opening, passage | to be a portal or door that allows access to | | `taut`, `hun` | doored, gated | to be a door | - |
@@ -4657,6 +4660,23 @@ addEventListener('DOMContentLoaded', () => {
 | `zousnuif` | eldest, oldest, firstborn, doyen, senior member, earliest example, dawn of time | to be the oldest of, to predate all of | | `zous`, `nuif` | oldest, eldest, earliest, first | to be the oldest | first, earliest |
 | `tifarc` | tent, camp, campsite, shelter, lean-to, bivouac, encampment | to camp at, to pitch camp at, to bivouac in | A dwelling meant to come down again. A tent, a lean-to, a snow cave, a refugee camp, or a festival's field of yurts all count. What makes it `tifarc` is that it's temporary, not what it's made of. | `tif`, `xarc` | makeshift, temporary, portable, pop-up | to camp, to pitch camp, to rough it | - |
 | `nuptifarc` | camper, backpacker, bivouacker, nomad | to camp at, to camp in | Someone living for now in a dwelling they will take down again. Compare `nuptifcus`, who stays in someone else's home, and `kuvuf`, who is changing homes for good. | `nuptif`, `xarc` | camping, encamped | to camp, to go camping | - |
+| `mazcuk` | winter, cold season, off-season, lull, low ebb, dormant period | to be the wintertime routine of | The cold, slow stretch of a cycle -- usually winter, but can be used more generally to any periodic dormancy. | `maz`, `cuk` | wintry, hibernal, dormant, fallow | to be a wintery thing | - |
+| `mazguk` | summer, hot season | to be the summertime routine of | The hot, painful stretch of a cycle -- usually summer, but can theoreticaly be used in other contexts. | `maz`, `guk` | summery | to be a summertime thing | - |
+| `mazuh` | spring, rising season | to be the springtime routine of | The rising, awakening part of a cycle -- usually spring, but can theoreticaly be used in other contexts when activity is growing. | `maz`, `xuh` | vernal | to be a springtime thing | - |
+| `mazarc` | fall, autumn, vanishing season | to be the autumn routine of | The fading, disappearing part of a cycle -- almost always autumn or the opposite of some other kind of `mazuh`. | `maz`, `xarc` | autumnal | to be an autumn thing | - |
+| `zusik` | concert, recital, performance | to be the concert of | Music as an event, the way `zusnunuh` is school as an event. Technically this doesn't have to be music, but in practice it's implied. | `zus`, `hik` | - | to be a concert | - |
+| `kumum` | swimmer, sailor, mariner, seaman, passenger, boat, ship, raft | to sail to, to swim to, to row to, to float to | Travel by water, by whatever means. When used to describe swimming, this implies travel, not just moving around in the water. (See `maukmum`.) The subject is assumed to be an agent, so when it's used as a noun it rarely means "boat" as a passive object, but can mean "boat" in the same way English anthropomorphizes boats in sentences like "the boat sailed across the lake." To talk about ships/boats/rafts as objects, use `tukumum`. | `kuh`, `mum` | seafaring, swimming, nautical | to sail, to travel on water, to travel in water, to swim somewhere | - |
+| `tikuh` | vehicle, craft, conveyance, transport | to drive, to ride, to be carried in | See also: `kufut`. | `tik`, `kuh` | vehicular | to drive, to ride | - |
+| `tikumaz` | car, cart, wagon, bus, truck, bicycle, wheeled vehicle | to drive, to ride, to be carried in | | `tikuh`, `maz` | wheeled | to drive, to cycle | - |
+| `tikumum` | boat, ship, raft, ferry, submarine | to sail, to be ferried in | See also: `kumum` and `maukmum`. | `tikuh`, `mum` | boatlike, nautical | to sail | - |
+| `tikuxuh` | aircraft, airplane, airship, helicopter, spacecraft | to fly in | See also: `kuxuh` and `maukuh`. | `tikuh`, `xuh` | aeronautical | to fly in a vehicle | - |
+| `mumkuzeif` | downstream, river mouth, downriver | to flow toward | | `mumkuh`, `zeif` | downstream, downriver | to flow downstream | - |
+| `nupzuip` | everyone, everybody, all people | - | | `nup`, `zuip` | universal, common to everyone | - | - |
+| `kumain` | - | to set out for, to start toward | | `kuh`, `main` | departing, outbound | to set out, to depart, to embark | - |
+| `pifcin` | trick, prank, illusion, stage magic, sleight of hand | to play the trick of, to perform the illusion of | A useful noun to contrast with the trickster of `mufcin`. When used as a transitive verb, the object is the trick, rather than the one who is tricked. Carries a slightly more playful/harmless tone than `mufcin`. | `pif`, `cin` | tricky, mischievous, illusory, magical | to play tricks, to clown around, to do stage magic | mischievously |
+| `nupzous` | elder, old person, senior | to be older than | | `nup`, `zous` | old, elderly, aged | to grow old, to age | - |
+| `houtik` | hat, lid, covering, cap, crown, top | to cover | | `hout`, `tik` | - | to be a hat | - |
+| `houtikmaz` | circlet, headband, crown, tiara, wreath | - | | `houtik`, `maz` | - | - | - |
     
 TODO: Body Parts, Buildings, Towns, and Cities
   </pre>
