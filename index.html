@@ -809,7 +809,7 @@ for (const [word,row] of miscGrammarWordMeanings["Word(s)"]) {
 | `vin` | here, now, this | to arrive at, to reach, to come to | | present, nearby, local | to be here, to be present, to arrive | here, now, locally, presently |
 | `feim` | mix, mixture, combination, blend | to mix, to combine, to blend, to interweave, to integrate | Like `baz`, this doesn't carry an implication, when used as a verb, that the subject is part of the mixture; it's the one doing the mixing. | mixed, blended, homogeneous, integrated | to mix something | mixedly, integrally |
 | `fik` | color, hue, tint, shade | to be the color of, to be colored like | | colorful, vibrant, vivid | to be colored, to wear a color, to be painted, to glow, to change color | vividly, vibrantly |
-| `fif` | pattern, design, shape, arrangement, sequence, order | to arrange, to organize, to structure, to pose | | patterned, structured, orderly, regular, shaped, arranged, posed | to organize, to pose | structurally, regularly |
+| `fif` | pattern, design, shape, arrangement, sequence, order, axis | to arrange, to organize, to structure, to pose | | patterned, structured, orderly, regular, shaped, arranged, posed | to organize, to pose | structurally, regularly |
 | `fic` | part, piece, chunk, component, element, subset | to split, to disassemble, to deconstruct, to take apart, to break, to shatter | | split, some, broken, distinguished, fractured, divided | to split something, to divide something | deconstructively |
   </pre>
 
@@ -1863,6 +1863,10 @@ I met a little cottage girl; she was eight years old, she said.
 | `ikneimcun` | cry, weep         | `hik` + `neimcun`     | Where `neimcun` is about the experience of sadness, `ikneimcun` is about the particular act of crying and weeping that humans do, regardless of the feeling behind it (e.g. happy crying still counts). |
 | `nupukpi`   | man, men          | `nupmuksukpif`        | Shorthand for an adult human who is `nupmuksukpif`, for those who want gendered language. |
 | `nupukfu`   | woman, women      | `nupmuksukfun`        | Shorthand for an adult human who is `nupmuksukfun`, for those who want gendered language. |
+| `ifuh`      | East              | `hifuh`               | Up, on a Papsa map. |
+| `ifsuk`     | West              | `hifsuk`              | Down, on a Papsa map. |
+| `ifpun`     | South             | `hifpun`              | Right, on a Papsa map. |
+| `iftaz`     | North             | `hiftaz`              | Left, on a Papsa map. |
 TODO Make sure all the units are listed here:
 | `aisbib`    | fingertip unit    | `nais` + `bibih`      |       |
 | `aisas`     | stretch unit      | `nais` + `has`        |       |
@@ -2089,7 +2093,29 @@ addEventListener('DOMContentLoaded', () => {
 });
   </code></pre></details>
 
-  <p>TODO Directions</p>
+  <p>Papsa associates the axes of a coordinate system with numbers, starting with time. Positive
+  means later, right, down, and forward; negative means earlier, left, up, and back. In addition to
+  the numeric words, axes are often referenced by phrases. Directions also have non-numerical words,
+  which are sometimes favored, and sometimes disfavored, depending on the word. Disfavored terms, in
+  the following table, are provided in parentheses.</p>
+
+  <pre data-table="directions">
+| Axis | Word      | Phrase        | Positive Direction                | Negative Direction              |
+|------|-----------|---------------|-----------------------------------|---------------------------------|
+| 0    | `fifsoun` | `fif ei zus`  | later: `zeif` (`hifsoun`, `zouc`) | earlier: `zous` (`hifcroun`)    |
+| 1    | `fifsaum` | `fif ei taz`  | right: `hifpun` (`hifsaum`)       | left: `hiftaz` (`hifcraum`)     |
+| 2    | `fifsuk`  | `fif ei xuh`  | down: `hifsuk` (`hifceim`)        | up: `hifuh` (`hifcruk`)         |
+| 3    | `fifsat`  | `fif ei tuah` | forward: `hifsat` (`hiftiŋ`)      | back: `hiftuah` (`hifcrat`)     |
+  </pre>
+
+  <p>Since Papsa maps put East at the top, the compass directions are names taken from the common
+  words for the directions on a map, dropping the <code>h</code>: <code>`ifuh`</code> (East),
+  <code>`ifpun`</code> (South), <code>`ifsuk`</code> (West), and <code>`iftaz`</code> (North).</p>
+
+  <p>Coordinate variables are pronouns, as in algebra, but usually not the generic <code>`isnu`</code>,
+  <code>`isma`</code>, and <code>`iski`</code>. The horizontal variable is <code>`ifpu`</code>, or
+  <code>`ifzei`</code> when the horizontal axis stands for time. The vertical is <code>`ifsu`</code>
+  (still with positive meaning down), and the forward one is <code>`ifti`</code>.</p>
 
   <h3>Credence, Speculation, and Theory</h3>
   
@@ -4512,10 +4538,25 @@ addEventListener('DOMContentLoaded', () => {
 | `nuneim` | - | to read with the hands | Mostly for blind people. Used for Braille, but also can work for a person in a dark room trying to figure out what something is by feeling it. | `nuh`, `neim` | - | to read with the hands | - |
 | `neimuh` | scent, smell, odor | to smell | | `neim`, `xuh` | smelly, scented | to smell | - |
 | `neimfaip` | taste, sense of taste | to taste | | `neim`, `faip` | gustatory | to taste | - |
-| `fifsoun` | - | to arrange horizontally, to position parallel to the primary axis | There's a connotation of deliberate positioning that is distinct from `taz`. When used to talk about a human lying down, there's an implication that the person is on their side and perhaps holding their head upright. Compare with `fifsuk`; contrast with `fifsaum`, `fifsaihat`, and `aihat`. | `fif`, `soun` | horizontal | to lie down | horizontally |
-| `fifsaum` | - | to arrange vertically, to position parallel to the secondary axis | Can be used to talk about a human, tree, or other "standing" thing, but should not be used for the meaning of "stand" that is about existence ("there stood three men..."), since this word strongly implies a deliberately vertical order, rather than an incidental verticality. | `fif`, `saum` | vertical | to stand up | vertically |
+| `fifsoun` | timeline, time axis | to arrange chronologically, to position parallel to the zeroth (temporal) axis | | `fif`, `soun` | chronological | - | chronologically |
+| `fifsaum` | - | to arrange horizontally, to position parallel to the first axis | There's a connotation of deliberate positioning that is distinct from `taz`. When used to talk about a human lying down, there's an implication that the person is on their side and perhaps holding their head upright. Compare with `fifsat`; contrast with `fifsuk`, `fifsaihat`, and `aihat`. | `fif`, `saum` | horizontal | to lie down | horizontally |
+| `fifsuk` | - | to arrange vertically, to position parallel to the second axis | Can be used to talk about a human, tree, or other "standing" thing, but should not be used for the meaning of "stand" that is about existence ("there stood three men..."), since this word strongly implies a deliberately vertical order, rather than an incidental verticality. | `fif`, `suk` | vertical | to stand up | vertically |
 | `fifsaihat` | slant, slope | to arrange diagonally, to tilt | Can be used to talk about a human, tree, or similar thing leaning on something, but there's a connotation of deliberate order that implies the angle isn't from a fall. See also: `aihat`. | `fif`, `saihat` | diagonal, leaning, slanted | to tilt, to lean | diagonally |
-| `fifsuk` | - | to arrange depthwise, to position parallel to the tertiary axis | There's a connotation of deliberate positioning that is distinct from `taz`. When used to talk about a human lying down, there's an implication that the person is on their back (not sitting up or on their side) and perhaps looking towards their toes. Compare with `fifsoun`; contrast with `fifsaum`, `fifsaihat`, and `aihat`. | `fif`, `suk` | deep | to lie down | deeply |
+| `fifsat` | - | to arrange depthwise, to position parallel to the third axis | There's a connotation of deliberate positioning that is distinct from `taz`. When used to talk about a human lying down, there's an implication that the person is on their back (not sitting up or on their side) and perhaps looking towards their toes. Compare with `fifsaum`; contrast with `fifsuk`, `fifsaihat`, and `aihat`. | `fif`, `sat` | deep | to lie down | deeply |
+| `hifsoun` | later, futureward | to be later than | Usually just `zeif` or `zouc`. | `hif`, `soun` | later | to go forward in time | later |
+| `hifcroun` | earlier, pastward | to be earlier than | Almost always just `zous`. | `hif`, `croun` | earlier | to go back in time | earlier |
+| `hifsaum` | right, rightward | to be right of | More commonly `hifpun`. | `hif`, `saum` | right | to go right | rightward |
+| `hifcraum` | left, leftward | to be left of | More commonly `hiftaz`. | `hif`, `craum` | left | to go left | leftward |
+| `hifsuk` | down, downward | to be below | | `hif`, `suk` | lower | to go down | downward |
+| `hifcruk` | up, upward | to be above | More commonly `hifuh`. | `hif`, `cruk` | upper | to go up | upward |
+| `hifsat` | forward, front | to be in front of | Also `hiftiŋ`. | `hif`, `sat` | front | to go forward | forward |
+| `hifcrat` | back, backward, rear | to be behind | More commonly `hiftuah`. | `hif`, `crat` | rear | to go back | backward |
+| `hifpun` | right, rightward | to be right of | | `hif`, `pun` | right | to go right | rightward |
+| `hiftaz` | left, leftward | to be left of | | `hif`, `taz` | left | to go left | leftward |
+| `hifceim` | down, downward | to be below | Rare. Usually `hifsuk`. | `hif`, `ceim` | lower | to go down | downward |
+| `hifuh` | up, upward | to be above | | `hif`, `xuh` | upper | to go up | upward |
+| `hiftiŋ` | forward, front, inward | to be in front of, to be further in than | | `hif`, `tiŋ` | front, inner | to go forward, to go in | forward, inward |
+| `hiftuah` | back, backward, rear | to be behind | | `hif`, `tuah` | rear | to go back | backward |
 | `kimcuk` | sleep, nap, rest | - | Does not demand unconsciousness. Can apply to machines, bacteria, governments, et cetera. | `kim`, `cuk` | sleepy | to sleep, to rest, to be dormant, to be still | sleepily |
 | `kimcukcuc` | awakening | - | | `kimcuk`, `juc` | awake | to awake, to be awake, to be active | - |
 | `kimneim` | dance | to dance | | `kim`, `neim` | dancing | to dance | - |
