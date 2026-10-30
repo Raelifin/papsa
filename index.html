@@ -237,11 +237,11 @@
     .def-ipa { color: #999; font-size: 0.85rem; }
     .def-type { color: #aaa; font-size: 0.72rem; }
     .def-row { margin: 0.15rem 0; }
-    .def-key { display: inline-block; width: 4rem; color: #767676; font-size: 0.8rem; }
+    .def-key { display: inline-block; width: 5rem; color: #767676; font-size: 0.8rem; }
     .lookup-note { font-size: 0.85rem; color: #555; margin-bottom: 0.3rem; }
     .lookup-note.well-formed { font-size: 0.82rem; color: #2a7a2a; margin-bottom: 0.4rem; }
     .lookup-hit { margin: 0.1rem 0; }
-    .lookup-hit a { font-family: 'Courier New', monospace; color: #1a5faa; }
+    .lookup-hit a, .def-row a { font-family: 'Courier New', monospace; color: #1a5faa; }
     .lookup-gloss { color: #777; font-size: 0.85rem; }
     .lookup-none { color: #777; }
     #translate-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: currentColor; }
@@ -4735,6 +4735,22 @@ TODO: Body Parts, Buildings, Towns, and Cities
   
   <details class="spec-code"><summary class="code-title">Compound Word Lookup</summary><pre><code>
 for (const [wrd,row] of compoundMeanings["Word"]) addCoreWord(wrd, row, 'compoundMeanings');
+
+// Link each compound with the words it's built from, both ways, so a lookup can show either. A root can
+// also be a number word, which has no dictionary entry, so the compounds of each root are kept here,
+// under the base letters of the word the root reads as.
+const compoundsOf = {};
+for (const [wrd,row] of compoundMeanings["Word"]) {
+  const entry = coreWords[baseLetters(wrd)];
+  if (entry.word !== wrd) continue;   // a collision, already reported
+  entry.roots = row['Roots'].split(',').map(r => r.trim());
+  for (const r of entry.roots) {
+    const root = makeToken(r);
+    if (root.probablyForeign) tableErrors.push({ where: 'compoundMeanings', reason: `${wrd} is built from ${r}, which isn't a word` });
+    else if (!compoundsOf[baseLetters(root.word)]?.includes(wrd)) (compoundsOf[baseLetters(root.word)] ??= []).push(wrd);
+  }
+}
+Object.values(compoundsOf).forEach(ws => ws.sort());
   </code></pre></details>
 </section>
 
@@ -5308,6 +5324,10 @@ function definitionHTML(t) {
     for (const [k, f] of [['intr', 'intransitive'], ['tr', 'transitive'], ['noun', 'noun'], ['adj', 'adjective'], ['adv', 'adverb']])
       if (t[f+'Meaning'] && t[f+'Meaning'] !== '-') rows.push([k, escapeHTML(t[f+'Meaning'])]);
     if (t.notes)            rows.push(['note', escapeHTML(t.notes)]);
+    const links = (ws) => ws.map(w => `<a href="#translate" data-word="${escapeHTML(w)}">${escapeHTML(w)}</a>`).join(', ');
+    if (t.roots)            rows.push(['roots', links(t.roots)]);
+    const compounds = compoundsOf[baseLetters(t.word)];
+    if (compounds)          rows.push(['compounds', links(compounds)]);
   }
   const body = rows.map(([k, html]) =>
     `<div class="def-row"><span class="def-key">${k}</span>${html}</div>`).join('');
