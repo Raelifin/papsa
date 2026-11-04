@@ -3005,32 +3005,34 @@ isnu mam isnu ul suin li suk kan sat  |  (x ↦ x) : Fin 2 → Fin 3
   <p>Papsa category theorists use variables that hint at their types.</p>
 
   <pre>
-ninaisibazi                                                             |  Category Theory
-ubu ou aba ou ibi ou uba ou ubi ou abu ou abi ou ibu ou iba suin sibaz  |  𝒜, ℬ, 𝒞, ... : category
-aznu ou izma ou uzki ou aztu ou izpa ou uzfi suin faf                   |  A, B, C, ... : object
-umsu ou amsa ou imsi ou umsa ou umsi suin mamas                         |  f, g, h, ... : morphism
-aznu suin faf ui ubu                                                    |  A : object(𝒞)
-umsu suin li aznu mamas izma                                            |  f : A → B
+ninaisibazi                                                                     |  Category Theory
+ubu nau aba nau ibi nau uba nau ubi nau abu nau abi nau ibu nau iba suin sibaz  |  𝒜, ℬ, 𝒞, ... : category
+aznu nau izma nau uzki nau aztu nau izpa nau uzfi suin faf                      |  A, B, C, ... : object
+umsu nau amsa nau imsi nau umsa nau umsi suin mamas                             |  f, g, h, ... : morphism
+aznu suin faf ui ubu                                                            |  A : object(𝒞)
+umsu suin li aznu mamas izma                                                    |  f : A → B
   </pre>
 
   <p>Note that <code>`mamas`</code> and <code>`kan`</code> are sometimes both written as an arrow, but
   <code>`kan`</code> implies that the elements are functions, while <code>`mamas`</code> can be any sort of
-  hom-set. This is an important distinction, because when we use <code>`ei`</code> to apply a function,
-  it (of course) takes its input. But when we use augmenting words on something that we see as a type of
-  morphism, we see it as <em>composition</em>. (<code>`ui`</code> is reserved for morphisms that happen
-  to be able to be applied, such as functions in Set.) Much as Papsa usually places function input first,
-  followed by the function (via augmentation), composition in Papsa places the base morphism first and the
-  augmenting morphism <em>after</em>, contrary to Earth's standard precomposition opperator (∘). Composition
-  can be invoked explicitly with <code>`zouspat`</code>.</p>
+  hom-set.</p>
+  
+  <p>When we try to treat a tuple of morphisms as a single morphism, we compose them. When applying functions,
+  the standard (augmentation) order puts the input before the function. Similarly, we see the first morphism
+  in the tuple as coming first, followed by the second one, opposite the familiar precomposition opperator (∘).
+  Composition can be invoked explicitly with <code>`zouspat`</code>.</p>
 
   <pre>
-usmu ei asma faf li usmu zouspat asma           |  g ∘ f = f then g
-umsu ei amsa ei azki faf umsu ei im amsa azki   |  h ∘ (g ∘ f) = (h ∘ g) ∘ f
-usmu ei asma ui isnu faf asma ui mai usmu isnu  |  (g ∘ f)(x) = g(f(x))
-umsu suin li aznu mamas izma il ul zuip li fun ui umsu faf aznu il li nik ui umsu faf izma  |  (f : A → B) ⇒ (src f = A) & (tgt f = B)
+usmu ou asma faf li usmu zouspat asma            |  g ∘ f = f then g
+umsu ou amsa ou azki faf umsu ou smai amsa azki  |  h ∘ (g ∘ f) = (h ∘ g) ∘ f
+isnu ei smau usmu asma faf isnu ei usmu ei asma  |  (g ∘ f)(x) = g(f(x))
   </pre>
 
   TODO id and functors at least
+
+  <pre>
+umsu suin li aznu mamas izma il ul zuip li fun ui umsu faf aznu il li nik ui umsu faf izma  |  (f : A → B) ⇒ (src f = A) & (tgt f = B)
+  </pre>
 
   <h3 id="linear-algebra">Tensors and Linear Algebra</h3>
 
