@@ -2235,7 +2235,7 @@ for (const [name,row] of organismNames["Papsa Name"]) {
   <p><a href="#numbers">Numbers</a> · <a href="#fractions">Fractions</a> ·
   <a href="#scientific-notation">Scientific Notation</a> · <a href="#negative-numbers">Negative Numbers</a> ·
   <a href="#constants">Constants</a> · <a href="#algebra">Algebra</a> · <a href="#functions">Functions</a> ·
-  <a href="#set-theory">Set, Type, and Category Theory</a> ·
+  <a href="#set-theory">Set Theory</a> · <a href="#type-theory">Type Theory</a> · <a href="#category-theory">Category Theory</a> ·
   <a href="#linear-algebra">Tensors and Linear Algebra</a> · 
   <a href="#infinity">Infinity and Infinitesimal Calculus</a> · <a href="#logic">Proofs and Logic</a></p>
 
@@ -2781,7 +2781,7 @@ sis ui sih faf sleipark    |  The list's sum is 328.
 
   <p>(Technically, <code>`ou`</code> creates lists/tuples, and lists of numbers are automatically
   added together in spots where a single number is expected, such as comparison. See the section on
-  <a href="#set-theory">Type Theory</a> for more details.)</p>
+  <a href="#type-theory">Type Theory</a> for more details.)</p>
 
   <p>Where <code>`sis`</code> is the word for addition, <code>`suat`</code> is the word for
   multiplication. But just as adding is usually done by grouping, multiplying is usually done by
@@ -2893,7 +2893,7 @@ kan ei jamz ui suk                  |  log₂
 kan ei jamz ui skat faf eijuiskat   |  logₑ = ln
   </pre>
 
-  <h3 id="set-theory">Set, Type, and Category Theory</h3>
+  <h3 id="set-theory">Set Theory</h3>
 
   <p>Papsa's notion of sets builds off the
   <a href="https://en.wikipedia.org/wiki/Ordinal_number#Von_Neumann_definition_of_ordinals">von Neumann
@@ -2931,8 +2931,8 @@ craum zousipfaf ei juc suk  |  -1 ⊈ 2
   Like with lambdas/functions, the variable goes in the subject slot, and the conditions are the objects.</p>
 
   <pre>
-isnu sip isnu zousis soun                         |  {x │ x &lt: 0}
-isnu sip li soun zousis isnu il li isnu ei tasis  |  {x │ 0 &lt: x, x is odd}
+isnu sip isnu zousis soun                         |  {x │ x &lt; 0}
+isnu sip li soun zousis isnu il li isnu ei tasis  |  {x │ 0 &lt; x, x is odd}
   </pre>
     
   <p>Most other set operations are simple to denote.</p>
@@ -2943,6 +2943,8 @@ isnu hait isma   |  y \ x  (notice the direction)
 isnu ei sipisip  |  𝒫(x)
 isnu ei nais     |  #x  (cardinality)
   </pre>
+
+  <h3 id="type-theory">Type Theory</h3>
 
   <p>When we introduce a piece of content like <code>`soun`</code>, we see it not just as "zero", but usually as
   something like "the <em>number</em> zero". As mentioned a moment ago, we can also see it as "the set zero", a.k.a.
@@ -2995,10 +2997,40 @@ isnu mam isnu ul suin li suk kan sat  |  (x ↦ x) : Fin 2 → Fin 3
   magic, such as automatic currying and uncurrying for functions. It's also how normal sums work.
   When we say <code>`isnu ou isma`</code>, we give it the type of "cooperative ({x} × {y})".
   As we've seen, this notion of "×" is the type-theoretic one: a Cartesian product. Thus, <code>`ou`</code> is most
-  naturally seen (at the value level) as the operator that builds tuples. When we push a cooperative (x × x) into being
-  an x, we use the obvious/canonical semigroup to merge the values. In the case of numbers, this is addition.</p>
+  naturally seen (at the value level) as the operator that builds tuples. When we push a cooperative (X × X) into being
+  an X, we use the obvious/canonical semigroup to merge the values. In the case of numbers, this is addition.</p>
 
-  TODO: Category theory
+  <h3 id="category-theory">Category Theory</h3>
+
+  <p>Papsa category theorists use variables that hint at their types.</p>
+
+  <pre>
+ninaisibazi                                                             |  Category Theory
+ubu ou aba ou ibi ou uba ou ubi ou abu ou abi ou ibu ou iba suin sibaz  |  𝒜, ℬ, 𝒞, ... : category
+aznu ou izma ou uzki ou aztu ou izpa ou uzfi suin faf                   |  A, B, C, ... : object
+umsu ou amsa ou imsi ou umsa ou umsi suin mamas                         |  f, g, h, ... : morphism
+aznu suin faf ui ubu                                                    |  A : object(𝒞)
+umsu suin li aznu mamas izma                                            |  f : A → B
+  </pre>
+
+  <p>Note that <code>`mamas`</code> and <code>`kan`</code> are sometimes both written as an arrow, but
+  <code>`kan`</code> implies that the elements are functions, while <code>`mamas`</code> can be any sort of
+  hom-set. This is an important distinction, because when we use <code>`ei`</code> to apply a function,
+  it (of course) takes its input. But when we use augmenting words on something that we see as a type of
+  morphism, we see it as <em>composition</em>. (<code>`ui`</code> is reserved for morphisms that happen
+  to be able to be applied, such as functions in Set.) Much as Papsa usually places function input first,
+  followed by the function (via augmentation), composition in Papsa places the base morphism first and the
+  augmenting morphism <em>after</em>, contrary to Earth's standard precomposition opperator (∘). Composition
+  can be invoked explicitly with <code>`zouspat`</code>.</p>
+
+  <pre>
+usmu ei asma faf li usmu zouspat asma           |  g ∘ f = f then g
+umsu ei amsa ei azki faf umsu ei im amsa azki   |  h ∘ (g ∘ f) = (h ∘ g) ∘ f
+usmu ei asma ui isnu faf asma ui mai usmu isnu  |  (g ∘ f)(x) = g(f(x))
+umsu suin li aznu mamas izma il ul zuip li fun ui umsu faf aznu il li nik ui umsu faf izma  |  (f : A → B) ⇒ (src f = A) & (tgt f = B)
+  </pre>
+
+  TODO id and functors at least
 
   <h3 id="linear-algebra">Tensors and Linear Algebra</h3>
 
@@ -4861,6 +4893,7 @@ addEventListener('DOMContentLoaded', () => {
 | `patiŋ` | overlap, overlapping region, shared interior, common core, intersection | to overlap, to share a core with, to coincide in part with | Contact that reaches past the edges into the interior. Two stones resting against each other only `pat`, while the circles of a Venn diagram `patiŋ`. Overlap implies no mixing: overlapping shadows stay what they were, which `feim` and `feimain` would not. | `pat`, `tiŋ` | overlapping, intersecting, shared, coinciding | to overlap, to coincide in part | in common, jointly |
 | `tasis` | remainder, leftover, residue, modulus | to give the remainder after attempting to evenly divide | The subject divides the object, leaving the noun form. Also characterizes odd numbers. | `taz`, `sis` | odd, remaining, leftover, excess, modulo | | |
 | `foujuc` | member, participant, element | to participate in, to be connected to, to be a member of, to be affiliated with, to stand with, to have a complex relationship with | One who has been the object of `baz`. | `fouh`, `juc` | connected, entangled, connected, attached, complicated | to have connections, to have a network, to have roots, to have ties | connectedly |
+| `zouspat` | film trailer | to come right before, to immediately precede, to be precomposed with | Almost always temporal or abstract, since there's natural confusion about whether the front of something moving is "before" or "after" the back. | `zous`, `pat` | preceding | to come just before something, to be a trailer | |
 
 TODO: Body Parts, Buildings, Towns, and Cities
   </pre>
