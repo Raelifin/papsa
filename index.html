@@ -49,7 +49,19 @@
       transition: transform 0.25s ease;
     }
     /* Script adds this once the reader is clearly heading down the page. */
-    .site-nav.nav-hidden { transform: translateY(-100%); }
+    .site-nav.nav-hidden { transform: translateY(calc(-100% - var(--sub-h, 0px))); }
+
+    /* A section with a <p class="contents"> line gets a copy of it as a sub-nav, shown under the bar
+       while the reader is in that section. It hangs below the bar, out of the flow, so showing it
+       never shifts the page; script sets --sub-h to its height so anchors there clear it too. */
+    .sub-row {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: #fafaf8; border-bottom: 1px solid #ddd; padding: 0.4rem 0 0.6rem;
+      visibility: hidden; opacity: 0; transition: opacity 0.15s ease, visibility 0.15s;
+    }
+    .sub-row.shown { visibility: visible; opacity: 1; }
+    .sub-row nav { gap: 0.3rem 1rem; }
+    section:has(> .contents) [id] { scroll-margin-top: calc(var(--nav-h, 4.5rem) + var(--sub-h, 0px) + 1rem); }
 
     /* Whichever section the reader is currently in gets bolded. The invisible
        bold copy reserves the wider width so nothing shifts as it changes. */
@@ -275,7 +287,8 @@
         overflow-x: auto;
         scrollbar-width: none; -webkit-overflow-scrolling: touch;
       }
-      .nav-rows::-webkit-scrollbar { display: none; }
+      .nav-rows::-webkit-scrollbar, .sub-row::-webkit-scrollbar { display: none; }
+      .sub-row { overflow-x: auto; scrollbar-width: none; padding: 0.3rem 0 0.5rem; }
       nav { font-size: 0.85rem; gap: 0.9rem; flex-wrap: nowrap; width: max-content; }
       nav a { white-space: nowrap; }
 
@@ -295,7 +308,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .site-nav, #tip { transition: none; }
+      .site-nav, .sub-row, #tip { transition: none; }
     }
   </style>
 </head>
@@ -1847,6 +1860,12 @@ I met a little cottage girl; she was eight years old, she said.
   human-centric.) The core words don't have any of the "human universal" small words like
   "dog" and "nose" because, again, not all beings will find those things to be basic concepts.</p>
 
+  <p>This appendix covers:</p>
+
+  <p class="contents"><a href="#units">Units of Measurement</a> · <a href="#colors">Colors</a> · <a href="#directions">Coordinates and Directions</a> ·
+  <a href="#credence">Credence, Speculation, and Theory</a> · <a href="#elements">Elements and Atoms</a> · <a href="#emotion">Emotion</a> ·
+  <a href="#family">Family</a> · <a href="#gender">Gender and Sexuality</a> · <a href="#taxonomy">Taxonomy of Earth Organisms</a></p>
+
   <p>It's normal for Papsa to get adapted into specific contexts through importing important
   concepts via naming them. For example, English speakers might recognize the Papsa name
   <code>`iuman`</code> as the word for "human", even though non-English Papsa speakers would not. Still,
@@ -1907,7 +1926,7 @@ for (const [name,row] of papsaNames["Papsa Name"]) {
 }
   </code></pre></details>
   
-  <h3>Units of Measurement</h3>
+  <h3 id="units">Units of Measurement</h3>
 
   <p>For <a href="https://utopiandreams.substack.com/p/spacetime-distances/comment/345143742">practical purposes</a>,
   the basic units of measurement in Papsa are, like the SI units, based on <a href="https://en.wikipedia.org/wiki/Caesium_standard">the cesium standard</a>.
@@ -1982,7 +2001,7 @@ iuman sukiaz uaskuh                                 |  Humans measure 12 in term
 
   <p>For more on units of measure, see <a href="https://utopiandreams.substack.com/p/timekeeping">various</a> <a href="https://utopiandreams.substack.com/p/spacetime-distances">essays</a> on <a href="https://utopiandreams.substack.com/">Utopian Dreams</a>.</p>
 
-  <h3>Colors</h3>
+  <h3 id="colors">Colors</h3>
 
   <p>Papsa takes a three-fold approach to color. First, we can talk in terms of wavelengths. Light with a
   wavelength of <code>`aisiguk ei saum`</code> — "1 Red-length" — for example, is on the far red side of
@@ -2013,7 +2032,7 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
 | 5     | Mind    | Magenta |                `fiknuŋ` | `iksif`   |
   </pre>
 
-  <h3>Coordinates and Directions</h3>
+  <h3 id="directions">Coordinates and Directions</h3>
 
   <p>Papsa addresses are usually given as positive-number coordinates in some local region.
   Coordinates, whether on a map or not, are usually read as the number of units to the right,
@@ -2137,17 +2156,17 @@ addEventListener('DOMContentLoaded', () => {
   <code>`ifzei`</code> when the horizontal axis stands for time. The vertical is <code>`ifsu`</code>
   (still with positive meaning down), and the forward one is <code>`ifti`</code>.</p>
 
-  <h3>Credence, Speculation, and Theory</h3>
+  <h3 id="credence">Credence, Speculation, and Theory</h3>
   
-  <h3>Elements and Atoms</h3>
+  <h3 id="elements">Elements and Atoms</h3>
   
-  <h3>Emotion</h3>
+  <h3 id="emotion">Emotion</h3>
 
   Don't forget gratitude and sorrow as thanks and sorry.
   
-  <h3>Family</h3>
+  <h3 id="family">Family</h3>
   
-  <h3>Gender and Sexuality</h3>
+  <h3 id="gender">Gender and Sexuality</h3>
   
   <h3 id="taxonomy">Taxonomy of Earth Organisms</h3>
 
@@ -2232,7 +2251,7 @@ for (const [name,row] of organismNames["Papsa Name"]) {
   <p>Papsa is designed to be especially good for mathematics, so it has more here than one might
   expect. This appendix covers:</p>
 
-  <p><a href="#numbers">Numbers</a> · <a href="#fractions">Fractions</a> ·
+  <p class="contents"><a href="#numbers">Numbers</a> · <a href="#fractions">Fractions</a> ·
   <a href="#scientific-notation">Scientific Notation</a> · <a href="#negative-numbers">Negative Numbers</a> ·
   <a href="#constants">Constants</a> · <a href="#algebra">Algebra</a> · <a href="#functions">Functions</a> ·
   <a href="#set-theory">Set Theory</a> · <a href="#type-theory">Type Theory</a> · <a href="#category-theory">Category Theory</a> ·
@@ -5621,6 +5640,34 @@ translate(inp.value);
     .map(a => ({ a, el: document.getElementById(decodeURIComponent(a.hash.slice(1))) }))
     .filter(s => s.el);
 
+  // ── Sub-navs ──
+  // Each section's contents line is copied into a row under the bar (see .sub-row).
+  let current = null, currentSub = null;
+  const subs = sections.filter(s => {
+    const toc = s.el.querySelector(':scope > .contents');
+    if (!toc) return false;
+    const row = document.createElement('div'), nav = document.createElement('nav');
+    row.className = 'sub-row';
+    nav.setAttribute('aria-label', s.a.dataset.label);
+    nav.append(Object.assign(document.createElement('span'), { className: 'nav-label', textContent: s.a.dataset.label + ':' }));
+    const targets = [...toc.querySelectorAll('a[href^="#"]')]
+      .map(src => ({ a: Object.assign(document.createElement('a'), { href: src.hash, textContent: src.textContent }),
+                     el: document.getElementById(decodeURIComponent(src.hash.slice(1))) }))
+      .filter(t => t.el);
+    targets.forEach(t => { t.a.dataset.label = t.a.textContent; nav.append(t.a); });
+    row.append(nav);
+    bar.append(row);
+    s.sub = { row, targets };
+    return true;
+  });
+  function syncSubs() {
+    subs.forEach(s => s.el.style.setProperty('--sub-h', s.sub.row.offsetHeight + 'px'));
+    bar.style.setProperty('--sub-h', current && current.sub ? current.sub.row.offsetHeight + 'px' : '0px');
+  }
+  syncSubs();
+  if (window.ResizeObserver) { const ro = new ResizeObserver(syncSubs); subs.forEach(s => ro.observe(s.sub.row)); }
+  else addEventListener('resize', syncSubs);
+
   // ── Auto-hide ──
   // The bar slides away once the reader is clearly heading down the page, and
   // comes back as soon as they scroll up, reach the top, or focus a link in it.
@@ -5682,29 +5729,47 @@ translate(inp.value);
   });
   bar.addEventListener('focusin', () => setHidden(false));
 
-  let current = null;
+  // Bold the link for where the reader is. When its row scrolls sideways (narrow screens), keep it in view.
+  function mark(list, on, row) {
+    list.forEach(a => {
+      a.classList.toggle('current', a === on);
+      if (a === on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+    if (on && row.scrollWidth > row.clientWidth + 4) {
+      const link = on.getBoundingClientRect(), box = row.getBoundingClientRect();
+      row.scrollBy({ left: (link.left + link.width / 2) - (box.left + box.width / 2), behavior: 'smooth' });
+    }
+  }
+
   function update() {
     slide();
     // Add back the slide so the "which section am I in?" line stays put whether
     // or not the bar is currently hidden.
-    const line = bar.getBoundingClientRect().bottom + (hidden ? bar.offsetHeight : 0) + 24;
+    const line = (hidden ? bar.offsetHeight : bar.getBoundingClientRect().bottom) + 24;
     const atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 2;
     let found = null;
     for (const s of sections) if (s.el.getBoundingClientRect().top <= line) found = s;
     if (atBottom) found = sections[sections.length - 1];
 
     if (found !== current) {
-      current = found;
-      links.forEach(a => {
-        const on = !!found && a === found.a;
-        a.classList.toggle('current', on);
-        if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
-      });
-      // When the nav rows scroll sideways (narrow screens), keep the active link in view rather than off the edge.
-      if (found && rows.scrollWidth > rows.clientWidth + 4) {
-        const link = found.a.getBoundingClientRect(), box = rows.getBoundingClientRect();
-        rows.scrollBy({ left: (link.left + link.width / 2) - (box.left + box.width / 2), behavior: 'smooth' });
+      if (current && current.sub) {
+        current.sub.row.classList.remove('shown');
+        mark(current.sub.targets.map(t => t.a), null, current.sub.row);
+        currentSub = null;
       }
+      current = found;
+      if (found && found.sub) found.sub.row.classList.add('shown');
+      syncSubs();
+      mark(links, found && found.a, rows);
+    }
+
+    if (!(found && found.sub)) return;
+    const subLine = line + found.sub.row.offsetHeight;
+    let sub = null;
+    for (const t of found.sub.targets) if (t.el.getBoundingClientRect().top <= subLine) sub = t;
+    if (sub !== currentSub) {
+      currentSub = sub;
+      mark(found.sub.targets.map(t => t.a), sub && sub.a, found.sub.row);
     }
   }
 
