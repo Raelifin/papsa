@@ -1572,7 +1572,7 @@ const lintContent = (c, found) => {
 <section id="examples">
   <h2>Examples</h2>
 
-  <pre>
+  <pre class="tall">
 neim kud. pif xarc sou   |  The feeling is compelling. Will the gift disappear? (Papsa's canonical pangram. Has the letters almost in order.)
 tait                     |  It's big.
 naun                     |  That's good.
@@ -1871,7 +1871,7 @@ I met a little cottage girl; she was eight years old, she said.
   <code>`iuman`</code> as the word for "human", even though non-English Papsa speakers would not. Still,
   there are some proper nouns that are so important and common that they get universal names.</p>
   
-  <pre class="oneline" data-table="papsaNames">
+  <pre class="tall oneline" data-table="papsaNames">
 | Papsa Name  | English           | Etymology             | Notes |
 |-------------|-------------------|-----------------------|-------|
 | `vufua`     | Earth             | `vufuh`               |       |
@@ -2063,16 +2063,16 @@ tigab figuk olguin nikud pauneim | "Red Net", Olguin, "Crying Motive" (ie 19383 
 |    0 |  `naunuŋ` |  `miniŋ` |  `kanuŋ` |  `tinuŋ` | `paunaun` |   `funuŋ` |
 |    6 |  `neimin` |  `mamin` | `kimain` | `tumain` |  `pimain` | `feimain` |
 |   12 |   `nikan` |  `mukan` |  `kukan` |  `tikan` |   `bikan` |   `fikan` |
-|   18 |  `natana` | `matana` | `katana` | `tautun` |   `patiŋ` |  `fatana` |
-|   24 |   `nupun` | `mapana` | `kapana` | `dupaun` |  `papana` |  `fapana` |
-|   30 |  `nafana` | `mafana` |  `kuvin` | `tafana` |  `pafana` |  `fafana` |
-|   36 |  `nuneim` | `manama` | `kuneim` | `tanama` | `pauneim` |  `fanama` |
-|   42 |  `neimam` |  `mumum` |  `kimam` | `tamama` |   `pimum` |  `feimum` |
-|   48 |  `nakama` | `makama` | `kakama` | `takama` |  `pakama` |  `fakama` |
+|   18 |   `natiŋ` |  `mutiŋ` | `katana` | `tautun` |   `patiŋ` |   `futun` |
+|   24 |   `nupun` | `mapana` | `kapana` | `dupaun` |  `pipaun` |  `fapana` |
+|   30 |  `nafana` | `mafana` |  `kuvin` | `tafana` |  `pafana` |   `vufun` |
+|   36 |  `nuneim` | `manama` | `kuneim` | `tanama` | `pauneim` |  `vineim` |
+|   42 |  `neimam` |  `mumum` |  `kimam` |  `tumum` |   `pimum` |  `feimum` |
+|   48 |  `nakama` | `makama` | `kakama` |  `tikim` |  `pakama` |  `fakama` |
 |   54 |  `natama` | `matama` | `katama` | `tatama` |  `patama` |  `fatama` |
 |   60 |  `napama` | `mapama` | `kapama` | `tapama` |  `papama` |  `fapama` |
 |   66 | `nuifeim` | `mafama` | `kafama` | `tafama` |  `pafama` |  `fafama` |
-|   72 |  `nanaka` | `manaka` | `kanaka` | `tanaka` |   `punik` |  `fanaka` |
+|   72 |  `nanaka` |  `minik` | `kanaka` | `tanaka` |   `punik` |  `fanaka` |
 |   78 |  `neimik` |  `mumuk` | `kamaka` | `tamaka` |  `pamaka` |  `famaka` |
 |   84 |  `nakaka` | `makaka` | `kakaka` | `takaka` |  `pakaka` |   `figuk` |
 |   90 |   `natik` | `mataka` | `kataka` | `tataka` |  `pataka` |   `futik` |
@@ -4912,6 +4912,17 @@ addEventListener('DOMContentLoaded', () => {
 | `zusguidut` | solstice | - | | `zus`, `guih`, `dut` | solstitial | - | - |
 | `guktait` | bonfire, blaze, conflagration | to engulf in flames | | `guk`, `tait` | blazing | to blaze, to rage | - |
 | `patiŋ` | overlap, overlapping region, shared interior, common core, intersection | to overlap, to share a core with, to coincide in part with | Contact that reaches past the edges into the interior. Two stones resting against each other only `pat`, while the circles of a Venn diagram `patiŋ`. Overlap implies no mixing: overlapping shadows stay what they were, which `feim` and `feimain` would not. | `pat`, `tiŋ` | overlapping, intersecting, shared, coinciding | to overlap, to coincide in part | in common, jointly |
+| `natiŋ` | plot, premise, storyline, gist | to be the plot of, to be the premise of | The heart of a game, story, or pretense: what it's really about once the details are set aside. | `nat`, `tiŋ` | plotted | to have a plot | - |
+| `mutiŋ` | torso, trunk (of a body) | to be the torso of | | `mut`, `tiŋ` | - | - | - |
+| `bitiŋ` | headquarters, head office, hub | to be the headquarters of | The center from which branches or departments extend. | `bih`, `tiŋ` | central, headquartered | to be headquartered | - |
+| `futun` | bowl, plate, tray, dish | to be a bowl or plate for, to serve on | An open container. | `fut`, `hun` | - | - | - |
+| `pipaun` | stock, security, bond, currency, financial instrument, investment | to invest in, to day-trade, to trade (in symbolic goods) | Trade in goods whose value is symbolic, such as currency, stocks, and bonds. | `pip`, `paun` | financial, invested | to invest, to trade | financially |
+| `paunpip` | price, cost, fee, price tag | to be the price of, to price | | `paun`, `pip` | priced | to cost | - |
+| `vufun` | homeland, native land, home country | to be the homeland of | | `vuf`, `fun` | native, indigenous | - | - |
+| `vineim` | presence, awareness, alertness, mindfulness | to be aware of, to be mindful of | | `vin`, `neim` | present, aware, alert, mindful | to be present, to be mindful | mindfully, alertly |
+| `tumum` | plumber | to plumb | | `tum`, `mum` | - | to do plumbing | - |
+| `tikim` | handle, lever, controller, joystick, control | to control, to operate | | `tik`, `kim` | - | - | - |
+| `minik` | ambition, aspiration | to aspire to, to strive for | | `min`, `nik` | ambitious, aspiring | to aspire, to strive | ambitiously |
 | `tasis` | remainder, leftover, residue, modulus | to give the remainder after attempting to evenly divide | The subject divides the object, leaving the noun form. Also characterizes odd numbers. | `taz`, `sis` | odd, remaining, leftover, excess, modulo | | |
 | `foujuc` | member, participant, element | to participate in, to be connected to, to be a member of, to be affiliated with, to stand with, to have a complex relationship with | One who has been the object of `baz`. | `fouh`, `juc` | connected, entangled, connected, attached, complicated | to have connections, to have a network, to have roots, to have ties | connectedly |
 | `zouspat` | film trailer | to come right before, to immediately precede, to be precomposed with | Almost always temporal or abstract, since there's natural confusion about whether the front of something moving is "before" or "after" the back. | `zous`, `pat` | preceding | to come just before something, to be a trailer | |
