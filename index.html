@@ -2032,6 +2032,47 @@ fik ei slaihaub             | 29/36 Red color (≈ 563 nm; #CCFF00; "electric li
 | 5     | Mind    | Magenta |                `fiknuŋ` | `iksif`   |
   </pre>
 
+  <p>Finally, for full precision (the equivalent of a hex code), a color can be given by its hue, saturation,
+  and lightness. Unlike hue, saturation and lightness are universal, so they're ordinary compounds:
+  <code>`fiktiŋ`</code> is saturation, and <code>`fikzuip`</code> (white) doubles as lightness. Each is augmented
+  by a number from zero to one. A lightness of zero is black (<code>`fikcuc`</code>), a lightness of one is white,
+  and a lightness of one half is the hue at its most vivid. Zero saturation is gray.</p>
+
+  <p>The hue names aren't limited to the six digits: <code>`ik`</code> followed by any number from 0 up to 6
+  names a hue, so <code>`iksaumaihat`</code> (hue 1.5) is halfway from yellow to green. A hue name alone is
+  the hue at full saturation and half lightness. A full color is the tuple of hue, saturation, and lightness.</p>
+
+  <pre>
+fik ui huh faf iksataihat                                         |  The color of the sky is hue 3.5 (#0080FF, "azure").
+fik ui bup faf iksuk ou im fiktiŋ saihat ou im fikzuip saihuk     |  The plant's color is green at half saturation and a third lightness (#2B802B).
+fik ui pif faf iksaumaihat ou im fiktiŋ saiheip ou im fikzuip saihuk  |  The gift's color is hue 1.5 at two-thirds saturation and a third lightness (#558E1C).
+  </pre>
+
+  <details class="spec-code"><summary class="code-title">Hues</summary><pre><code>
+// `ik` plus any number from 0 up to 6 names a hue. The six names above are just the whole-number hues.
+// Numbers are defined in the Mathematics appendix, further down, but parsers only run after the page has loaded.
+tokenParsers.splice(1, 0, (s, base, ixs) => {
+  if ( ! base.startsWith('IK')) return;
+  const n = tokenize(s.slice(2))[0];
+  if (n?.type !== 'number' || ! (n.value >= 0 && n.value < 6)) return;
+  const [lo, hi] = [Math.floor(n.value), Math.ceil(n.value) % 6].map(d => colors['Digit'][d]['English'].toLowerCase());
+  const meaning = lo === hi ? lo : `hue ${+n.value.toFixed(3)}, between ${lo} and ${hi}`;
+  return { word: s, meaning, rawTok: s, type: wordType(ixs), probablyForeign: false };
+});
+  </code></pre></details>
+
+  <p>Papsa can also name the red, green, and blue levels that screens use. When <code>`fik`</code> is augmented
+  by a whole number from 0 to 215, the number's three base-six digits are the levels of red, green, and blue,
+  in that order (little-endian, as with address words), each from 0 (none) to 5 (full). That covers the 216
+  "web-safe" colors. (A fractional number, recall, is a wavelength.) Like the hue names, this is human-centric,
+  since it's built on the three kinds of cone cell in human eyes.</p>
+
+  <pre>
+fik ui guk faf fik ei sifat     |  The color of the fire is RGB 5-3-0 (#FF9900).
+fik ui mum faf fik ei sounatat  |  The color of the water is RGB 0-3-3 (#009999).
+fik ei sififif                  |  RGB 5-5-5: white (#FFFFFF)
+  </pre>
+
   <h3 id="directions">Coordinates and Directions</h3>
 
   <p>Papsa addresses are usually given as positive-number coordinates in some local region.
@@ -4623,6 +4664,7 @@ addEventListener('DOMContentLoaded', () => {
 | `fiknuŋ` | purple, magenta | to be as purple as | | `fik`, `nuŋ` | purple, magenta | to be purple | - |
 | `fikcuc` | blackness, darkness | to be as dark as | | `fik`, `juc` | black, dark | to be dark | darkly |
 | `fikzuip` | white, lightness, brightness | to be as light as | | `fik`, `zuip` | white, bright, light | to be light | brightly |
+| `fiktiŋ` | saturation, purity (of color), chroma, vividness | to be as saturated as | How much of a color is pure hue, from gray (`fiktiŋ ei soun`) to fully vivid (`fiktiŋ ei saum`). | `fik`, `tiŋ` | saturated, pure, vivid | to be saturated | vividly |
 | `vufzuip` | universe, world | to be the universe of | | `vuf`, `zuip` | universal | to be a universe | universally |
 | `vufusoun` | galactic cluster | to be the (home) galactic cluster of | | `vuf`, `xuh`, `soun` | - | to be a galactic cluster | - |
 | `vufusaum` | galaxy | to be the (home) galaxy of | | `vuf`, `xuh`, `saum` | galactic | to be a galaxy | - |
